@@ -1,0 +1,12 @@
+* text=auto
+
+*.java text eol=lf
+*.xml text eol=lf
+*.xsd text eol=lf
+*.fxml text eol=lf
+*.txt text eol=lf
+*.properties text eol=lf
+*.md text eol=lf
+
+*.cmd text eol=crlf
+*.bat text eol=crlf

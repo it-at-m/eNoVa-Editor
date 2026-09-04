@@ -1,0 +1,49 @@
+@startuml
+
+title ErsuchenSachentscheidungChecker
+
+start
+
+:XML-Document prüfen;
+:Root-Element holen;
+
+if (Namespace = http://www.xjustiz.de ?) then (Ja)
+else (Nein)
+    :Fehler:\nkeine XJustiz-Nachricht;
+    stop
+endif
+
+if (Root = nachricht.enova.entscheidung.2900003 ?) then (Ja)
+else (Nein)
+    :Fehler:\nkeine eNoVa-Nachricht 2900003;
+    stop
+endif
+
+:fachdaten suchen;
+
+if (fachdaten vorhanden?) then (Ja)
+else (Nein)
+    :Fehler:\nkeine eNoVa-Fachdaten;
+    stop
+endif
+
+:auswahl_GegenstandDerNachricht suchen;
+
+if (vorhanden?) then (Ja)
+else (Nein)
+    :Fehler:\nkein Gegenstand der Nachricht;
+    stop
+endif
+
+:ersuchenSachentscheidung suchen;
+
+if (vorhanden?) then (Ja)
+    :Datei akzeptieren;
+else (Nein)
+    :Fehler:\nkein Ersuchen um Sachentscheidung;
+    stop
+endif
+
+stop
+
+@enduml

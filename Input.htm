@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>eNoVa</title>
+    <style>
+      .kopf-zeile {
+          display: flex;
+          width: 100%;
+          margin-top: 40px;
+      }
+
+      .behoerde {
+          flex: 1;
+      }
+
+      .kontakt {
+          margin-left: auto;
+          padding-top: 20px;
+          padding-right: 10px
+      }
+
+      .datum-zeile {
+          text-align: right;
+          margin-top: 20px;
+          padding-right: 10px
+      }
+
+      .person-block {
+          margin-bottom: 15px;
+      }
+
+      .grundstueck-block {
+          margin-bottom: 20px;
+      }
+
+      .flurstuecke {
+          margin-top: 5px;
+      }
+
+      .flurstueck-block {
+          margin-bottom: 8px;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <!--
+        Absender suchen:
+        In der XML-Datei steht beim Absender eine Rollennummer.
+        Mit dieser Nummer suchen wir die passende Beteiligung.
+        Dort stehen die Rolle und die Person, die zu diesem Absender gehören.
+        Die gefundenen Daten können danach innerhalb dieses Bereichs verwendet werden.
+    -->
+    {{#each xpath://tns:beteiligung[
+    tns:rolle/tns:rollennummer =
+    //tns:absender/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+    ]}}
+
+    <p>
+      <!--
+          Rollenbezeichnung ausgeben:
+          Der Name "rollenbezeichnung" gehört zur Konfiguration
+          in codelists.properties.
+          Der XPath liefert den Rollen-Code, zum Beispiel 208.
+          Über die Codelist wird daraus dann die Bezeichnung.
+      -->
+      {{codelist:rollenbezeichnung xpath:
+      tns:rolle[
+      tns:rollennummer =
+      //tns:absender/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+      ]/tns:rollenbezeichnung/code
+      }}
+
+      <!--
+          Informationen der Person/Absender aus der zuvor gefundenen Beteiligung ausgeben.
+      -->
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:titel}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:vorname}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:nachname}}
+
+      <br>
+
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:strasse}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:hausnummer}}
+
+      <br>
+
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:postleitzahl}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:ort}}
+
+    </p>
+
+    <div class="kopf-zeile">
+
+      <div class="behoerde">
+        {{xpath://tns:grunddaten/tns:verfahrensdaten/tns:instanzdaten/tns:auswahl_instanzbehoerde/tns:sonstige}}
+      </div>
+
+      <div class="kontakt">
+        Telefon:
+        {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:telekommunikation[tns:telekommunikationsart/code='007'
+        ]/tns:verbindung}}
+
+        <br>
+
+        Aktenzeichen:
+        {{xpath://tns:absender/tns:aktenzeichen}}
+      </div>
+
+    </div>
+
+    <div class="datum-zeile">
+      <!-- Ort des aktuellen Beteiligten -->
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:ort}},
+
+      <!-- Erstellungsdatum der Nachricht im Format TT.MM.JJJJ -->
+      {{xpath:concat(
+      substring(//tns:nachrichtenkopf/tns:erstellungszeitpunkt, 9, 2), '.',
+      substring(//tns:nachrichtenkopf/tns:erstellungszeitpunkt, 6, 2), '.',
+      substring(//tns:nachrichtenkopf/tns:erstellungszeitpunkt, 1, 4)
+      )}}
+    </div>
+
+    {{/each}}
+
+    <!-- Betreff / Verfahrensgegenstand -->
+    <p>
+      {{xpath://tns:grunddaten/tns:verfahrensdaten/tns:instanzdaten/tns:verfahrensgegenstand/tns:gegenstand}}
+      <br>
+      ({{codelist:ersuchenSachentscheidung
+      xpath://tns:fachdaten/tns:auswahl_GegenstandDerNachricht/tns:ersuchenSachentscheidung/tns:ersuchenSachentscheidung/code}})
+    </p>
+
+    <p>
+      Sehr geehrte Damen und Herren,
+    </p>
+
+    <p>
+      hiermit zeigen wir die Beurkundung nachfolgenden Grundstücksverkauf an:
+    </p>
+
+    <h3>Verkäufer:</h3>
+
+    {{#each xpath://tns:beteiligung[
+    tns:rolle/tns:rollenbezeichnung/code='168'
+    ]}}
+
+    <div class="person-block">
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:titel}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:vorname}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:nachname}}
+
+      <br>
+
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:strasse}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:hausnummer}}
+
+      <br>
+
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:postleitzahl}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:ort}}
+
+      <br>
+
+      Geboren am
+      {{xpath:concat(
+      substring(normalize-space(tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:geburt/tns:geburtsdatum),
+      9, 2), '.',
+      substring(normalize-space(tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:geburt/tns:geburtsdatum),
+      6, 2), '.',
+      substring(normalize-space(tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:geburt/tns:geburtsdatum),
+      1, 4)
+      )}}
+    </div>
+
+    {{/each}}
+
+    <h3>Käufer:</h3>
+
+    {{#each xpath://tns:beteiligung[
+    tns:rolle/tns:rollenbezeichnung/code='072'
+    ]}}
+
+    <div class="person-block">
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:titel}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:vorname}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:nachname}}
+
+      <br>
+
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:strasse}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:hausnummer}}
+
+      <br>
+
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:postleitzahl}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:ort}}
+
+      <br>
+
+      Geboren am
+      {{xpath:concat(
+      substring(normalize-space(tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:geburt/tns:geburtsdatum),
+      9, 2), '.',
+      substring(normalize-space(tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:geburt/tns:geburtsdatum),
+      6, 2), '.',
+      substring(normalize-space(tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:geburt/tns:geburtsdatum),
+      1, 4)
+      )}}
+    </div>
+
+    {{/each}}
+
+    <p>
+      Urkunde:
+      {{xpath://tns:datenDerUrkunde/tns:urNr}}
+
+      <br>
+
+      Beurkundungsdatum:
+      {{xpath:concat(
+      substring(normalize-space(//tns:datenDerUrkunde/tns:urkundsdatum), 9, 2), '.',
+      substring(normalize-space(//tns:datenDerUrkunde/tns:urkundsdatum), 6, 2), '.',
+      substring(normalize-space(//tns:datenDerUrkunde/tns:urkundsdatum), 1, 4)
+      )}}
+    </p>
+
+    <h3>Grundstück:</h3>
+
+    {{#each xpath://tns:fachdaten/tns:beschreibungDesBetroffenenRechts}}
+
+    <div class="grundstueck-block">
+
+      <div>
+        Amtsgericht:
+        {{xpath:tns:bundeslandfremdesGrundbuchblatt/tns:amtsgericht}}
+      </div>
+
+      <div>
+        Grundbuchbezirk:
+        {{xpath:tns:bundeslandfremdesGrundbuchblatt/tns:grundbuchbezirk}}
+      </div>
+
+      <div>
+        Grundbuchblatt:
+        {{xpath:tns:bundeslandfremdesGrundbuchblatt/tns:grundbuchblatt}}
+      </div>
+
+      <div class="flurstuecke">
+
+        {{#each xpath:tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:grundstueck/tns:flurstuecke}}
+
+        <div class="flurstueck-block">
+          <div>
+            Gemarkung:
+            {{xpath:tns:identifikationFlurstueck/tns:gemarkungsschluessel}}
+          </div>
+
+          <div>
+            Flurstück:
+            {{xpath:concat(
+            tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:zaehler,
+            substring('/', 1, number(boolean(tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:nenner))),
+            tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:nenner
+            )}}
+          </div>
+        </div>
+
+        {{/each}}
+
+      </div>
+
+    </div>
+
+    {{/each}}
+
+    <p>
+      Mit freundlichen Grüßen
+    </p>
+
+    <p>
+      {{xpath://tns:absender/tns:informationen/tns:auswahl_kommunikationspartner/tns:sonstige}}
+    </p>
+  </body>
+</html>
