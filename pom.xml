@@ -79,4 +79,87 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>dist</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.openjfx</groupId>
+                        <artifactId>javafx-maven-plugin</artifactId>
+                        <version>0.0.8</version>
+                        <executions>
+                            <execution>
+                                <id>create-runtime-image</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>jlink</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>
+                                        de.muenchen.enovaeditor/de.muenchen.enovaeditor.EnovaEditorApplication
+                                    </mainClass>
+                                    <launcher>app</launcher>
+                                    <jlinkZipName>app</jlinkZipName>
+                                    <jlinkImageName>app</jlinkImageName>
+                                    <noManPages>true</noManPages>
+                                    <stripDebug>true</stripDebug>
+                                    <noHeaderFiles>true</noHeaderFiles>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>build-distribution</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <mkdir
+                                                dir="${project.build.directory}/distribution/eNoVa-editor"/>
+
+                                        <copy
+                                                todir="${project.build.directory}/distribution/eNoVa-editor/app">
+                                            <fileset
+                                                    dir="${project.build.directory}/app"/>
+                                        </copy>
+
+                                        <copy
+                                                file="${project.basedir}/Input.htm"
+                                                todir="${project.build.directory}/distribution/eNoVa-editor"/>
+
+                                        <copy
+                                                file="${project.basedir}/codelists.properties"
+                                                todir="${project.build.directory}/distribution/eNoVa-editor"/>
+
+                                        <copy
+                                                todir="${project.build.directory}/distribution/eNoVa-editor/codelists">
+                                            <fileset
+                                                    dir="${project.basedir}/codelists"/>
+                                        </copy>
+
+                                        <copy
+                                                file="${project.basedir}/src/main/dist/eNoVa-editor.cmd"
+                                                todir="${project.build.directory}/distribution/eNoVa-editor"/>
+
+                                        <zip
+                                                destfile="${project.build.directory}/${project.artifactId}-${project.version}.zip"
+                                                basedir="${project.build.directory}/distribution"/>
+
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

@@ -12,6 +12,15 @@ public final class ApplicationPaths {
     }
 
     public static Path getApplicationDirectory() {
+
+        String configuredHome = System.getenv("ENOVA_HOME");
+
+        if (configuredHome != null && !configuredHome.isBlank()) {
+            return Path.of(configuredHome)
+                    .toAbsolutePath()
+                    .normalize();
+        }
+
         try {
             Path location = Path.of(
                     EnovaEditorApplication.class
