@@ -1,0 +1,115 @@
+@startuml
+title eNoVa-Editor – aktueller Ablauf
+
+start
+
+partition "JavaFX-Anwendung" {
+    :EnovaEditorApplication startet;
+    :main-view.fxml wird geladen;
+    :MainController wird verwendet;
+}
+
+partition "MainController" {
+    :Benutzer klickt\n"XML öffnen";
+    :FileChooser öffnen;
+}
+
+if (XML-Datei ausgewählt?) then (ja)
+
+    partition "XmlLoader" {
+        :XML-Datei einlesen;
+        :DOM Document erzeugen;
+    }
+
+    note right
+        Ergebnis:
+        org.w3c.dom.Document
+    end note
+
+    partition "ErsuchenSachentscheidungChecker" {
+
+        :Prüfen, ob die XML ein\nErsuchen um Sachentscheidung\n(eNoVa 2900003) ist;
+
+        if (Nachricht gültig?) then (ja)
+        else (nein)
+            :Fehler werfen;
+            detach
+        endif
+    }
+
+    partition "TemplateLoader" {
+
+        partition "ApplicationPaths" {
+            :Programmverzeichnis ermitteln;
+        }
+
+        :Input.htm im\nProgrammverzeichnis suchen;
+
+        if (Input.htm vorhanden\nund lesbar?) then (ja)
+            :Input.htm als UTF-8 lesen;
+        else (nein)
+            :IOException werfen;
+            detach
+        endif
+    }
+
+    partition "XPathTemplateRenderer" {
+
+        :Input.htm und XML verarbeiten;
+
+        :Wiederholungen im\nTemplate verarbeiten;
+
+        :XML-Werte über\nXPath einsetzen;
+
+        :XML-Werte für HTML\nsicher kodieren;
+
+        note right
+            Ergebnis:
+            fertiger HTML-String
+        end note
+    }
+
+    partition "HtmlOutputWriter" {
+        :Verzeichnis der\nEingabe-XML bestimmen;
+        :Dateinamen und\nZeitstempel erzeugen;
+
+        :HTML speichern als\nName-JJJJMMDDHHmmSS.htm;
+
+        note right
+            Die HTML-Datei liegt
+            im selben Verzeichnis
+            wie die Eingabe-XML.
+        end note
+    }
+
+    partition "MainController" {
+        :Dateiname in JavaFX-UI anzeigen;
+    }
+
+    partition "BrowserOpener" {
+
+        if (Standardbrowser kann\ngeöffnet werden?) then (ja)
+            :HTML-Datei im\nStandardbrowser öffnen;
+        else (nein)
+            :IOException werfen;
+        endif
+    }
+
+    if (Browser konnte geöffnet werden?) then (ja)
+        partition "Standardbrowser" {
+            :Generierte HTML-Datei anzeigen;
+        }
+    else (nein)
+        partition "MainController" {
+            :Warnung anzeigen:\nHTML wurde erstellt,\nBrowser konnte nicht geöffnet werden;
+            :Pfad der erzeugten\nHTML-Datei anzeigen;
+        }
+    endif
+
+else (nein)
+    :Keine Aktion;
+endif
+
+stop
+
+@enduml

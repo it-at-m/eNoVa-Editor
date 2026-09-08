@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>de.muenchen</groupId>
+    <artifactId>eNoVa-editor</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>eNoVa-editor</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <junit.version>5.12.1</junit.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>21.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>21.0.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.8</version>
+                <executions>
+                    <execution>
+                        <!-- Default configuration for running with: mvn clean javafx:run -->
+                        <id>default-cli</id>
+                        <configuration>
+                            <mainClass>de.muenchen.enovaeditor/de.muenchen.enovaeditor.EnovaEditorApplication
+                            </mainClass>
+                            <launcher>app</launcher>
+                            <jlinkZipName>app</jlinkZipName>
+                            <jlinkImageName>app</jlinkImageName>
+                            <noManPages>true</noManPages>
+                            <stripDebug>true</stripDebug>
+                            <noHeaderFiles>true</noHeaderFiles>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+        </plugins>
+    </build>
+    <profiles>
+        <profile>
+            <id>dist</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.openjfx</groupId>
+                        <artifactId>javafx-maven-plugin</artifactId>
+                        <version>0.0.8</version>
+                        <executions>
+                            <execution>
+                                <id>create-runtime-image</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>jlink</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>
+                                        de.muenchen.enovaeditor/de.muenchen.enovaeditor.EnovaEditorApplication
+                                    </mainClass>
+                                    <launcher>app</launcher>
+                                    <jlinkZipName>app</jlinkZipName>
+                                    <jlinkImageName>app</jlinkImageName>
+                                    <noManPages>true</noManPages>
+                                    <stripDebug>true</stripDebug>
+                                    <noHeaderFiles>true</noHeaderFiles>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>build-distribution</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <mkdir
+                                                dir="${project.build.directory}/distribution/eNoVa-editor"/>
+
+                                        <copy
+                                                todir="${project.build.directory}/distribution/eNoVa-editor/app">
+                                            <fileset
+                                                    dir="${project.build.directory}/app"/>
+                                        </copy>
+
+                                        <copy
+                                                file="${project.basedir}/Input.htm"
+                                                todir="${project.build.directory}/distribution/eNoVa-editor"/>
+
+                                        <copy
+                                                file="${project.basedir}/codelists.properties"
+                                                todir="${project.build.directory}/distribution/eNoVa-editor"/>
+
+                                        <copy
+                                                todir="${project.build.directory}/distribution/eNoVa-editor/codelists">
+                                            <fileset
+                                                    dir="${project.basedir}/codelists"/>
+                                        </copy>
+
+                                        <copy
+                                                file="${project.basedir}/src/main/dist/eNoVa-editor.cmd"
+                                                todir="${project.build.directory}/distribution/eNoVa-editor"/>
+
+                                        <zip
+                                                destfile="${project.build.directory}/${project.artifactId}-${project.version}.zip"
+                                                basedir="${project.build.directory}/distribution"/>
+
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
