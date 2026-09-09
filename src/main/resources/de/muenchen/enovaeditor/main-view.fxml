@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ComboBox?>
 
 <BorderPane
         xmlns:fx="http://javafx.com/fxml"
@@ -23,7 +24,7 @@
                         left="20.0"/>
             </padding>
 
-            <HBox spacing="15.0">
+            <HBox spacing="15.0" alignment="CENTER_LEFT">
 
                 <Button
                         text="XML öffnen"
@@ -37,6 +38,13 @@
 
             <Separator/>
 
+            <HBox spacing="15.0" alignment="CENTER_LEFT">
+                <Label text="Sachbearbeiter auswählen:"/>
+                <ComboBox
+                        fx:id="caseworkerComboBox"
+                        minWidth="180.0"
+                        HBox.hgrow="ALWAYS"/>
+            </HBox>
         </VBox>
     </top>
 
