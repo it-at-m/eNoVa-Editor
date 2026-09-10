@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<caseworkers>
+
+    <entry name="Max Mustermann">
+        <xml><![CDATA[
+            <bearbeiter>
+                <name>Max Mustermann</name>
+                <kennung>MM123</kennung>
+            </bearbeiter>
+        ]]></xml>
+    </entry>
+
+    <entry name="Anna Mustermann">
+        <xml><![CDATA[
+            <sachbearbeiter>
+                <vollerName>Anna Mustermann</vollerName>
+                <telefon>089-123456</telefon>
+            </sachbearbeiter>
+        ]]></xml>
+    </entry>
+
+</caseworkers>
