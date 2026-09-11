@@ -1,113 +1,70 @@
 @startuml
-title eNoVa-Editor – aktueller Ablauf
+title eNoVa-Editor – Fachassistent-Ablauf (XJustiz 2900003 & 2900004)
 
 start
 
 partition "JavaFX-Anwendung" {
     :EnovaEditorApplication startet;
+    :Bildschirmgröße ermitteln & Fenster zentrieren;
     :main-view.fxml wird geladen;
-    :MainController wird verwendet;
+    :caseworkers.xml einlesen;
 }
 
 partition "MainController" {
-    :Benutzer klickt\n"XML öffnen";
-    :FileChooser öffnen;
+    :Eingangsdaten laden (Drag & Drop / Dateidialog / CLI-Parameter);
 }
 
 if (XML-Datei ausgewählt?) then (ja)
 
-    partition "XmlLoader" {
-        :XML-Datei einlesen;
-        :DOM Document erzeugen;
-    }
-
-    note right
-        Ergebnis:
-        org.w3c.dom.Document
-    end note
-
-    partition "ErsuchenSachentscheidungChecker" {
-
-        :Prüfen, ob die XML ein\nErsuchen um Sachentscheidung\n(eNoVa 2900003) ist;
-
+    partition "XmlLoader & ErsuchenSachentscheidungChecker" {
+        :XML-Datei einlesen (DOM Document);
+        :Prüfen, ob Nachricht eNoVa 2900003 ist;
         if (Nachricht gültig?) then (ja)
         else (nein)
-            :Fehler werfen;
+            :Fehlermeldung anzeigen;
             detach
         endif
     }
 
-    partition "TemplateLoader" {
-
-        partition "ApplicationPaths" {
-            :Programmverzeichnis ermitteln;
-        }
-
-        :Input.htm im\nProgrammverzeichnis suchen;
-
-        if (Input.htm vorhanden\nund lesbar?) then (ja)
-            :Input.htm als UTF-8 lesen;
-        else (nein)
-            :IOException werfen;
-            detach
-        endif
+    partition "XPathTemplateRenderer & WebView" {
+        :Input.htm einlesen & rendern;
+        :HTML direkt im Anwendungsfenster anzeigen (Tab "Notaranfrage");
+        :Verfahrens- & Urkundendaten für Entscheidungsmaske extrahieren;
+        :Aktenzeichen-Vorschlag ableiten;
     }
 
-    partition "XPathTemplateRenderer" {
-
-        :Input.htm und XML verarbeiten;
-
-        :Wiederholungen im\nTemplate verarbeiten;
-
-        :XML-Werte über\nXPath einsetzen;
-
-        :XML-Werte für HTML\nsicher kodieren;
-
-        note right
-            Ergebnis:
-            fertiger HTML-String
-        end note
+    partition "Sachbearbeitung (Entscheidungserfassung)" {
+        :Sachbearbeiter(in) auswählen;
+        :Art der Sachentscheidung wählen (BauGB § 28, §§ 144/145, §§ 172/173);
+        :Tenor, Begründung und Gebühr prüfen / anpassen;
+        :Bescheid-Entwurf live in Tab 2 aktualisieren (BescheidHtmlRenderer);
     }
 
-    partition "HtmlOutputWriter" {
-        :Verzeichnis der\nEingabe-XML bestimmen;
-        :Dateinamen und\nZeitstempel erzeugen;
-
-        :HTML speichern als\nName-JJJJMMDDHHmmSS.htm;
-
-        note right
-            Die HTML-Datei liegt
-            im selben Verzeichnis
-            wie die Eingabe-XML.
-        end note
+    partition "Export für beBPo & Veraktung" {
+        :Benutzer klickt "beBPo-Paket exportieren";
+        
+        fork
+            :EnovaResponseBuilder erzeugt\nnachricht.enova.entscheidung.2900004.xml;
+            note right
+                Bereit zur qualifizierten
+                Signatur (qeS / CAdES detached)
+                für die Rückübermittlung via beBPo
+            end note
+        fork again
+            :BescheidPdfGenerator erzeugt\nAmtlichen Bescheid (DIN-A4 PDF);
+            note right
+                Druckreifes Dokument
+                zur behördlichen Veraktung
+                (DMS / E-Akte)
+            end note
+        end fork
+        
+        :Erfolgsmeldung anzeigen;
+        :Optional: Zielordner im Windows Explorer öffnen;
     }
-
-    partition "MainController" {
-        :Dateiname in JavaFX-UI anzeigen;
-    }
-
-    partition "BrowserOpener" {
-
-        if (Standardbrowser kann\ngeöffnet werden?) then (ja)
-            :HTML-Datei im\nStandardbrowser öffnen;
-        else (nein)
-            :IOException werfen;
-        endif
-    }
-
-    if (Browser konnte geöffnet werden?) then (ja)
-        partition "Standardbrowser" {
-            :Generierte HTML-Datei anzeigen;
-        }
-    else (nein)
-        partition "MainController" {
-            :Warnung anzeigen:\nHTML wurde erstellt,\nBrowser konnte nicht geöffnet werden;
-            :Pfad der erzeugten\nHTML-Datei anzeigen;
-        }
-    endif
 
 else (nein)
-    :Keine Aktion;
+    :Warten auf Dateiauswahl oder Klick auf "Musterdaten laden";
 endif
 
 stop

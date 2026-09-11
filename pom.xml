@@ -27,6 +27,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>21.0.6</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.version}</version>
@@ -137,6 +143,10 @@
 
                                         <copy
                                                 file="${project.basedir}/codelists.properties"
+                                                todir="${project.build.directory}/distribution/eNoVa-editor"/>
+
+                                        <copy
+                                                file="${project.basedir}/caseworkers.xml"
                                                 todir="${project.build.directory}/distribution/eNoVa-editor"/>
 
                                         <copy

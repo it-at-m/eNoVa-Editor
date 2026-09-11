@@ -32,3 +32,11 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Local Generated & Temporary Files ###
+*.png
+*.log
+*-202*.htm
+*-bescheid-*.pdf
+*-sachentscheidung-*.xml
+260713*.pdf
