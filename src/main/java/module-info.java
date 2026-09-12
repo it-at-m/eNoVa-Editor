@@ -1,6 +1,7 @@
 module de.muenchen.enovaeditor {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.web;
     requires java.xml;
     requires java.desktop;
 
