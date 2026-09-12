@@ -35,8 +35,12 @@ build/
 
 ### Local Generated & Temporary Files ###
 *.png
+!src/main/resources/**/icon.png
+!installer/app.png
+*.exe
 *.log
 *-202*.htm
 *-bescheid-*.pdf
 *-sachentscheidung-*.xml
 260713*.pdf
+installer/dist/

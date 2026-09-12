@@ -61,6 +61,11 @@ public class EnovaEditorApplication extends Application {
         stage.setMinHeight(520);
         stage.setScene(scene);
 
+        var iconStream = EnovaEditorApplication.class.getResourceAsStream("icon.png");
+        if (iconStream != null) {
+            stage.getIcons().add(new javafx.scene.image.Image(iconStream));
+        }
+
         // Ensure window is always positioned within visible screen bounds
         stage.setX(visualBounds.getMinX() + Math.max(0, (visualBounds.getWidth() - initialWidth) / 2));
         stage.setY(visualBounds.getMinY() + Math.max(0, (visualBounds.getHeight() - initialHeight) / 2));
