@@ -100,7 +100,6 @@
                                         de.muenchen.enovaeditor/de.muenchen.enovaeditor.EnovaEditorApplication
                                     </mainClass>
                                     <launcher>app</launcher>
-                                    <jlinkZipName>app</jlinkZipName>
                                     <jlinkImageName>app</jlinkImageName>
                                     <noManPages>true</noManPages>
                                     <stripDebug>true</stripDebug>
@@ -147,6 +146,14 @@
 
                                         <copy
                                                 file="${project.basedir}/src/main/dist/eNoVa-editor.cmd"
+                                                todir="${project.build.directory}/distribution/eNoVa-editor"/>
+
+                                        <copy
+                                                file="${project.basedir}/sender-config.properties"
+                                                todir="${project.build.directory}/distribution/eNoVa-editor"/>
+
+                                        <copy
+                                                file="${project.basedir}/caseworkers.xml"
                                                 todir="${project.build.directory}/distribution/eNoVa-editor"/>
 
                                         <zip
