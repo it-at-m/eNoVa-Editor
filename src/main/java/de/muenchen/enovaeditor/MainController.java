@@ -1,6 +1,12 @@
 package de.muenchen.enovaeditor;
 
 import de.muenchen.enovaeditor.browser.BrowserOpener;
+import de.muenchen.enovaeditor.codelist.CodelistConfig;
+import de.muenchen.enovaeditor.codelist.CodelistDefinition;
+import de.muenchen.enovaeditor.codelist.CodelistEntry;
+import de.muenchen.enovaeditor.codelist.GenericodeReader;
+import de.muenchen.enovaeditor.config.ApplicationPaths;
+import de.muenchen.enovaeditor.config.SenderConfigLoader;
 import de.muenchen.enovaeditor.config.caseworker.CaseworkerConfigLoader;
 import de.muenchen.enovaeditor.config.caseworker.CaseworkerEntry;
 import de.muenchen.enovaeditor.template.HtmlOutputWriter;
@@ -12,8 +18,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
+import org.w3c.dom.Document;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,57 +32,47 @@ import java.util.List;
 
 public class MainController {
 
-    private final BrowserOpener browserOpener =
-            new BrowserOpener();
-    private final XmlLoader xmlLoader =
-            new XmlLoader();
-    private final ErsuchenSachentscheidungChecker checker =
-            new ErsuchenSachentscheidungChecker();
-    private final TemplateLoader templateLoader =
-            new TemplateLoader();
-    private final XPathTemplateRenderer templateRenderer =
-            new XPathTemplateRenderer();
-    private final HtmlOutputWriter htmlOutputWriter =
-            new HtmlOutputWriter();
-    private final CaseworkerConfigLoader caseworkerConfigLoader =
-            new CaseworkerConfigLoader();
+    private static final double DECISION_TEXT_WRAP_WIDTH = 500;
+    private static final double FILE_NUMBER_MIN_WIDTH = 150;
+    private static final double FILE_NUMBER_PADDING = 30;
+    private static final double CASEWORKER_WIDTH_PADDING = 50;
+
+    private final BrowserOpener browserOpener = new BrowserOpener();
+    private final XmlLoader xmlLoader = new XmlLoader();
+    private final ErsuchenSachentscheidungChecker checker = new ErsuchenSachentscheidungChecker();
+    private final TemplateLoader templateLoader = new TemplateLoader();
+    private final XPathTemplateRenderer templateRenderer = new XPathTemplateRenderer();
+    private final HtmlOutputWriter htmlOutputWriter = new HtmlOutputWriter();
+    private final CaseworkerConfigLoader caseworkerConfigLoader = new CaseworkerConfigLoader();
+    private final SenderConfigLoader senderConfigLoader = new SenderConfigLoader();
+
+    private Document openedDocument;
+    private String senderName;
+
     @FXML
     private Label fileStatusLabel;
+
+    @FXML
+    private Label senderNameLabel;
+
     @FXML
     private ComboBox<CaseworkerEntry> caseworkerComboBox;
 
     @FXML
+    private ComboBox<CodelistEntry> decisionComboBox;
+
+    @FXML
+    private TextField fileNumber;
+
+    @FXML
     private void initialize() {
+        configureCaseworkerComboBox();
+        configureDecisionComboBox();
+        configureFileNumberField();
 
-        caseworkerComboBox.setConverter(
-                new StringConverter<CaseworkerEntry>() {
-
-                    @Override
-                    public String toString(CaseworkerEntry caseworker) {
-                        return caseworker == null
-                                ? ""
-                                : caseworker.name();
-                    }
-
-                    @Override
-                    public CaseworkerEntry fromString(String string) {
-                        return null;
-                    }
-                }
-        );
-
-        try {
-            List<CaseworkerEntry> caseworkerEntries =
-                    caseworkerConfigLoader.load();
-
-            caseworkerComboBox.getItems().addAll(caseworkerEntries);
-        } catch (IOException e) {
-            showError(
-                    "Sachbearbeiter-Konfiguration konnte nicht geladen werden",
-                    e.getMessage()
-            );
-        }
-
+        loadSenderName();
+        loadCaseworkers();
+        loadDecisions();
     }
 
     @FXML
@@ -84,29 +84,22 @@ public class MainController {
             return;
         }
 
+        openedDocument = null;
+
         try {
-            var document = xmlLoader.load(selectedFile);
+            Document document = xmlLoader.load(selectedFile);
 
             checker.check(document);
 
-            String inputTemplate =
-                    templateLoader.loadInputTemplate();
+            openedDocument = document;
 
-            String renderedHtml =
-                    templateRenderer.render(
-                            inputTemplate,
-                            document
-                    );
+            String inputTemplate = templateLoader.loadInputTemplate();
 
-            Path outputHtml =
-                    htmlOutputWriter.write(
-                            renderedHtml,
-                            selectedFile
-                    );
+            String renderedHtml = templateRenderer.render(inputTemplate, document);
 
-            fileStatusLabel.setText(
-                    selectedFile.getName()
-            );
+            Path outputHtml = htmlOutputWriter.write(renderedHtml, selectedFile);
+
+            fileStatusLabel.setText(selectedFile.getName());
 
             try {
                 browserOpener.open(outputHtml);
@@ -123,43 +116,148 @@ public class MainController {
 
             fileStatusLabel.setText("");
 
-            showError(
-                    "Datei kann nicht verarbeitet werden",
-                    e.getMessage()
-            );
+            showError("Datei kann nicht verarbeitet werden", e.getMessage());
         }
     }
 
     private File chooseXmlFile() {
 
-        FileChooser fileChooser =
-                new FileChooser();
+        FileChooser fileChooser = new FileChooser();
 
-        fileChooser.setTitle(
-                "XML-Datei auswählen"
-        );
+        fileChooser.setTitle("XML-Datei auswählen");
 
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter(
-                        "XML-Dateien",
-                        "*.xml"
-                )
-        );
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML-Dateien", "*.xml"));
 
-        return fileChooser.showOpenDialog(
-                fileStatusLabel
-                        .getScene()
-                        .getWindow()
-        );
+        return fileChooser.showOpenDialog(fileStatusLabel.getScene().getWindow());
     }
 
-    private void showError(
-            String title,
-            String message
-    ) {
+    private void configureCaseworkerComboBox() {
+        caseworkerComboBox.setConverter(new StringConverter<CaseworkerEntry>() {
 
-        Alert alert =
-                new Alert(Alert.AlertType.ERROR);
+            @Override
+            public String toString(CaseworkerEntry caseworker) {
+                return caseworker == null ? "" : caseworker.name();
+            }
+
+            @Override
+            public CaseworkerEntry fromString(String s) {
+                return null;
+            }
+        });
+    }
+
+    private void configureDecisionComboBox() {
+        decisionComboBox.setCellFactory(listView -> new ListCell<CodelistEntry>() {
+
+            @Override
+            protected void updateItem(CodelistEntry item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                    setStyle(null);
+                } else {
+                    setText(null);
+                    setGraphic(createDecisionText(item));
+
+                    setStyle(
+                            "-fx-border-color: transparent transparent #d0d0d0 transparent;"
+                                    + "-fx-border-width: 0 0 1 0;"
+                    );
+                }
+            }
+        });
+
+        decisionComboBox.setButtonCell(new ListCell<CodelistEntry>() {
+            @Override
+            protected void updateItem(CodelistEntry item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    setText(null);
+                    setGraphic(createDecisionText(item));
+                }
+            }
+        });
+    }
+
+    private Text createDecisionText(CodelistEntry item) {
+        Text text = new Text(item.value());
+        text.setWrappingWidth(DECISION_TEXT_WRAP_WIDTH);
+        return text;
+    }
+
+    private void configureFileNumberField() {
+        fileNumber.textProperty().addListener((observable, oldValue, newValue) -> {
+            Text text = new Text(newValue);
+            text.setFont(fileNumber.getFont());
+
+            double textWidth = text.getLayoutBounds().getWidth();
+            double preferredWidth = textWidth + FILE_NUMBER_PADDING;
+            double widthWithMin = Math.max(FILE_NUMBER_MIN_WIDTH, preferredWidth);
+
+            fileNumber.setPrefWidth(widthWithMin);
+        });
+    }
+
+    private void loadSenderName() {
+        try {
+            senderName = senderConfigLoader.loadSenderName();
+            senderNameLabel.setText(senderName);
+        } catch (IOException e) {
+            showError("Absender-Konfiguration konnte nicht geladen werden", e.getMessage());
+        }
+    }
+
+    private void loadCaseworkers() {
+        try {
+            List<CaseworkerEntry> caseworkerEntries = caseworkerConfigLoader.load();
+
+            double maxTextWidth = 0;
+
+            for (CaseworkerEntry caseworkerEntry : caseworkerEntries) {
+                Text text = new Text(caseworkerEntry.name());
+                double textWidth = text.getLayoutBounds().getWidth();
+
+                if (textWidth > maxTextWidth) {
+                    maxTextWidth = textWidth;
+                }
+            }
+
+            caseworkerComboBox.setPrefWidth(maxTextWidth + CASEWORKER_WIDTH_PADDING);
+            caseworkerComboBox.getItems().addAll(caseworkerEntries);
+
+        } catch (IOException e) {
+            showError("Sachbearbeiter-Konfiguration konnte nicht geladen werden", e.getMessage());
+        }
+    }
+
+    private void loadDecisions() {
+        try {
+            CodelistConfig config = new CodelistConfig();
+
+            CodelistDefinition definition = config.get("sachentscheidung");
+
+            GenericodeReader genericodeReader = new GenericodeReader();
+
+            Path codelistFile = ApplicationPaths.getApplicationDirectory().resolve("codelists").resolve(definition.file());
+
+            List<CodelistEntry> entries = genericodeReader.readAll(codelistFile, definition);
+
+            decisionComboBox.getItems().addAll(entries);
+
+        } catch (Exception e) {
+            showError("Sachentscheidung-Codelist konnte nicht geladen werden", e.getMessage());
+        }
+    }
+
+    private void showError(String title, String message) {
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
 
         alert.setTitle(title);
         alert.setHeaderText(null);
@@ -167,13 +265,9 @@ public class MainController {
         alert.showAndWait();
     }
 
-    private void showWarning(
-            String title,
-            String message
-    ) {
+    private void showWarning(String title, String message) {
 
-        Alert alert =
-                new Alert(Alert.AlertType.WARNING);
+        Alert alert = new Alert(Alert.AlertType.WARNING);
 
         alert.setTitle(title);
         alert.setHeaderText(null);

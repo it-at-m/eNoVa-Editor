@@ -14,7 +14,7 @@ public class EnovaEditorApplication extends Application {
         FXMLLoader fxmlLoader =
                 new FXMLLoader(EnovaEditorApplication.class.getResource("main-view.fxml"));
 
-        Scene scene = new Scene(fxmlLoader.load(), 900, 600);
+        Scene scene = new Scene(fxmlLoader.load(), 800, 520);
 
         stage.setTitle("eNoVa Editor");
         stage.setScene(scene);

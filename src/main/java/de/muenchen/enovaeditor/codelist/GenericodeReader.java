@@ -7,6 +7,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GenericodeReader {
 
@@ -26,17 +28,32 @@ public class GenericodeReader {
 
             if (keyValue.equals(currentKey)) {
 
-                String result = findValue(row, definition.valueColumn(), definition);
-
-                if (result == null) {
-                    throw new IllegalArgumentException("Ausgabewert für '" + keyValue + "' wurde nicht gefunden.");
-                }
-
-                return result;
+                return getRequiredValue(row, definition.valueColumn(), definition);
             }
         }
 
         throw new IllegalArgumentException("Wert '" + keyValue + "' wurde in der Codeliste nicht gefunden.");
+    }
+
+    public List<CodelistEntry> readAll(Path file, CodelistDefinition definition) throws Exception {
+        List<CodelistEntry> entries = new ArrayList<>();
+
+        Document document = xmlLoader.load(file.toFile());
+
+        NodeList rows = document.getElementsByTagName(definition.rowElement());
+
+        for (int i = 0; i < rows.getLength(); i++) {
+
+            Element row = (Element) rows.item(i);
+
+            String currentKey = getRequiredValue(row, definition.keyColumn(), definition);
+
+            String currentValue = getRequiredValue(row, definition.valueColumn(), definition);
+
+            entries.add(new CodelistEntry(currentKey, currentValue));
+        }
+
+        return entries;
     }
 
     private String findValue(Element row, String column, CodelistDefinition definition) {
@@ -65,5 +82,15 @@ public class GenericodeReader {
         }
 
         return null;
+    }
+
+    private String getRequiredValue(Element row, String column, CodelistDefinition definition) {
+        String value = findValue(row, column, definition);
+
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException("Wert für konfigurierte Spalte '" + column + "' fehlt.");
+        }
+
+        return value;
     }
 }
