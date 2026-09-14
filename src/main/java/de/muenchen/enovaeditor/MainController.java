@@ -101,6 +101,8 @@ public class MainController {
 
             fileStatusLabel.setText(selectedFile.getName());
 
+            clearDecisionFields();
+
             try {
                 browserOpener.open(outputHtml);
             } catch (IOException e) {
@@ -253,6 +255,12 @@ public class MainController {
         } catch (Exception e) {
             showError("Sachentscheidung-Codelist konnte nicht geladen werden", e.getMessage());
         }
+    }
+
+    private void clearDecisionFields() {
+        fileNumber.clear();
+        caseworkerComboBox.setValue(null);
+        decisionComboBox.setValue(null);
     }
 
     private void showError(String title, String message) {
