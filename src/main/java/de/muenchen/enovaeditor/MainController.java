@@ -70,6 +70,8 @@ public class MainController {
         configureDecisionComboBox();
         configureFileNumberField();
 
+        setDecisionFieldsDisabled(true);
+
         loadSenderName();
         loadCaseworkers();
         loadDecisions();
@@ -100,8 +102,8 @@ public class MainController {
             Path outputHtml = htmlOutputWriter.write(renderedHtml, selectedFile);
 
             fileStatusLabel.setText(selectedFile.getName());
-
             clearDecisionFields();
+            setDecisionFieldsDisabled(false);
 
             try {
                 browserOpener.open(outputHtml);
@@ -115,9 +117,10 @@ public class MainController {
             }
 
         } catch (Exception e) {
-
+            openedDocument = null;
             fileStatusLabel.setText("");
-
+            clearDecisionFields();
+            setDecisionFieldsDisabled(true);
             showError("Datei kann nicht verarbeitet werden", e.getMessage());
         }
     }
@@ -261,6 +264,12 @@ public class MainController {
         fileNumber.clear();
         caseworkerComboBox.setValue(null);
         decisionComboBox.setValue(null);
+    }
+
+    private void setDecisionFieldsDisabled(boolean disabled) {
+        fileNumber.setDisable(disabled);
+        caseworkerComboBox.setDisable(disabled);
+        decisionComboBox.setDisable(disabled);
     }
 
     private void showError(String title, String message) {
