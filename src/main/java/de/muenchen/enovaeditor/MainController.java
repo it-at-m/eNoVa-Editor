@@ -14,12 +14,17 @@ import de.muenchen.enovaeditor.template.TemplateLoader;
 import de.muenchen.enovaeditor.template.XPathTemplateRenderer;
 import de.muenchen.enovaeditor.xml.ErsuchenSachentscheidungChecker;
 import de.muenchen.enovaeditor.xml.XmlLoader;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
@@ -46,7 +51,8 @@ public class MainController {
     private final CaseworkerConfigLoader caseworkerConfigLoader = new CaseworkerConfigLoader();
     private final SenderConfigLoader senderConfigLoader = new SenderConfigLoader();
 
-    private Document openedDocument;
+    private final ObjectProperty<Document> openedDocument = new SimpleObjectProperty<>(null);
+
     private String senderName;
 
     @FXML
@@ -65,12 +71,15 @@ public class MainController {
     private TextField fileNumber;
 
     @FXML
+    private Button generateAnswer;
+
+    @FXML
     private void initialize() {
+        setupBindings();
+
         configureCaseworkerComboBox();
         configureDecisionComboBox();
         configureFileNumberField();
-
-        setDecisionFieldsDisabled(true);
 
         loadSenderName();
         loadCaseworkers();
@@ -86,14 +95,12 @@ public class MainController {
             return;
         }
 
-        openedDocument = null;
+        openedDocument.set(null);
 
         try {
             Document document = xmlLoader.load(selectedFile);
 
             checker.check(document);
-
-            openedDocument = document;
 
             String inputTemplate = templateLoader.loadInputTemplate();
 
@@ -103,7 +110,7 @@ public class MainController {
 
             fileStatusLabel.setText(selectedFile.getName());
             clearDecisionFields();
-            setDecisionFieldsDisabled(false);
+            openedDocument.set(document);
 
             try {
                 browserOpener.open(outputHtml);
@@ -117,12 +124,16 @@ public class MainController {
             }
 
         } catch (Exception e) {
-            openedDocument = null;
+            openedDocument.set(null);
             fileStatusLabel.setText("");
             clearDecisionFields();
-            setDecisionFieldsDisabled(true);
             showError("Datei kann nicht verarbeitet werden", e.getMessage());
         }
+    }
+
+    @FXML
+    protected void onGenerateAnswer() {
+
     }
 
     private File chooseXmlFile() {
@@ -266,10 +277,34 @@ public class MainController {
         decisionComboBox.setValue(null);
     }
 
-    private void setDecisionFieldsDisabled(boolean disabled) {
-        fileNumber.setDisable(disabled);
-        caseworkerComboBox.setDisable(disabled);
-        decisionComboBox.setDisable(disabled);
+    private void setupBindings() {
+        setupGenerateAnswerButtonBinding();
+        setupDecisionFieldsDisabledBinding();
+    }
+
+    private void setupGenerateAnswerButtonBinding() {
+        BooleanBinding fileNumberMissing = Bindings.createBooleanBinding(
+                () -> fileNumber.getText().isBlank(),
+                fileNumber.textProperty()
+        );
+
+        BooleanBinding caseworkerMissing = caseworkerComboBox
+                .getSelectionModel()
+                .selectedItemProperty()
+                .isNull();
+
+        BooleanBinding decisionMissing = decisionComboBox
+                .getSelectionModel()
+                .selectedItemProperty()
+                .isNull();
+
+        generateAnswer.disableProperty().bind(fileNumberMissing.or(caseworkerMissing).or(decisionMissing).or(openedDocument.isNull()));
+    }
+
+    private void setupDecisionFieldsDisabledBinding() {
+        fileNumber.disableProperty().bind(openedDocument.isNull());
+        caseworkerComboBox.disableProperty().bind(openedDocument.isNull());
+        decisionComboBox.disableProperty().bind(openedDocument.isNull());
     }
 
     private void showError(String title, String message) {

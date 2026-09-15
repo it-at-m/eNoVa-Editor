@@ -90,6 +90,20 @@
                     minWidth="180.0"
                     GridPane.columnIndex="1"
                     GridPane.rowIndex="3"/>
+
+            <Button
+                    fx:id="generateAnswer"
+                    text="Antwort generieren"
+                    onAction="#onGenerateAnswer"
+                    GridPane.columnIndex="1"
+                    GridPane.rowIndex="4"
+                    GridPane.halignment="RIGHT">
+
+                <GridPane.margin>
+                    <Insets top="20"/>
+                </GridPane.margin>
+
+            </Button>
         </GridPane>
     </center>
 
