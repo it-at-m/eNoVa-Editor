@@ -30,13 +30,20 @@ public final class ApplicationPaths {
                             .toURI()
             ).toAbsolutePath().normalize();
 
-            if (Files.isRegularFile(location)) {
-                return location.getParent();
+            Path dir = Files.isRegularFile(location) ? location.getParent() : location;
+            if (Files.exists(dir.resolve("Input.htm"))) {
+                return dir;
+            }
+            if (dir.getParent() != null && Files.exists(dir.getParent().resolve("Input.htm"))) {
+                return dir.getParent();
             }
 
-            return Path.of(System.getProperty("user.dir"))
-                    .toAbsolutePath()
-                    .normalize();
+            Path userDir = Path.of(System.getProperty("user.dir")).toAbsolutePath().normalize();
+            if (Files.exists(userDir.resolve("Input.htm"))) {
+                return userDir;
+            }
+
+            return dir;
 
         } catch (URISyntaxException e) {
             throw new IllegalStateException(

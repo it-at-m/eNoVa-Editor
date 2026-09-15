@@ -33,6 +33,10 @@
                         text="XML öffnen"
                         onAction="#onXmlOpenClick"/>
 
+                <Button
+                        text="Musterdaten laden"
+                        onAction="#onLoadSampleClick"/>
+
                 <Label
                         fx:id="fileStatusLabel"
                         text="Keine Datei ausgewählt"/>
@@ -77,10 +81,14 @@
             <Label text="Sachbearbeiter auswählen:"
                    GridPane.columnIndex="0"
                    GridPane.rowIndex="2"/>
-            <ComboBox
-                    fx:id="caseworkerComboBox"
-                    GridPane.columnIndex="1"
-                    GridPane.rowIndex="2"/>
+            <VBox spacing="4.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                <ComboBox
+                        fx:id="caseworkerComboBox"
+                        minWidth="200.0"/>
+                <Label fx:id="caseworkerDetailLabel"
+                       text=""
+                       style="-fx-font-size: 11px; -fx-text-fill: #475569;"/>
+            </VBox>
 
             <Label text="Entscheidung:"
                    GridPane.columnIndex="0"
@@ -90,6 +98,26 @@
                     minWidth="180.0"
                     GridPane.columnIndex="1"
                     GridPane.rowIndex="3"/>
+
+            <HBox spacing="15.0" alignment="CENTER_LEFT"
+                  GridPane.columnIndex="0"
+                  GridPane.columnSpan="2"
+                  GridPane.rowIndex="4">
+                <padding>
+                    <Insets top="10.0"/>
+                </padding>
+                <Button fx:id="previewButton"
+                        text="Antwort-Vorschau anzeigen"
+                        onAction="#onPreviewResponseClick"
+                        disable="true"/>
+                <Button fx:id="exportButton"
+                        text="Sachentscheidung speichern / Export"
+                        onAction="#onExportResponseClick"
+                        disable="true"/>
+                <Label fx:id="actionStatusLabel"
+                       text=""
+                       style="-fx-text-fill: #0078b4;"/>
+            </HBox>
         </GridPane>
     </center>
 

@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Bescheid über Sachentscheidung (eNoVA)</title>
+    <style>
+      * {
+          box-sizing: border-box;
+      }
+      body {
+          font-family: 'Segoe UI', Arial, sans-serif;
+          font-size: 13.5px;
+          line-height: 1.55;
+          color: #1e293b;
+          margin: 0;
+          padding: 24px;
+          background: #ffffff;
+      }
+      @page {
+          size: A4;
+          margin: 20mm 15mm 20mm 15mm;
+      }
+      @media print {
+          body {
+              padding: 0;
+          }
+          .no-print {
+              display: none !important;
+          }
+          .page-break {
+              page-break-before: always;
+          }
+      }
+      .toolbar {
+          background-color: #f1f5f9;
+          border: 1px solid #cbd5e1;
+          border-radius: 8px;
+          padding: 12px 16px;
+          margin-bottom: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+      }
+      .toolbar button {
+          background-color: #0284c7;
+          color: white;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 6px;
+          font-weight: bold;
+          font-size: 13px;
+          cursor: pointer;
+      }
+      .toolbar button:hover {
+          background-color: #0369a1;
+      }
+      .kopf-zeile {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 16px;
+          margin-bottom: 20px;
+          padding-bottom: 14px;
+          border-bottom: 2px solid #004b76;
+      }
+      .behoerde-name {
+          font-size: 17px;
+          font-weight: bold;
+          color: #004b76;
+          margin-bottom: 3px;
+      }
+      .fachbereich {
+          font-size: 12px;
+          color: #64748b;
+      }
+      .kontakt {
+          text-align: right;
+          font-size: 12.5px;
+          color: #334155;
+          line-height: 1.5;
+      }
+      .empfaenger-block {
+          margin: 24px 0 20px 0;
+          min-height: 70px;
+          font-size: 13.5px;
+          line-height: 1.45;
+      }
+      .datum-zeile {
+          text-align: right;
+          color: #475569;
+          font-size: 12.5px;
+          margin: 10px 0 20px 0;
+      }
+      .titel-box {
+          background-color: #f0fdf4;
+          border-left: 4px solid #16a34a;
+          border-radius: 4px;
+          padding: 14px 18px;
+          margin: 20px 0;
+      }
+      .titel-haupt {
+          font-size: 16px;
+          font-weight: bold;
+          color: #14532d;
+          margin-bottom: 4px;
+      }
+      .titel-sub {
+          font-size: 13px;
+          color: #166534;
+      }
+      .entscheidungs-tenor {
+          background-color: #f8fafc;
+          border: 1px solid #cbd5e1;
+          border-left: 5px solid #004b76;
+          border-radius: 6px;
+          padding: 14px 18px;
+          margin: 18px 0;
+          font-size: 14px;
+          font-weight: 600;
+          color: #0f172a;
+          line-height: 1.6;
+      }
+      .section-heading {
+          font-size: 13.5px;
+          font-weight: bold;
+          color: #0b2a3d;
+          margin: 20px 0 8px 0;
+          padding-bottom: 4px;
+          border-bottom: 1px solid #e2e8f0;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+      }
+      .person-block, .grundstueck-block {
+          background-color: #f8fafc;
+          border: 1px solid #e2e8f0;
+          border-radius: 6px;
+          padding: 10px 14px;
+          margin-bottom: 8px;
+      }
+      .flurstueck-item {
+          display: inline-block;
+          background-color: #ffffff;
+          border: 1px solid #cbd5e1;
+          border-radius: 4px;
+          padding: 4px 10px;
+          margin: 4px 4px 4px 0;
+          font-size: 12.5px;
+      }
+      .rechtsbehelf {
+          margin-top: 30px;
+          padding-top: 14px;
+          border-top: 1px solid #e2e8f0;
+          font-size: 11px;
+          color: #64748b;
+          line-height: 1.5;
+      }
+      .unterschrift-zeile {
+          margin-top: 35px;
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+      }
+      .siegel-box {
+          width: 140px;
+          height: 70px;
+          border: 1px dashed #94a3b8;
+          border-radius: 6px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 11px;
+          color: #64748b;
+          text-align: center;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- Toolbar fuer Browseransicht -->
+    <div class="toolbar no-print">
+      <div>
+        <strong>Sachentscheidung eNoVA (XJustiz 2900003)</strong>
+        <span style="color: #64748b; margin-left: 10px;">Antwort-Dokument</span>
+      </div>
+      <button onclick="window.print()">🖨️ Drucken / Als PDF speichern</button>
+    </div>
+
+    <!-- Behoerden-Kopfzeile -->
+    <div class="kopf-zeile">
+      <div>
+        <div class="behoerde-name">
+          {{xpath://tns:absender/tns:informationen/tns:auswahl_kommunikationspartner/tns:sonstige}}
+        </div>
+        <div class="fachbereich">Fachbereich Bau- und Liegenschaftsverwaltung • Vorkaufsrechtsstelle</div>
+      </div>
+      <div class="kontakt">
+        <strong>Aktenzeichen:</strong> {{xpath://tns:absender/tns:aktenzeichen}}<br/>
+        <strong>Verfahren:</strong> BauGB §§ 24 ff. (eNoVA)
+        {{#each xpath://tns:beteiligung[tns:rolle/tns:rollennummer = //tns:absender/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer]}}
+        <br/><strong>Sachbearbeitung:</strong>
+        {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:titel}}
+        {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:vorname}}
+        {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:nachname}}
+        {{#each xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:telekommunikation}}
+        <br/><strong>Kontakt:</strong> {{xpath:tns:verbindung}}
+        {{/each}}
+        {{/each}}
+      </div>
+    </div>
+
+    <!-- Empfaenger (Notariat) -->
+    <div class="empfaenger-block">
+      {{#each xpath://tns:beteiligung[
+      tns:rolle/tns:rollennummer =
+      //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+      ]}}
+        <strong>An das Notariat</strong><br/>
+        {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:titel}}
+        {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:vorname}}
+        {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:nachname}}<br/>
+        {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:strasse}}
+        {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:hausnummer}}<br/>
+        {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:postleitzahl}}
+        {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:ort}}
+      {{/each}}
+    </div>
+
+    <!-- Datumszeile -->
+    <div class="datum-zeile">
+      Datum:
+      {{xpath:concat(
+      substring(//tns:nachrichtenkopf/tns:erstellungszeitpunkt, 9, 2), '.',
+      substring(//tns:nachrichtenkopf/tns:erstellungszeitpunkt, 6, 2), '.',
+      substring(//tns:nachrichtenkopf/tns:erstellungszeitpunkt, 1, 4)
+      )}}
+    </div>
+
+    <!-- Titelbox / Bescheid -->
+    <div class="titel-box">
+      <div class="titel-haupt">BESCHEID / ZEUGNIS ÜBER DAS VORKAUFSRECHT</div>
+      <div class="titel-sub">
+        zur Notarurkunde UVZ-Nr. {{xpath://tns:datenDerUrkunde/tns:urNr}}
+        vom {{xpath:concat(
+        substring(normalize-space(//tns:datenDerUrkunde/tns:urkundsdatum), 9, 2), '.',
+        substring(normalize-space(//tns:datenDerUrkunde/tns:urkundsdatum), 6, 2), '.',
+        substring(normalize-space(//tns:datenDerUrkunde/tns:urkundsdatum), 1, 4)
+        )}}
+      </div>
+    </div>
+
+    <p>Sehr geehrte Damen und Herren,</p>
+
+    <p>zu dem mit Notarurkunde UVZ-Nr. <strong>{{xpath://tns:datenDerUrkunde/tns:urNr}}</strong> angezeigten Grundstückskaufvertrag ergeht folgende Sachentscheidung:</p>
+
+    <!-- Entscheidungstenor aus Codeliste -->
+    <div class="entscheidungs-tenor">
+      {{codelist:sachentscheidung
+      xpath://tns:fachdaten/tns:auswahl_GegenstandDerNachricht/tns:sachentscheidung/tns:sachentscheidung/code}}
+    </div>
+
+    <!-- Betroffene Grundstuecke -->
+    <div class="section-heading">Betroffene Grundstücke / Flurstücke</div>
+    {{#each xpath://tns:fachdaten/tns:beschreibungDesBetroffenenRechts}}
+    <div class="grundstueck-block">
+      <div>
+        <strong>Grundbuch:</strong>
+        Amtsgericht {{xpath:tns:bundeslandfremdesGrundbuchblatt/tns:amtsgericht}},
+        Grundbuchbezirk {{xpath:tns:bundeslandfremdesGrundbuchblatt/tns:grundbuchbezirk}},
+        Blatt {{xpath:tns:bundeslandfremdesGrundbuchblatt/tns:grundbuchblatt}}
+      </div>
+      <div style="margin-top: 6px;">
+        <strong>Flurstücke:</strong><br/>
+        {{#each xpath:tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:grundstueck/tns:flurstuecke}}
+        <span class="flurstueck-item">
+          Gemarkung: {{xpath:tns:identifikationFlurstueck/tns:gemarkungsschluessel}},
+          Flurstück: {{xpath:concat(
+          tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:zaehler,
+          substring('/', 1, number(boolean(tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:nenner))),
+          tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:nenner
+          )}}
+        </span>
+        {{/each}}
+      </div>
+    </div>
+    {{/each}}
+
+    <!-- Vertragsteile -->
+    <div class="section-heading">Vertragsteile</div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+      <div style="flex: 1 1 240px;">
+        <strong>Verkäufer:</strong>
+        {{#each xpath://tns:beteiligung[tns:rolle/tns:rollenbezeichnung/code='168']}}
+        <div class="person-block">
+          {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:titel}}
+          {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:vorname}}
+          {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:nachname}}<br/>
+          {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:ort}}
+        </div>
+        {{/each}}
+      </div>
+      <div style="flex: 1 1 240px;">
+        <strong>Käufer:</strong>
+        {{#each xpath://tns:beteiligung[tns:rolle/tns:rollenbezeichnung/code='072']}}
+        <div class="person-block">
+          {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:titel}}
+          {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:vorname}}
+          {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:nachname}}<br/>
+          {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:ort}}
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+    <!-- Unterschrift & Dienstsiegel -->
+    <div class="unterschrift-zeile">
+      <div>
+        Im Auftrag<br/><br/>
+        <div style="border-top: 1px solid #475569; min-width: 250px; padding-top: 4px; font-weight: 600;">
+          {{#each xpath://tns:beteiligung[tns:rolle/tns:rollennummer = //tns:absender/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer]}}
+          {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:titel}}
+          {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:vorname}}
+          {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:nachname}}
+          <div style="font-size: 11.5px; font-weight: normal; color: #475569; margin-top: 2px;">
+            {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:anschriftenzusatz}}
+          </div>
+          {{/each}}
+          <div style="font-size: 11px; font-weight: normal; color: #64748b; margin-top: 2px;">
+            Sachbearbeitung Vorkaufsrecht
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #64748b; margin-top: 3px;">Dieses Dokument wurde elektronisch erstellt.</div>
+      </div>
+      <div class="siegel-box">
+        [ Dienstsiegel /<br/>qualifiziertes Siegel ]
+      </div>
+    </div>
+
+    <!-- Rechtsbehelfsbelehrung -->
+    <div class="rechtsbehelfsbelehrung rechtsbehelf">
+      <strong>Rechtsbehelfsbelehrung:</strong><br/>
+      Gegen diesen Bescheid kann innerhalb eines Monats nach Bekanntgabe Widerspruch erhoben werden. Der Widerspruch ist schriftlich oder zur Niederschrift bei der im Briefkopf angegebenen Behörde einzulegen. Bei elektronischer Einlegung muss das Dokument mit einer qualifizierten elektronischen Signatur versehen sein oder auf einem sicheren Übermittlungsweg eingereicht werden.
+    </div>
+
+  </body>
+</html>

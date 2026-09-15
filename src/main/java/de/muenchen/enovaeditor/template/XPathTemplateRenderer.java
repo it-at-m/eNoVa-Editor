@@ -34,12 +34,14 @@ public class XPathTemplateRenderer {
     private static final Pattern CODELIST_PLACEHOLDER = Pattern.compile("\\{\\{codelist:([\\w.-]+)\\s+xpath:(.+?)}}", Pattern.DOTALL);
 
     public String render(String template, Document document) throws Exception {
-
-        String result = renderEachBlocks(template, document);
-
+        if (template == null) {
+            return "";
+        }
+        String normalizedTemplate = template.replace("\r\n", "\n").replace("\r", "");
+        String result = renderEachBlocks(normalizedTemplate, document);
         result = renderCodelistPlaceholders(result, document);
-
-        return renderXPathPlaceholders(result, document);
+        String finalHtml = renderXPathPlaceholders(result, document);
+        return finalHtml.replace("\r\n", "\n").replace("\r", "");
     }
 
     private String renderEachBlocks(String template, Object context) throws Exception {
@@ -142,7 +144,9 @@ public class XPathTemplateRenderer {
             String xpathExpression = matcher.group(1).trim();
 
             String value = xpath.evaluate(xpathExpression, context);
-
+            if (value != null) {
+                value = value.trim();
+            }
             String safeValue = escapeHtml(value);
 
             matcher.appendReplacement(result, Matcher.quoteReplacement(safeValue));
@@ -199,8 +203,16 @@ public class XPathTemplateRenderer {
     }
 
     private String escapeHtml(String value) {
-
-        return value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&#39;");
+        if (value == null) {
+            return "";
+        }
+        return value.replace("\r", "")
+                .replace("\n", " ")
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;");
     }
 
     private static class XJustizNamespaceContext implements NamespaceContext {

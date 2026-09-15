@@ -1,113 +1,62 @@
 @startuml
-title eNoVa-Editor – aktueller Ablauf
+title eNoVa-Editor – Fachassistent-Ablauf (XJustiz eNoVA 2900003)
 
 start
 
 partition "JavaFX-Anwendung" {
     :EnovaEditorApplication startet;
+    :Bildschirmgröße ermitteln & Fenster zentrieren;
     :main-view.fxml wird geladen;
-    :MainController wird verwendet;
+    :caseworkers.xml einlesen (schemafreie CDATA-Fragmente);
+    :codelists/ENOVA.Sachentscheidung einlesen (Genericode);
 }
 
 partition "MainController" {
-    :Benutzer klickt\n"XML öffnen";
-    :FileChooser öffnen;
+    :Eingangsdaten laden (Dateidialog / Musterdaten);
 }
 
 if (XML-Datei ausgewählt?) then (ja)
 
-    partition "XmlLoader" {
-        :XML-Datei einlesen;
-        :DOM Document erzeugen;
-    }
-
-    note right
-        Ergebnis:
-        org.w3c.dom.Document
-    end note
-
-    partition "ErsuchenSachentscheidungChecker" {
-
-        :Prüfen, ob die XML ein\nErsuchen um Sachentscheidung\n(eNoVa 2900003) ist;
-
+    partition "XmlLoader & ErsuchenSachentscheidungChecker" {
+        :XML-Datei einlesen (DOM Document);
+        :Prüfen, ob Nachricht eNoVa 2900003 ist;
         if (Nachricht gültig?) then (ja)
         else (nein)
-            :Fehler werfen;
+            :Fehlermeldung anzeigen;
             detach
         endif
     }
 
-    partition "TemplateLoader" {
+    partition "TemplateLoader & XPathTemplateRenderer" {
+        :Input.htm einlesen & rendern;
+        :HTML im Standard-Browser öffnen;
+    }
 
-        partition "ApplicationPaths" {
-            :Programmverzeichnis ermitteln;
-        }
+    partition "Sachbearbeitung (Entscheidungserfassung)" {
+        :Sachbearbeiter(in) auswählen;
+        :Aktenzeichen der Kommune erfassen;
+        :Art der Sachentscheidung wählen (aus Genericode-Codeliste);
+    }
 
-        :Input.htm im\nProgrammverzeichnis suchen;
-
-        if (Input.htm vorhanden\nund lesbar?) then (ja)
-            :Input.htm als UTF-8 lesen;
-        else (nein)
-            :IOException werfen;
-            detach
+    partition "Antwort & Export" {
+        if (Aktion?) then (Vorschau)
+            :EnovaResponseTransformer transformiert 2900003 Ersuchen in Sachentscheidung;
+            :Output.htm Template rendern & im Browser anzeigen;
+        else (Export)
+            :EnovaResponseTransformer transformiert 2900003;
+            :nachricht.enova.entscheidung.2900003.xml speichern;
+            :Output.htm Bescheid speichern;
+            note right
+                Bereit zur qualifizierten
+                Signatur (qeS / CAdES detached)
+                für die Rückübermittlung via beBPo
+            end note
+            :Erfolgsmeldung anzeigen;
         endif
     }
-
-    partition "XPathTemplateRenderer" {
-
-        :Input.htm und XML verarbeiten;
-
-        :Wiederholungen im\nTemplate verarbeiten;
-
-        :XML-Werte über\nXPath einsetzen;
-
-        :XML-Werte für HTML\nsicher kodieren;
-
-        note right
-            Ergebnis:
-            fertiger HTML-String
-        end note
-    }
-
-    partition "HtmlOutputWriter" {
-        :Verzeichnis der\nEingabe-XML bestimmen;
-        :Dateinamen und\nZeitstempel erzeugen;
-
-        :HTML speichern als\nName-JJJJMMDDHHmmSS.htm;
-
-        note right
-            Die HTML-Datei liegt
-            im selben Verzeichnis
-            wie die Eingabe-XML.
-        end note
-    }
-
-    partition "MainController" {
-        :Dateiname in JavaFX-UI anzeigen;
-    }
-
-    partition "BrowserOpener" {
-
-        if (Standardbrowser kann\ngeöffnet werden?) then (ja)
-            :HTML-Datei im\nStandardbrowser öffnen;
-        else (nein)
-            :IOException werfen;
-        endif
-    }
-
-    if (Browser konnte geöffnet werden?) then (ja)
-        partition "Standardbrowser" {
-            :Generierte HTML-Datei anzeigen;
-        }
-    else (nein)
-        partition "MainController" {
-            :Warnung anzeigen:\nHTML wurde erstellt,\nBrowser konnte nicht geöffnet werden;
-            :Pfad der erzeugten\nHTML-Datei anzeigen;
-        }
-    endif
 
 else (nein)
-    :Keine Aktion;
+    :Warten auf Dateiauswahl oder Klick auf "Musterdaten laden";
 endif
 
 stop
