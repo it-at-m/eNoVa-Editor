@@ -13,10 +13,7 @@ import de.muenchen.enovaeditor.template.HtmlOutputWriter;
 import de.muenchen.enovaeditor.template.TemplateLoader;
 import de.muenchen.enovaeditor.template.XPathTemplateRenderer;
 import de.muenchen.enovaeditor.util.OutputPathUtil;
-import de.muenchen.enovaeditor.xml.AnswerTransformer;
-import de.muenchen.enovaeditor.xml.ErsuchenSachentscheidungChecker;
-import de.muenchen.enovaeditor.xml.XmlLoader;
-import de.muenchen.enovaeditor.xml.XmlWriter;
+import de.muenchen.enovaeditor.xml.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
@@ -38,6 +35,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.UUID;
 
 public class MainController {
 
@@ -146,7 +144,13 @@ public class MainController {
     protected void onGenerateAnswer() {
         try {
             Document inputDocument = openedDocument.get();
-            Document answerDocument = answerTransformer.transform(inputDocument);
+
+            AnswerParameters parameters = new AnswerParameters(
+                    fileNumber.getText(),
+                    UUID.randomUUID().toString()
+            );
+
+            Document answerDocument = answerTransformer.transform(inputDocument, parameters);
             Path outputXmlPath = OutputPathUtil.createOutputPath(openedXmlPath, "Output", ".xml");
             xmlWriter.write(answerDocument, outputXmlPath.toFile());
 

@@ -18,7 +18,7 @@ public class AnswerTransformer {
 
     private static final String RULE_FILE = "answer-transform.xsl";
 
-    public Document transform(Document document) throws IOException, TransformerException {
+    public Document transform(Document document, AnswerParameters parameters) throws IOException, TransformerException {
         Path xsltPath = ApplicationFileUtil.resolveReadableFile(RULE_FILE);
 
         StreamSource xsltSource = new StreamSource(xsltPath.toFile());
@@ -28,6 +28,10 @@ public class AnswerTransformer {
 
         DOMSource domSource = new DOMSource(document);
         DOMResult domResult = new DOMResult();
+
+        transformer.setParameter("fileNumber", parameters.fileNumber());
+        transformer.setParameter("messageId", parameters.messageId());
+
         transformer.transform(domSource, domResult);
 
         Node resultNode = domResult.getNode();
