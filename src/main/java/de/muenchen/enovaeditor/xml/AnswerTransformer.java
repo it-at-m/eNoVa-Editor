@@ -1,6 +1,7 @@
 package de.muenchen.enovaeditor.xml;
 
 import de.muenchen.enovaeditor.util.ApplicationFileUtil;
+import net.sf.saxon.TransformerFactoryImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -22,7 +23,7 @@ public class AnswerTransformer {
 
         StreamSource xsltSource = new StreamSource(xsltPath.toFile());
 
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        TransformerFactory transformerFactory = new TransformerFactoryImpl();
         Transformer transformer = transformerFactory.newTransformer(xsltSource);
 
         DOMSource domSource = new DOMSource(document);
