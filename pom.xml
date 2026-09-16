@@ -156,6 +156,10 @@
                                                 file="${project.basedir}/caseworkers.xml"
                                                 todir="${project.build.directory}/distribution/eNoVa-editor"/>
 
+                                        <copy
+                                                file="${project.basedir}/answer-transform.xsl"
+                                                todir="${project.build.directory}/distribution/eNoVa-editor"/>
+
                                         <zip
                                                 destfile="${project.build.directory}/${project.artifactId}-${project.version}.zip"
                                                 basedir="${project.build.directory}/distribution"/>
