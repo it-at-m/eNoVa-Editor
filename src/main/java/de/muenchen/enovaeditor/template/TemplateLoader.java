@@ -1,6 +1,6 @@
 package de.muenchen.enovaeditor.template;
 
-import de.muenchen.enovaeditor.config.ApplicationPaths;
+import de.muenchen.enovaeditor.util.ApplicationFileUtil;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -12,23 +12,7 @@ public class TemplateLoader {
     private static final String INPUT_TEMPLATE = "Input.htm";
 
     public String loadInputTemplate() throws IOException {
-        Path templatePath = ApplicationPaths
-                .getApplicationDirectory()
-                .resolve(INPUT_TEMPLATE);
-
-        if (!Files.isRegularFile(templatePath)) {
-            throw new IOException(
-                    "Die Datei Input.htm wurde nicht gefunden: "
-                            + templatePath
-            );
-        }
-
-        if (!Files.isReadable(templatePath)) {
-            throw new IOException(
-                    "Die Datei Input.htm kann nicht gelesen werden: "
-                            + templatePath
-            );
-        }
+        Path templatePath = ApplicationFileUtil.resolveReadableFile(INPUT_TEMPLATE);
 
         return Files.readString(
                 templatePath,

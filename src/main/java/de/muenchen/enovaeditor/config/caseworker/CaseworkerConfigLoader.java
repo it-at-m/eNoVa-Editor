@@ -1,6 +1,6 @@
 package de.muenchen.enovaeditor.config.caseworker;
 
-import de.muenchen.enovaeditor.config.ApplicationPaths;
+import de.muenchen.enovaeditor.util.ApplicationFileUtil;
 import de.muenchen.enovaeditor.xml.XmlLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -10,7 +10,6 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,16 +22,7 @@ public class CaseworkerConfigLoader {
 
     public List<CaseworkerEntry> load() throws IOException {
 
-        Path configPath = ApplicationPaths.getApplicationDirectory().resolve(CONFIG_FILE);
-
-        if (!Files.isRegularFile(configPath)) {
-            throw new IOException("Die Datei caseworkers.xml wurde nicht gefunden: " + configPath);
-        }
-
-        if (!Files.isReadable(configPath)) {
-            throw new IOException("Die Datei caseworkers.xml kann nicht gelesen werden: " + configPath);
-        }
-
+        Path configPath = ApplicationFileUtil.resolveReadableFile(CONFIG_FILE);
         Document document;
 
         try {

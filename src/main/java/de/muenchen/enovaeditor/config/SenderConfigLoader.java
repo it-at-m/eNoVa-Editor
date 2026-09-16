@@ -1,5 +1,7 @@
 package de.muenchen.enovaeditor.config;
 
+import de.muenchen.enovaeditor.util.ApplicationFileUtil;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
@@ -13,14 +15,7 @@ public class SenderConfigLoader {
 
     public String loadSenderName() throws IOException {
 
-        Path configFile = ApplicationPaths.getApplicationDirectory().resolve(CONFIG_FILE);
-        if (!Files.isRegularFile(configFile)) {
-            throw new IOException("Die Datei " + CONFIG_FILE + " wurde nicht gefunden: " + configFile);
-        }
-
-        if (!Files.isReadable(configFile)) {
-            throw new IOException("Die Datei " + CONFIG_FILE + " kann nicht gelesen werden: " + configFile);
-        }
+        Path configFile = ApplicationFileUtil.resolveReadableFile(CONFIG_FILE);
 
         Properties properties = new Properties();
 
