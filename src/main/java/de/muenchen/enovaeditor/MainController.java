@@ -22,7 +22,12 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
@@ -116,7 +121,7 @@ public class MainController {
             fileStatusLabel.setText(selectedFile.getName());
             clearDecisionFields();
             openedDocument.set(document);
-            openedXmlPath = selectedFile.toPath();
+            openedXmlPath = selectedXmlPath;
             try {
                 browserOpener.open(outputHtml);
             } catch (IOException e) {
