@@ -154,7 +154,7 @@
                                                 todir="${project.build.directory}/distribution/eNoVa-editor"/>
 
                                         <copy
-                                                file="${project.basedir}/sender-config.properties"
+                                                file="${project.basedir}/sender-config.xml"
                                                 todir="${project.build.directory}/distribution/eNoVa-editor"/>
 
                                         <copy

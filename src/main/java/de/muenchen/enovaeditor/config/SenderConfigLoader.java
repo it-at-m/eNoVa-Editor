@@ -1,31 +1,51 @@
 package de.muenchen.enovaeditor.config;
 
 import de.muenchen.enovaeditor.util.ApplicationFileUtil;
+import de.muenchen.enovaeditor.xml.XmlLoader;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Properties;
 
 public class SenderConfigLoader {
 
-    private static final String CONFIG_FILE = "sender-config.properties";
+    private static final String CONFIG_FILE = "sender-config.xml";
+
+    private final XmlLoader xmlLoader = new XmlLoader();
 
     public String loadSenderName() throws IOException {
 
         Path configFile = ApplicationFileUtil.resolveReadableFile(CONFIG_FILE);
 
-        Properties properties = new Properties();
+        Document document;
 
-        try (Reader reader = Files.newBufferedReader(configFile, StandardCharsets.UTF_8)) {
-            properties.load(reader);
+        try {
+            document = xmlLoader.load(configFile.toFile());
+        } catch (ParserConfigurationException | SAXException e) {
+            throw new IOException(
+                    "Absender-Konfiguration konnte nicht gelesen werden.",
+                    e
+            );
         }
-        String senderName = properties.getProperty("sender.name");
+
+        Node nameNode = document
+                .getDocumentElement()
+                .getElementsByTagName("name")
+                .item(0);
+
+        if (nameNode == null) {
+            throw new IOException("Das Element 'name' fehlt.");
+        }
+
+        String senderName = nameNode.getTextContent();
+
         if (senderName == null || senderName.isBlank()) {
-            throw new IOException("Die Eigenschaft 'sender.name' fehlt oder ist leer.");
+            throw new IOException("Das Element 'name' ist leer.");
         }
+
         return senderName.trim();
     }
 
