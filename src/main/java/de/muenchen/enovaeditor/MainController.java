@@ -272,7 +272,7 @@ public class MainController {
             caseworkerComboBox.getItems().addAll(caseworkerEntries);
 
         } catch (IOException e) {
-            showError("Sachbearbeiter-Konfiguration konnte nicht geladen werden", e.getMessage());
+            showError("Sachbearbeiter*in-Konfiguration konnte nicht geladen werden", e.getMessage());
         }
     }
 
