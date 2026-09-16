@@ -11,7 +11,7 @@ public class HtmlOutputWriter {
 
     public Path write(String html, Path inputXmlPath) throws IOException {
 
-        Path outputPath = OutputPathUtil.createOutputPath(inputXmlPath, "", ".htm");
+        Path outputPath = OutputPathUtil.createOutputPath(inputXmlPath, ".htm");
 
         Files.writeString(outputPath, html, StandardCharsets.UTF_8);
 

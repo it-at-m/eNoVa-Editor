@@ -11,6 +11,10 @@ public final class OutputPathUtil {
     private OutputPathUtil() {
     }
 
+    public static Path createOutputPath(Path inputPath, String extension) {
+        return createOutputPath(inputPath, "", extension);
+    }
+
     public static Path createOutputPath(Path inputPath, String fileNameSuffix, String extension) {
         Path normalizedInputPath = inputPath.toAbsolutePath().normalize();
 
