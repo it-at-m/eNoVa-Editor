@@ -12,10 +12,18 @@ import de.muenchen.enovaeditor.config.caseworker.CaseworkerEntry;
 import de.muenchen.enovaeditor.template.HtmlOutputWriter;
 import de.muenchen.enovaeditor.template.TemplateLoader;
 import de.muenchen.enovaeditor.template.XPathTemplateRenderer;
+import de.muenchen.enovaeditor.util.OutputPathUtil;
+import de.muenchen.enovaeditor.xml.AnswerTransformer;
 import de.muenchen.enovaeditor.xml.ErsuchenSachentscheidungChecker;
 import de.muenchen.enovaeditor.xml.XmlLoader;
+import de.muenchen.enovaeditor.xml.XmlWriter;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -25,6 +33,7 @@ import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
 import org.w3c.dom.Document;
 
+import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -43,10 +52,14 @@ public class MainController {
     private final TemplateLoader templateLoader = new TemplateLoader();
     private final XPathTemplateRenderer templateRenderer = new XPathTemplateRenderer();
     private final HtmlOutputWriter htmlOutputWriter = new HtmlOutputWriter();
+    private final AnswerTransformer answerTransformer = new AnswerTransformer();
+    private final XmlWriter xmlWriter = new XmlWriter();
     private final CaseworkerConfigLoader caseworkerConfigLoader = new CaseworkerConfigLoader();
     private final SenderConfigLoader senderConfigLoader = new SenderConfigLoader();
 
-    private Document openedDocument;
+    private final ObjectProperty<Document> openedDocument = new SimpleObjectProperty<>(null);
+    private Path openedXmlPath;
+
     private String senderName;
 
     @FXML
@@ -65,12 +78,15 @@ public class MainController {
     private TextField fileNumber;
 
     @FXML
+    private Button generateAnswer;
+
+    @FXML
     private void initialize() {
+        setupBindings();
+
         configureCaseworkerComboBox();
         configureDecisionComboBox();
         configureFileNumberField();
-
-        setDecisionFieldsDisabled(true);
 
         loadSenderName();
         loadCaseworkers();
@@ -86,25 +102,26 @@ public class MainController {
             return;
         }
 
-        openedDocument = null;
+        Path selectedXmlPath = selectedFile.toPath();
+
+        openedDocument.set(null);
+        openedXmlPath = null;
 
         try {
             Document document = xmlLoader.load(selectedFile);
 
             checker.check(document);
 
-            openedDocument = document;
-
             String inputTemplate = templateLoader.loadInputTemplate();
 
             String renderedHtml = templateRenderer.render(inputTemplate, document);
 
-            Path outputHtml = htmlOutputWriter.write(renderedHtml, selectedFile);
+            Path outputHtml = htmlOutputWriter.write(renderedHtml, selectedXmlPath);
 
             fileStatusLabel.setText(selectedFile.getName());
             clearDecisionFields();
-            setDecisionFieldsDisabled(false);
-
+            openedDocument.set(document);
+            openedXmlPath = selectedXmlPath;
             try {
                 browserOpener.open(outputHtml);
             } catch (IOException e) {
@@ -117,11 +134,29 @@ public class MainController {
             }
 
         } catch (Exception e) {
-            openedDocument = null;
+            openedDocument.set(null);
+            openedXmlPath = null;
             fileStatusLabel.setText("");
             clearDecisionFields();
-            setDecisionFieldsDisabled(true);
             showError("Datei kann nicht verarbeitet werden", e.getMessage());
+        }
+    }
+
+    @FXML
+    protected void onGenerateAnswer() {
+        try {
+            Document inputDocument = openedDocument.get();
+            Document answerDocument = answerTransformer.transform(inputDocument);
+            Path outputXmlPath = OutputPathUtil.createOutputPath(openedXmlPath, "Output", ".xml");
+            xmlWriter.write(answerDocument, outputXmlPath.toFile());
+
+            showSuccess(
+                    "Antwort wurde erzeugt",
+                    "Die Antwort wurde erfolgreich erstellt:\n\n"
+                            + outputXmlPath
+            );
+        } catch (IOException | TransformerException e) {
+            showError("Antwort konnte nicht erzeugt werden", e.getMessage());
         }
     }
 
@@ -266,10 +301,34 @@ public class MainController {
         decisionComboBox.setValue(null);
     }
 
-    private void setDecisionFieldsDisabled(boolean disabled) {
-        fileNumber.setDisable(disabled);
-        caseworkerComboBox.setDisable(disabled);
-        decisionComboBox.setDisable(disabled);
+    private void setupBindings() {
+        setupGenerateAnswerButtonBinding();
+        setupDecisionFieldsDisabledBinding();
+    }
+
+    private void setupGenerateAnswerButtonBinding() {
+        BooleanBinding fileNumberMissing = Bindings.createBooleanBinding(
+                () -> fileNumber.getText().isBlank(),
+                fileNumber.textProperty()
+        );
+
+        BooleanBinding caseworkerMissing = caseworkerComboBox
+                .getSelectionModel()
+                .selectedItemProperty()
+                .isNull();
+
+        BooleanBinding decisionMissing = decisionComboBox
+                .getSelectionModel()
+                .selectedItemProperty()
+                .isNull();
+
+        generateAnswer.disableProperty().bind(fileNumberMissing.or(caseworkerMissing).or(decisionMissing).or(openedDocument.isNull()));
+    }
+
+    private void setupDecisionFieldsDisabledBinding() {
+        fileNumber.disableProperty().bind(openedDocument.isNull());
+        caseworkerComboBox.disableProperty().bind(openedDocument.isNull());
+        decisionComboBox.disableProperty().bind(openedDocument.isNull());
     }
 
     private void showError(String title, String message) {
@@ -285,6 +344,15 @@ public class MainController {
     private void showWarning(String title, String message) {
 
         Alert alert = new Alert(Alert.AlertType.WARNING);
+
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void showSuccess(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
         alert.setTitle(title);
         alert.setHeaderText(null);
