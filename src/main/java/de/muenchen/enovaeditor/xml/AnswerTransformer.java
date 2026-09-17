@@ -1,6 +1,7 @@
 package de.muenchen.enovaeditor.xml;
 
 import de.muenchen.enovaeditor.util.ApplicationFileUtil;
+import net.sf.saxon.TransformerFactoryImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -17,16 +18,25 @@ public class AnswerTransformer {
 
     private static final String RULE_FILE = "answer-transform.xsl";
 
-    public Document transform(Document document) throws IOException, TransformerException {
+    public Document transform(Document document, AnswerParameters parameters) throws IOException, TransformerException {
         Path xsltPath = ApplicationFileUtil.resolveReadableFile(RULE_FILE);
 
         StreamSource xsltSource = new StreamSource(xsltPath.toFile());
 
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        TransformerFactory transformerFactory = new TransformerFactoryImpl();
         Transformer transformer = transformerFactory.newTransformer(xsltSource);
 
         DOMSource domSource = new DOMSource(document);
         DOMResult domResult = new DOMResult();
+
+        transformer.setParameter("fileNumber", parameters.fileNumber());
+        transformer.setParameter("messageId", parameters.messageId());
+
+        transformer.setParameter("productName", parameters.manufacturerInfo().productName());
+        transformer.setParameter("manufacturerName", parameters.manufacturerInfo().manufacturerName());
+        transformer.setParameter("version", parameters.manufacturerInfo().version());
+
+
         transformer.transform(domSource, domResult);
 
         Node resultNode = domResult.getNode();

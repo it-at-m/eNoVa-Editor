@@ -9,14 +9,13 @@ import de.muenchen.enovaeditor.config.ApplicationPaths;
 import de.muenchen.enovaeditor.config.SenderConfigLoader;
 import de.muenchen.enovaeditor.config.caseworker.CaseworkerConfigLoader;
 import de.muenchen.enovaeditor.config.caseworker.CaseworkerEntry;
+import de.muenchen.enovaeditor.config.manufacturer.ManufacturerInfo;
+import de.muenchen.enovaeditor.config.manufacturer.ManufacturerInfoLoader;
 import de.muenchen.enovaeditor.template.HtmlOutputWriter;
 import de.muenchen.enovaeditor.template.TemplateLoader;
 import de.muenchen.enovaeditor.template.XPathTemplateRenderer;
 import de.muenchen.enovaeditor.util.OutputPathUtil;
-import de.muenchen.enovaeditor.xml.AnswerTransformer;
-import de.muenchen.enovaeditor.xml.ErsuchenSachentscheidungChecker;
-import de.muenchen.enovaeditor.xml.XmlLoader;
-import de.muenchen.enovaeditor.xml.XmlWriter;
+import de.muenchen.enovaeditor.xml.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
@@ -38,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.UUID;
 
 public class MainController {
 
@@ -56,6 +56,7 @@ public class MainController {
     private final XmlWriter xmlWriter = new XmlWriter();
     private final CaseworkerConfigLoader caseworkerConfigLoader = new CaseworkerConfigLoader();
     private final SenderConfigLoader senderConfigLoader = new SenderConfigLoader();
+    private final ManufacturerInfoLoader manufacturerInfoLoader = new ManufacturerInfoLoader();
 
     private final ObjectProperty<Document> openedDocument = new SimpleObjectProperty<>(null);
     private Path openedXmlPath;
@@ -146,7 +147,16 @@ public class MainController {
     protected void onGenerateAnswer() {
         try {
             Document inputDocument = openedDocument.get();
-            Document answerDocument = answerTransformer.transform(inputDocument);
+
+            ManufacturerInfo manufacturerInfo = manufacturerInfoLoader.load();
+
+            AnswerParameters parameters = new AnswerParameters(
+                    fileNumber.getText(),
+                    UUID.randomUUID().toString(),
+                    manufacturerInfo
+            );
+
+            Document answerDocument = answerTransformer.transform(inputDocument, parameters);
             Path outputXmlPath = OutputPathUtil.createOutputPath(openedXmlPath, "Output", ".xml");
             xmlWriter.write(answerDocument, outputXmlPath.toFile());
 

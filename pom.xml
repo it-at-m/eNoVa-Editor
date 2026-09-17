@@ -6,7 +6,7 @@
 
     <groupId>de.muenchen</groupId>
     <artifactId>eNoVa-editor</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
     <name>eNoVa-editor</name>
 
     <properties>
@@ -38,9 +38,30 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>12.10</version>
+        </dependency>
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>manufacturer-info.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>manufacturer-info.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -149,7 +170,7 @@
                                                 todir="${project.build.directory}/distribution/eNoVa-editor"/>
 
                                         <copy
-                                                file="${project.basedir}/sender-config.properties"
+                                                file="${project.basedir}/sender-config.xml"
                                                 todir="${project.build.directory}/distribution/eNoVa-editor"/>
 
                                         <copy
