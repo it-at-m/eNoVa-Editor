@@ -32,6 +32,11 @@ public class AnswerTransformer {
         transformer.setParameter("fileNumber", parameters.fileNumber());
         transformer.setParameter("messageId", parameters.messageId());
 
+        transformer.setParameter("productName", parameters.manufacturerInfo().productName());
+        transformer.setParameter("manufacturerName", parameters.manufacturerInfo().manufacturerName());
+        transformer.setParameter("version", parameters.manufacturerInfo().version());
+
+
         transformer.transform(domSource, domResult);
 
         Node resultNode = domResult.getNode();
