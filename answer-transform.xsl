@@ -19,6 +19,12 @@
     <!-- Eindeutige Nachrichten-ID, die von der Anwendung für jede Antwort neu erzeugt wird -->
     <xsl:param name="messageId"/>
 
+    <!-- Name des ausgewählten Sachbearbeiters, der von der Anwendung übergeben wird -->
+    <xsl:param name="caseworkerName"/>
+
+    <!-- Code der ausgewählten Sachentscheidung, der von der Anwendung übergeben wird -->
+    <xsl:param name="decisionCode"/>
+
     <!-- Produktname der Anwendung, der aus den internen Herstellerinformationen übergeben wird -->
     <xsl:param name="productName"/>
 
@@ -34,8 +40,10 @@
     <!-- ========================================================= -->
 
     <!-- Liest den Absendernamen aus der externen sender-config.xml -->
-    <xsl:variable name="senderName"
-                  select="doc('sender-config.xml')/sender/name"/>
+    <xsl:variable name="senderName" select="doc('sender-config.xml')/sender/name"/>
+
+    <!-- Liest die Sachbearbeiter aus der externen caseworkers.xml -->
+    <xsl:variable name="caseworkers" select="doc('caseworkers.xml')"/>
 
 
     <!-- ========================================================= -->
@@ -46,15 +54,23 @@
     <xsl:template match="tns:nachricht.enova.entscheidung.2900003">
         <xsl:copy>
 
-            <!-- Fügt den Nachrichtenkopf hinzu und wendet dessen Transformationsregel an -->
+            <!-- Übernimmt die Nachrichtenkopf und verarbeitet deren Inhalte nach den vorhandenen Transformationsregeln -->
             <xsl:apply-templates select="tns:nachrichtenkopf"/>
 
+            <!-- Übernimmt die Grunddaten und verarbeitet deren Inhalte nach den vorhandenen Transformationsregeln -->
+            <xsl:apply-templates select="tns:grunddaten"/>
+
+            <!-- Übernimmt die Schriftgutobjekte -->
+            <xsl:apply-templates select="tns:schriftgutobjekte"/>
+
+            <!-- Übernimmt die Fachdaten und verarbeitet deren Inhalte nach den vorhandenen Transformationsregeln -->
+            <xsl:apply-templates select="tns:fachdaten"/>
         </xsl:copy>
     </xsl:template>
 
 
     <!-- ========================================================= -->
-    <!-- Nachrichtenkopf                                          -->
+    <!-- Nachrichtenkopf                                           -->
     <!-- ========================================================= -->
 
     <!-- Nachrichtenkopf: Übernimmt den Nachrichtenkopf ohne vorhandene Herstellerinformationen -->
@@ -137,6 +153,70 @@
                 <xsl:value-of select="$version"/>
             </tns:version>
         </tns:herstellerinformation>
+    </xsl:template>
+
+
+    <!-- ========================================================= -->
+    <!-- Grunddaten                                                -->
+    <!-- ========================================================= -->
+
+    <xsl:template match="tns:grunddaten/tns:verfahrensdaten">
+
+        <!-- Variablen -->
+
+        <!-- Ermittelt die nächste freie Rollennummer -->
+        <xsl:variable name="nextRoleNumber" select="max(tns:beteiligung/tns:rolle/tns:rollennummer) + 1"/>
+        <!-- Ermittelt die nächste freie Rollennummer -->
+        <xsl:variable name="nextParticipantNumber" select="max(tns:beteiligung/tns:beteiligter/tns:beteiligtennummer) + 1"/>
+        <!-- Wählt den in der Anwendung ausgewählten Sachbearbeiter aus -->
+        <xsl:variable name="selectedCaseworker" select="$caseworkers/caseworkers/entry[@name = $caseworkerName]"/>
+
+        <xsl:copy>
+
+            <!-- Übernimmt alle vorhandenen Inhalte der Verfahrensdaten -->
+            <xsl:apply-templates select="@* | *"/>
+
+            <!-- Fügt den ausgewählten Sachbearbeiter als neue Beteiligung hinzu -->
+            <tns:beteiligung>
+
+                <tns:rolle>
+                    <tns:rollennummer>
+                        <xsl:value-of select="$nextRoleNumber"/>
+                    </tns:rollennummer>
+
+                    <tns:rollenbezeichnung listVersionID="3.5">
+                        <code>212</code>
+                    </tns:rollenbezeichnung>
+                </tns:rolle>
+
+                <tns:beteiligter>
+                    <tns:beteiligtennummer>
+                        <xsl:value-of select="$nextParticipantNumber"/>
+                    </tns:beteiligtennummer>
+
+                    <!-- Übernimmt die Daten des ausgewählten Sachbearbeiters -->
+                    <xsl:copy-of select="$selectedCaseworker/tns:auswahl_beteiligter"/>
+                </tns:beteiligter>
+
+            </tns:beteiligung>
+
+        </xsl:copy>
+    </xsl:template>
+
+
+    <!-- ========================================================= -->
+    <!-- Fachdaten                                                 -->
+    <!-- ========================================================= -->
+
+    <!-- Sachentscheidung: Ersetzt das Ersuchen um Sachentscheidung durch die ausgewählte Sachentscheidung -->
+    <xsl:template match="tns:fachdaten/tns:auswahl_GegenstandDerNachricht/tns:ersuchenSachentscheidung">
+        <tns:sachentscheidung>
+            <tns:sachentscheidung listVersionID="1.0">
+                <code>
+                    <xsl:value-of select="$decisionCode"/>
+                </code>
+            </tns:sachentscheidung>
+        </tns:sachentscheidung>
     </xsl:template>
 
 </xsl:stylesheet>

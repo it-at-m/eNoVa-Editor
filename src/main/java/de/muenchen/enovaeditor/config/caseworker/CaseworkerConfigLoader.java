@@ -12,7 +12,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CaseworkerConfigLoader {
 
@@ -42,6 +44,7 @@ public class CaseworkerConfigLoader {
         NodeList children = root.getChildNodes();
 
         List<CaseworkerEntry> caseworkers = new ArrayList<>();
+        Set<String> names = new HashSet<>();
 
         for (int i = 0; i < children.getLength(); i++) {
             Node child = children.item(i);
@@ -64,50 +67,16 @@ public class CaseworkerConfigLoader {
                 throw new IOException("Ungültige caseworkers.xml: Das Attribut 'name' eines <entry>-Elements darf nicht leer sein.");
             }
 
-            NodeList entryChildren = entry.getChildNodes();
-
-            int xmlCount = 0;
-
-            Element xmlElement = null;
-            for (int j = 0; j < entryChildren.getLength(); j++) {
-                Node entryChild = entryChildren.item(j);
-
-                if (entryChild.getNodeType() != Node.ELEMENT_NODE) {
-                    continue;
-                }
-
-                if (!entryChild.getNodeName().equals("xml")) {
-                    throw new IOException("Ungültige caseworkers.xml: Im <entry> für '" + name + "' ist das unerwartete Element <" + entryChild.getNodeName() + "> enthalten. Erwartet wird nur <xml>.");
-                }
-                if (xmlCount == 0) {
-                    xmlElement = (Element) entryChild;
-                }
-                xmlCount++;
-            }
-
-            if (xmlCount == 0) {
-                throw new IOException("Ungültige caseworkers.xml: Im <entry> für '" + name + "' fehlt das erforderliche <xml>-Element.");
-            }
-
-            if (xmlCount > 1) {
-                throw new IOException("Ungültige caseworkers.xml: Im <entry> für '" + name + "' darf genau ein <xml>-Element vorhanden sein.");
-            }
-
-            NodeList xmlChildren = xmlElement.getChildNodes();
-
-            if (xmlChildren.getLength() != 1
-                    || xmlChildren.item(0).getNodeType() != Node.CDATA_SECTION_NODE) {
+            if (!names.add(name)) {
                 throw new IOException(
-                        "Ungültige caseworkers.xml: Das <xml>-Element für '"
+                        "Ungültige caseworkers.xml: "
+                                + "Der Sachbearbeitername '"
                                 + name
-                                + "' muss genau einen CDATA-Block enthalten."
+                                + "' ist mehrfach vorhanden."
                 );
             }
 
-            String xmlBlock = xmlElement.getTextContent();
-            caseworkers.add(
-                    new CaseworkerEntry(name, xmlBlock)
-            );
+            caseworkers.add(new CaseworkerEntry(name));
         }
 
         return caseworkers;
