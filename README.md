@@ -9,4 +9,4 @@ Der __eNoVa-Editor__ kann Dateien im Format [XJustiz.enova.2900003](https://xjus
 
 Ab __Januar 2027__ sind die Kommunen in Deutschland verpflichtet Vorkaufsrechtsanfragen von den Notaren digital im Format _XJustiz.enova.2900003_ zu bearbeiten. 
 
-Jeden Freitag ab 14:00 halten wir ein offenes Meeting ab, um Fragen zu beantworten. 
+Jeden Freitag ab 14:00 halten wir unter https://meet.jit.si/eNoVa-Editor ein offenes Meeting ab, um Fragen zu beantworten. 
