@@ -150,10 +150,16 @@ public class MainController {
 
             ManufacturerInfo manufacturerInfo = manufacturerInfoLoader.load();
 
+            CaseworkerEntry selectedCaseworker = caseworkerComboBox.getValue();
+
+            CodelistEntry selectedDecision = decisionComboBox.getValue();
+
             AnswerParameters parameters = new AnswerParameters(
                     fileNumber.getText(),
                     UUID.randomUUID().toString(),
-                    manufacturerInfo
+                    manufacturerInfo,
+                    selectedCaseworker.name(),
+                    selectedDecision.code()
             );
 
             Document answerDocument = answerTransformer.transform(inputDocument, parameters);

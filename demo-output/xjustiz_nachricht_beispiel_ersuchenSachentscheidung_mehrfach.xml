@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><!--Kommentierte Version von Dr. Rupert Späth, it@M, LH München. Stand: 19.08.2026-->
+<tns:nachricht.enova.entscheidung.2900003 xmlns:tns="http://www.xjustiz.de" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<tns:nachrichtenkopf xjustizVersion="3.6.2"><!--In der Antwort muss der Nachrichtenkopf praktisch komplett neu geschrieben werden. 
+			Lediglich die Absenderdaten können für den Notar-Empfänger verwendet werden. 
+			Derzeit gehe ich davon aus, dass das Grundbuchamt eine eigene Nachricht bekommt, das bedeutet, dass dieses separat als Empfänger in einer eigenene XML-Datei zu benennen ist.--> 
+		<tns:erstellungszeitpunkt>2026-08-13T14:40:13+02:00</tns:erstellungszeitpunkt>
+		<tns:absender>
+			<tns:informationen><!--Type.GDS.Kommunikationspartner-->
+				<tns:auswahl_kommunikationspartner>
+					<tns:sonstige>Notar Dr. Müller</tns:sonstige>
+				</tns:auswahl_kommunikationspartner>
+				<tns:auswahl_verweisGrunddaten><!--optional-->
+					<tns:ref.rollennummer>1</tns:ref.rollennummer><!--Verweis auf grunddaten.verfahrensdaten.beteiliung.beteiligter.beteiligtennummer, nicht auf rolle.rollennummer!-->
+				</tns:auswahl_verweisGrunddaten>
+			</tns:informationen>
+			<tns:aktenzeichen>UVZ-4697</tns:aktenzeichen>
+			<tns:eigeneNachrichtenID>f8f9e173-58ac-4db1-b709-845e8306bd65</tns:eigeneNachrichtenID><!--TODO: Es ist zu klären, wie wir die eigene Nachrichten-ID bekommen. -->
+		</tns:absender>
+		<tns:empfaenger>
+			<tns:informationen><!--Type.GDS.Kommunikationspartner-->
+				<tns:auswahl_kommunikationspartner>
+					<tns:sonstige>LH München</tns:sonstige>
+				</tns:auswahl_kommunikationspartner>
+			</tns:informationen>
+			<tns:auswahl_aktenzeichen>
+				<tns:aktenzeichen.unbekannt>true</tns:aktenzeichen.unbekannt>
+			</tns:auswahl_aktenzeichen>
+		</tns:empfaenger>
+		<tns:herstellerinformation>
+			<tns:nameDesProdukts>XNP-XNotar-eNoVA</tns:nameDesProdukts>
+			<tns:herstellerDesProdukts>Bundesnotarkammer KdöR</tns:herstellerDesProdukts>
+			<tns:version>1.50.3</tns:version>
+		</tns:herstellerinformation>
+	</tns:nachrichtenkopf>
+	<tns:grunddaten>
+		<tns:verfahrensdaten><!--Bei den Verfahrensdaten ist bezüglich der Antwort zu klären:
+								- Sind die Instanzdaten unverändert zurück zu schicken?
+								- Ist der Sachbearbeiter, der die Entscheidung trifft als Beteiligter zu nennen? Als Rolle wäre insbesondere denkbar 141(Sachbearbeiter), 186(Vertreter des öffentlichen Interesses), 189(Verwaltungsbehörde), 212(Aussteller, von Fachabteilung präferiert) -->
+			<tns:verfahrensnummer>100000019136</tns:verfahrensnummer><!--alphanumerisch-->
+			<tns:instanzdaten>
+				<tns:auswahl_instanzbehoerde> <!--Im Regelfall sollte dies identisch mit nachrichtenkopf.empfaenger sein -->
+					<tns:sonstige>LH München</tns:sonstige>
+				</tns:auswahl_instanzbehoerde>
+				<tns:verfahrensgegenstand>
+					<tns:gegenstand>Ersuchen Genehmigung GrdstVG; 100000019136</tns:gegenstand>
+				</tns:verfahrensgegenstand>
+			</tns:instanzdaten>
+			<!--Achtung: XML kennt keine Reihenfolge! Welche Rolle zuerst kommt ist beliebig-->
+			<tns:beteiligung>
+				<tns:rolle><!-- 208='Notar(in)' -->
+					<tns:rollennummer>1</tns:rollennummer>
+					<tns:rollenbezeichnung listVersionID="3.5"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.rollenbezeichnung_3.5#version --> 
+						<code>208</code> 
+					</tns:rollenbezeichnung>
+				</tns:rolle>  
+				<tns:rolle><!-- 215='Einreicher(in)' -->
+					<tns:rollennummer>2</tns:rollennummer>
+					<tns:rollenbezeichnung listVersionID="3.5">
+						<code>215</code>
+					</tns:rollenbezeichnung>
+				</tns:rolle>
+				<tns:beteiligter>
+					<tns:beteiligtennummer>1</tns:beteiligtennummer>
+					<tns:auswahl_beteiligter>
+						<tns:natuerlichePerson>
+							<tns:vollerName> <!-- Type.GDS.NameNatuerlichePerson -->
+								<tns:vorname>Martin</tns:vorname>
+								<tns:titel>Dr.</tns:titel>
+								<tns:nachname>Müller</tns:nachname>
+							</tns:vollerName>
+							<tns:anschrift><!-- 003='Dienst-/Geschäftsadresse' -->
+								<tns:anschriftstyp listVersionID="3.0"><!--https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.anschriftstyp -->
+									<code>003</code>
+								</tns:anschriftstyp>
+								<tns:strasse>Anton-Wilhelm-Amo-Straße</tns:strasse>
+								<tns:hausnummer>34</tns:hausnummer>
+								<tns:postleitzahl>10117</tns:postleitzahl>
+								<tns:ort>Berlin</tns:ort>
+							</tns:anschrift>
+							<tns:telekommunikation><!-- 007='Telefon' -->
+								<tns:telekommunikationsart listVersionID="2.3"><!--https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.telekommunikationsart -->
+									<code>007</code>
+								</tns:telekommunikationsart>
+								<tns:verbindung>030 - 1231239321</tns:verbindung>
+							</tns:telekommunikation>
+						</tns:natuerlichePerson>
+					</tns:auswahl_beteiligter>
+				</tns:beteiligter>
+			</tns:beteiligung>
+			<tns:beteiligung>
+				<tns:rolle><!-- 168='Veräußerer (Veräußerin)' -->
+					<tns:rollennummer>3</tns:rollennummer><!-- Achtung: Rollen müssen fortlaufend, beginnend mit 1 durchnummeriert werden. -->
+					<tns:rollenbezeichnung listVersionID="3.5"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.rollenbezeichnung_3.5#version --> 
+						<code>168</code>
+					</tns:rollenbezeichnung>
+				</tns:rolle>
+				<tns:beteiligter>
+					<tns:beteiligtennummer>2</tns:beteiligtennummer>
+					<tns:auswahl_beteiligter>
+						<tns:natuerlichePerson>
+							<tns:vollerName>
+								<tns:vorname>Max</tns:vorname>
+								<tns:nachname>Verkäufer</tns:nachname>
+							</tns:vollerName>
+							<tns:geburt>
+								<tns:geburtsdatum>1965-08-13</tns:geburtsdatum>
+							</tns:geburt>
+							<tns:anschrift><!-- 017='Privatanschrift' -->
+								<tns:anschriftstyp listVersionID="3.0"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.anschriftstyp -->
+									<code>017</code>
+								</tns:anschriftstyp>
+								<tns:anschriftenzusatz>Rückgebäude</tns:anschriftenzusatz>
+								<tns:strasse>Zenettistraße</tns:strasse>
+								<tns:hausnummer>24</tns:hausnummer>
+								<tns:postleitzahl>80337</tns:postleitzahl>
+								<tns:ort>München</tns:ort>
+								<tns:staat listVersionID="6.1"><!-- https://www.xrepository.de/details/urn:xoev-de:bund:bfj:codeliste:bfj.staat -->
+									<code>000</code><!-- 000='Deutschland' -->
+								</tns:staat>
+							</tns:anschrift>
+						</tns:natuerlichePerson>
+					</tns:auswahl_beteiligter>
+				</tns:beteiligter>
+			</tns:beteiligung>
+			<tns:beteiligung>
+				<tns:rolle><!-- 072='Erwerber(in)' -->
+					<tns:rollennummer>4</tns:rollennummer>
+					<tns:rollenbezeichnung listVersionID="3.5">
+						<code>072</code><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.rollenbezeichnung_3.5#version --> 
+					</tns:rollenbezeichnung>
+				</tns:rolle>
+				<tns:beteiligter>
+					<tns:beteiligtennummer>3</tns:beteiligtennummer>
+					<tns:auswahl_beteiligter>
+						<tns:natuerlichePerson>
+							<tns:vollerName>
+								<tns:vorname>Martina</tns:vorname>
+								<tns:nachname>Käuferin</tns:nachname>
+							</tns:vollerName>
+							<tns:geburt>
+								<tns:geburtsdatum>1978-09-28</tns:geburtsdatum>
+							</tns:geburt>
+							<tns:anschrift><!-- 017='Privatanschrift' -->
+								<tns:anschriftstyp listVersionID="3.0"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.anschriftstyp -->
+									<code>017</code>
+								</tns:anschriftstyp>
+								<tns:strasse>Oberländerstraße</tns:strasse>
+								<tns:hausnummer>36</tns:hausnummer>
+								<tns:postleitzahl>1136</tns:postleitzahl>
+								<tns:ort>Wien</tns:ort>
+								<tns:staat listVersionID="6.1"><!-- https://www.xrepository.de/details/urn:xoev-de:bund:bfj:codeliste:bfj.staat -->
+									<code>151</code><!-- 151='Österreich' -->
+								</tns:staat>
+							</tns:anschrift>
+						</tns:natuerlichePerson>
+					</tns:auswahl_beteiligter>
+				</tns:beteiligter>
+			</tns:beteiligung>
+		</tns:verfahrensdaten>
+	</tns:grunddaten>
+	<tns:schriftgutobjekte>
+		<tns:dokument>
+			<tns:identifikation>
+				<tns:id>5e2e5487-93f2-41aa-b760-2fccc975b888</tns:id>
+				<tns:nummerImUebergeordnetenContainer>1</tns:nummerImUebergeordnetenContainer>
+			</tns:identifikation>
+			<tns:xjustiz.fachspezifischeDaten>
+				<tns:dokumentklasse listVersionID="1.3"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.dokumentklasse_1.3#version -->
+					<code>015</code> <!-- 015='Schreiben' -->
+				</tns:dokumentklasse>
+				<tns:dokumententyp listVersionID="4.1"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.dokumenttyp_3.7#version -->
+					<code>102</code><!-- 102='Erwerbsurkunde' -->
+				</tns:dokumententyp>
+				<tns:datei>
+					<tns:dateiname>4_e_USL_Urkunde_5e2e5487-93f2-41aa-b760-2fccc975b888.pdf</tns:dateiname>
+					<tns:bestandteil listVersionID="2.5"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.bestandteiltyp -->
+						<code>001</code><!-- 001='Original'-->
+					</tns:bestandteil>
+				</tns:datei>
+				<tns:datei>
+					<tns:dateiname>4_e_USL_Urkunde_5e2e5487-93f2-41aa-b760-2fccc975b888.pdf.pkcs7</tns:dateiname>
+					<tns:bestandteil listVersionID="2.5">
+						<code>003</code><!-- 003='Signaturdatei'-->
+					</tns:bestandteil>
+					<tns:dateiname.bezugsdatei>4_e_USL_Urkunde_5e2e5487-93f2-41aa-b760-2fccc975b888.pdf</tns:dateiname.bezugsdatei>
+				</tns:datei>
+			</tns:xjustiz.fachspezifischeDaten>
+		</tns:dokument>
+	</tns:schriftgutobjekte>
+	<tns:fachdaten><!--Derzeit gehe ich davon aus, dass bei der Antwort in den Fachdaten lediglich der Bereich 'ersuchenSachentscheidung' durch 'sachentscheidung' zu tauschen ist.-->
+		<tns:auswahl_GegenstandDerNachricht><!-- 011='Erteilung der Genehmigung nach § 2 GrdstVG'-->
+			<tns:ersuchenSachentscheidung><!--Das Format gibt hier tatsächlich vor, dass das Tag des Kind-Element identisch mit dem Eltern-Element ist-->
+				<tns:ersuchenSachentscheidung listVersionID="1.0"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:enova.ersuchensachentscheidung -->
+					<code>011</code>
+				</tns:ersuchenSachentscheidung>
+			</tns:ersuchenSachentscheidung>
+		</tns:auswahl_GegenstandDerNachricht>
+		<tns:datenDerUrkunde>
+			<tns:urNr>4697</tns:urNr>
+			<tns:urkundsdatum>2026-08-13</tns:urkundsdatum>
+			<tns:urkundsperson>
+				<tns:ref.rollennummer>1</tns:ref.rollennummer><!--Verweis auf grunddaten.verfahrensdaten.beteiliung.beteiligter.beteiligtennummer, nicht auf rolle.rollennummer!-->
+			</tns:urkundsperson>
+		</tns:datenDerUrkunde>
+		<tns:beschreibungDesBetroffenenRechts><!--Wenn mehrere Grundstücke in einer Urkunde übertragen werden, dann kommt dieses Element mehrmals vor. Es ist sogar zulässig, dass dieses Element 0 mal vorkommt. Der fachliche Hintergrund, eine Nachricht ohne Nennung eines Grundstücks zu verschicken, ist mir aber nicht ersichtlich. --> 
+			<tns:buchungsstelle><!-- Die Wahl des Namens für dieses Tag erschließt sich mir nicht. Nach meiner Meinung macht es wenig Sinn, den Eintrag in das Grundbuch in 'buchungsstelle' und 'Grundbuchblatt' zu trennen. --> 
+				<tns:lfdNummer>3</tns:lfdNummer><!--Diese Nummer ist optional, wird nirgends referenziert und muss anscheinend auch nicht fortlaufend, beginnnend mit 1 sein. Sinn? -->
+				<tns:auswahl_buchungsstelle>
+					<tns:grundstueck>
+						<tns:flurstuecke><!--Achtung, dies ist ein Flurstück! Das Element ist hier mehrfach zulässig. Dies macht aber nur einen Sinn, wenn diese Flurstücke auf dem selben Grundbuchblatt notiert sind, siehe "bundeslandfremdesGrundbuchblatt" -->
+							<tns:identifikationFlurstueck>
+								<tns:gemarkungsschluessel>8694</tns:gemarkungsschluessel>
+								<tns:flurstuecksnummer>
+									<tns:zaehler>306</tns:zaehler><!-- Auch bekannt unter 'Stammnummer'-->
+									<tns:nenner>46</tns:nenner><!--Optional, hauptsächt vorhanden, wenn das Grundstück igrendwann geteilt wurde. Auch als 'Bruchteilsnummer' bekannt -->
+								</tns:flurstuecksnummer>
+							</tns:identifikationFlurstueck> <!-- 001='Erholungsfläche'--> 
+							<tns:wirtschaftsart listVersionID="1.0"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:dabag.wirtschaftsart -->
+								<code>001</code> 
+							</tns:wirtschaftsart>
+							<tns:groesse>357</tns:groesse><!--Das format macht hier keine näheren Angaben, wie die Größe angegeben wird. Es ist anzunehmen, dass m² gemeint sind. -->
+						</tns:flurstuecke>
+					</tns:grundstueck>
+				</tns:auswahl_buchungsstelle>
+			</tns:buchungsstelle>
+			<tns:anschrift>
+				<tns:strasse>Aberlestraße</tns:strasse>
+				<tns:hausnummer>34</tns:hausnummer>
+				<tns:postleitzahl>81379</tns:postleitzahl>
+				<tns:ort>München</tns:ort>
+				<tns:auswahl_bundesland><!-- 09='Bayern'-->
+					<tns:bundesland.BRD listVersionID="2010-04-01"><!-- https://www.xrepository.de/details/urn:de:bund:destatis:bevoelkerungsstatistik:schluessel:bundesland -->
+						<code>09</code><!-- 09='Bayern'-->
+					</tns:bundesland.BRD>
+				</tns:auswahl_bundesland>
+			</tns:anschrift>
+			<tns:weitereAngabenZumGrundstueck><!-- 003='Wohngebäude'--> 
+				<tns:grundstuecksart listVersionID="1.1"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:enova.grundstuecksart -->
+					<code>003</code>
+				</tns:grundstuecksart>
+			</tns:weitereAngabenZumGrundstueck>
+			<tns:grundbuchart listVersionID="1.0"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:dabag.grundbuchart -->
+				<code>009</code><!--009='Grundstücksgrundbuch'-->
+			</tns:grundbuchart>
+			<tns:bundeslandfremdesGrundbuchblatt><!-- Der Name dieses Tags ist wohl ungünstig gewählt. Es müsste wohl eher 'Grundbuchblatt' heißen. -->
+				<tns:amtsgericht>München</tns:amtsgericht>
+				<tns:grundbuchbezirk>Obermenzing</tns:grundbuchbezirk>
+				<tns:grundbuchblatt>1714</tns:grundbuchblatt>
+			</tns:bundeslandfremdesGrundbuchblatt>
+		</tns:beschreibungDesBetroffenenRechts>
+		<tns:beschreibungDesBetroffenenRechts> 
+			<tns:buchungsstelle>
+				<tns:lfdNummer>4</tns:lfdNummer><!--Diese Nummer ist optional, wird nirgends referenziert und muss anscheinend auch nicht fortlaufend, beginnnend mit 1 sein. Sinn? -->
+				<tns:auswahl_buchungsstelle>
+					<tns:grundstueck>
+						<tns:flurstuecke>
+							<tns:identifikationFlurstueck>
+								<tns:gemarkungsschluessel>8685</tns:gemarkungsschluessel>
+								<tns:flurstuecksnummer>
+									<tns:zaehler>306</tns:zaehler><!-- Auch bekannt unter 'Stammnummer'-->
+									<tns:nenner>46</tns:nenner><!--Optional, hauptsächt vorhanden, wenn das Grundstück igrendwann geteilt wurde. Auch als 'Bruchteilsnummer' bekannt -->
+								</tns:flurstuecksnummer>
+							</tns:identifikationFlurstueck> <!-- 001='Erholungsfläche'--> 
+							<tns:wirtschaftsart listVersionID="1.0"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:dabag.wirtschaftsart -->
+								<code>001</code> 
+							</tns:wirtschaftsart>
+							<tns:groesse>359</tns:groesse><!--Das format macht hier keine näheren Angaben, wie die Größe angegeben wird. Es ist anzunehmen, dass m² gemeint sind. -->
+						</tns:flurstuecke>
+						<tns:flurstuecke>
+							<tns:identifikationFlurstueck>
+								<tns:gemarkungsschluessel>8685</tns:gemarkungsschluessel>
+								<tns:flurstuecksnummer>
+									<tns:zaehler>307</tns:zaehler>
+								</tns:flurstuecksnummer>
+							</tns:identifikationFlurstueck> <!-- 006='Mischnutzung'--> 
+							<tns:wirtschaftsart listVersionID="1.0"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:dabag.wirtschaftsart -->
+								<code>006</code> 
+							</tns:wirtschaftsart>
+							<tns:groesse>776</tns:groesse>
+						</tns:flurstuecke>
+					</tns:grundstueck>
+				</tns:auswahl_buchungsstelle>
+			</tns:buchungsstelle>
+			<tns:anschrift>
+				<tns:strasse>Huberstraße</tns:strasse>
+				<tns:hausnummer>18</tns:hausnummer>
+				<tns:postleitzahl>81377</tns:postleitzahl>
+				<tns:ort>München</tns:ort>
+				<tns:auswahl_bundesland><!-- 09='Bayern'-->
+					<tns:bundesland.BRD listVersionID="2010-04-01"><!-- https://www.xrepository.de/details/urn:de:bund:destatis:bevoelkerungsstatistik:schluessel:bundesland -->
+						<code>09</code><!-- 09='Bayern'-->
+					</tns:bundesland.BRD>
+				</tns:auswahl_bundesland>
+			</tns:anschrift>
+			<tns:weitereAngabenZumGrundstueck><!-- 002='Bebaut'--> 
+				<tns:grundstuecksart listVersionID="1.1"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:enova.grundstuecksart -->
+					<code>002</code>
+				</tns:grundstuecksart>
+			</tns:weitereAngabenZumGrundstueck>
+			<tns:grundbuchart listVersionID="1.0"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:dabag.grundbuchart -->
+				<code>009</code><!--009='Grundstücksgrundbuch'-->
+			</tns:grundbuchart>
+			<tns:bundeslandfremdesGrundbuchblatt><!-- Der Name dieses Tags ist wohl ungünstig gewählt. Es müsste wohl eher 'Grundbuchblatt' heißen. -->
+				<tns:amtsgericht>München</tns:amtsgericht>
+				<tns:grundbuchbezirk>Langwied</tns:grundbuchbezirk>
+				<tns:grundbuchblatt>1715</tns:grundbuchblatt>
+			</tns:bundeslandfremdesGrundbuchblatt>
+		</tns:beschreibungDesBetroffenenRechts>
+		<!-- <tns:erwerber_veraeusserer> wird anscheinend im normalen Verkehr nicht benötigt, da im Grunddatensatz bereits Erwerber und Veräußerer genannt werden. Der Sinn von <tns:erwerber_veraeusserer> scheint darin zu bestehen, wenn es mehrere Erwerber und/oder Veräußerer gibt die jeweiligen Anteile genannt werden können. Selbiges gilt bei Teilverkäufen. -->
+	</tns:fachdaten>
+</tns:nachricht.enova.entscheidung.2900003>

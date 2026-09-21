@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>eNoVa</title>
+    <style>
+      .kopf-zeile {
+          display: flex;
+          width: 100%;
+          margin-top: 40px;
+      }
+
+      .behoerde {
+          flex: 1;
+      }
+
+      .kontakt {
+          margin-left: auto;
+          padding-top: 20px;
+          padding-right: 10px
+      }
+
+      .datum-zeile {
+          text-align: right;
+          margin-top: 20px;
+          padding-right: 10px
+      }
+
+      .person-block {
+          margin-bottom: 15px;
+      }
+
+      .grundstueck-block {
+          margin-bottom: 20px;
+      }
+
+      .flurstuecke {
+          margin-top: 5px;
+      }
+
+      .flurstueck-block {
+          margin-bottom: 8px;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <!--
+        Absender suchen:
+        In der XML-Datei steht beim Absender eine Rollennummer.
+        Mit dieser Nummer suchen wir die passende Beteiligung.
+        Dort stehen die Rolle und die Person, die zu diesem Absender gehören.
+        Die gefundenen Daten können danach innerhalb dieses Bereichs verwendet werden.
+    -->
+    
+
+    <p>
+      <!--
+          Rollenbezeichnung ausgeben:
+          Der Name "rollenbezeichnung" gehört zur Konfiguration
+          in codelists.properties.
+          Der XPath liefert den Rollen-Code, zum Beispiel 208.
+          Über die Codelist wird daraus dann die Bezeichnung.
+      -->
+      Notar(in)
+
+      <!--
+          Informationen der Person/Absender aus der zuvor gefundenen Beteiligung ausgeben.
+      -->
+      Dr.
+      Martin
+      Müller
+
+      <br>
+
+      Anton-Wilhelm-Amo-Straße
+      34
+
+      <br>
+
+      10117
+      Berlin
+
+    </p>
+
+    <div class="kopf-zeile">
+
+      <div class="behoerde">
+        LH München
+      </div>
+
+      <div class="kontakt">
+        Telefon:
+        030 - 1231239321
+
+        <br>
+
+        Aktenzeichen:
+        UVZ-4697
+      </div>
+
+    </div>
+
+    <div class="datum-zeile">
+      <!-- Ort des aktuellen Beteiligten -->
+      Berlin,
+
+      <!-- Erstellungsdatum der Nachricht im Format TT.MM.JJJJ -->
+      13.08.2026
+    </div>
+
+    
+
+    <!-- Betreff / Verfahrensgegenstand -->
+    <p>
+      Ersuchen Genehmigung GrdstVG; 100000019136
+      <br>
+      (Erteilung der Genehmigung nach § 2 GrdstVG)
+    </p>
+
+    <p>
+      Sehr geehrte Damen und Herren,
+    </p>
+
+    <p>
+      hiermit zeigen wir die Beurkundung nachfolgenden Grundstücksverkauf an:
+    </p>
+
+    <h3>Verkäufer:</h3>
+
+    
+
+    <div class="person-block">
+      
+      Max
+      Verkäufer
+
+      <br>
+
+      Zenettistraße
+      24
+
+      <br>
+
+      80337
+      München
+
+      <br>
+
+      Geboren am
+      13.08.1965
+    </div>
+
+    
+
+    <h3>Käufer:</h3>
+
+    
+
+    <div class="person-block">
+      
+      Martina
+      Käuferin
+
+      <br>
+
+      Oberländerstraße
+      36
+
+      <br>
+
+      1136
+      Wien
+
+      <br>
+
+      Geboren am
+      28.09.1978
+    </div>
+
+    
+
+    <p>
+      Urkunde:
+      4697
+
+      <br>
+
+      Beurkundungsdatum:
+      13.08.2026
+    </p>
+
+    <h3>Grundstück:</h3>
+
+    
+
+    <div class="grundstueck-block">
+
+      <div>
+        Amtsgericht:
+        München
+      </div>
+
+      <div>
+        Grundbuchbezirk:
+        Obermenzing
+      </div>
+
+      <div>
+        Grundbuchblatt:
+        1714
+      </div>
+
+      <div class="flurstuecke">
+
+        
+
+        <div class="flurstueck-block">
+          <div>
+            Gemarkung:
+            8694
+          </div>
+
+          <div>
+            Flurstück:
+            306/46
+          </div>
+        </div>
+
+        
+
+      </div>
+
+    </div>
+
+    
+
+    <div class="grundstueck-block">
+
+      <div>
+        Amtsgericht:
+        München
+      </div>
+
+      <div>
+        Grundbuchbezirk:
+        Langwied
+      </div>
+
+      <div>
+        Grundbuchblatt:
+        1715
+      </div>
+
+      <div class="flurstuecke">
+
+        
+
+        <div class="flurstueck-block">
+          <div>
+            Gemarkung:
+            8685
+          </div>
+
+          <div>
+            Flurstück:
+            306/46
+          </div>
+        </div>
+
+        
+
+        <div class="flurstueck-block">
+          <div>
+            Gemarkung:
+            8685
+          </div>
+
+          <div>
+            Flurstück:
+            307
+          </div>
+        </div>
+
+        
+
+      </div>
+
+    </div>
+
+    
+
+    <p>
+      Mit freundlichen Grüßen
+    </p>
+
+    <p>
+      Notar Dr. Müller
+    </p>
+  </body>
+</html>
