@@ -1,0 +1,49 @@
+publiccodeYmlVersion: 0.5.0
+name: eNoVa-Editor
+url: https://github.com/it-at-m/eNoVa-Editor
+landingURL: https://opensource.muenchen.de/software/enova.html
+softwareVersion: 0.9.0
+releaseDate: 2026-10-05
+platforms:
+  - windows
+categories:
+  - regulations-and-directives
+organisation:
+  uri: https://www.muenchen.de
+  name: LH München
+fundedBy:
+  - name: LH München
+    uri: https://www.muenchen.de
+developmentStatus: beta
+softwareType: standalone/desktop
+intendedAudience:
+  countries:
+    - DE
+  scope:
+    - government
+description:
+  de:
+    shortDescription: "Tool für Kommunen um digitale Vorkaufsrechtsanfragen zu lesen und zu beantworten"
+    longDescription: Der eNoVa-Editor ist eine Java-Desktop-Anwendung um die ab
+      01.01.2027 verpflichtende XJustiz-Kommunikation zwischen Kommunen und Notaren zu ermöglichen. Es ist keine beBPo- oder Signatursoftware sondern ist darauf spezialisiert, XJustiz.eNoVa.2900003-Dateien zu lesen, anzuzeigen und zu schreiben.
+	  Siehe: https://xjustiz.justiz.de/Anwendungsfaelle/eNoVA/index.php
+	  Wünsche und Anregungen sind willkommen - Codebeiträge bitte nur in Abstimmung.
+    features:
+      - Lesen von XJustiz.eNoVa.2900003.ersuchenSachentscheidung-Dateien
+      - Schreiben von XJustiz.eNoVa.2900003.sachentscheidung-Dateien
+      - Konvertierung beider XJustiz-Dateien in eine HTML-Datei in Briefform
+  en:
+    shortDescription: "Tool for municipalities to read and answer digital pre-emption right requests"
+    longDescription: "German local government desktop application to process XJustiz.eNoVa.2900003 files regarding pre-emption rights from notaries, mandatory from January 2027."
+legal:
+  license: MIT-open-group
+  repoOwner: "Landeshauptstadt München"
+maintenance:
+  type: community
+  contacts:
+    - name: "Rupert Späth"
+      email: enova-editor@muenchen.de
+localisation:
+  localisationReady: true
+  availableLanguages:
+    - de
