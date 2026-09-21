@@ -89,7 +89,7 @@
                 <tns:telekommunikation><!-- 003='Internet' -->
                     <tns:telekommunikationsart
                             listVersionID="2.3"><!--https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.telekommunikationsart -->
-                        <code>001</code>
+                        <code>003</code>
                     </tns:telekommunikationsart>
                     <tns:verbindung>https://www.lustige-gemeinde.de</tns:verbindung>
                 </tns:telekommunikation>

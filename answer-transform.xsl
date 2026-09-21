@@ -47,29 +47,6 @@
 
 
     <!-- ========================================================= -->
-    <!-- Root-Element                                              -->
-    <!-- ========================================================= -->
-
-    <!-- Root-Element: Erstellt den äußeren Nachrichten-Wrapper der Antwort -->
-    <xsl:template match="tns:nachricht.enova.entscheidung.2900003">
-        <xsl:copy>
-
-            <!-- Übernimmt die Nachrichtenkopf und verarbeitet deren Inhalte nach den vorhandenen Transformationsregeln -->
-            <xsl:apply-templates select="tns:nachrichtenkopf"/>
-
-            <!-- Übernimmt die Grunddaten und verarbeitet deren Inhalte nach den vorhandenen Transformationsregeln -->
-            <xsl:apply-templates select="tns:grunddaten"/>
-
-            <!-- Übernimmt die Schriftgutobjekte -->
-            <xsl:apply-templates select="tns:schriftgutobjekte"/>
-
-            <!-- Übernimmt die Fachdaten und verarbeitet deren Inhalte nach den vorhandenen Transformationsregeln -->
-            <xsl:apply-templates select="tns:fachdaten"/>
-        </xsl:copy>
-    </xsl:template>
-
-
-    <!-- ========================================================= -->
     <!-- Nachrichtenkopf                                           -->
     <!-- ========================================================= -->
 
@@ -165,9 +142,9 @@
         <!-- Variablen -->
 
         <!-- Ermittelt die nächste freie Rollennummer -->
-        <xsl:variable name="nextRoleNumber" select="max(tns:beteiligung/tns:rolle/tns:rollennummer) + 1"/>
-        <!-- Ermittelt die nächste freie Rollennummer -->
-        <xsl:variable name="nextParticipantNumber" select="max(tns:beteiligung/tns:beteiligter/tns:beteiligtennummer) + 1"/>
+        <xsl:variable name="nextRoleNumber" select="max((tns:beteiligung/tns:rolle/tns:rollennummer, 0)) + 1"/>
+        <!-- Ermittelt die nächste freie Beteiligtennummer -->
+        <xsl:variable name="nextParticipantNumber" select="max((tns:beteiligung/tns:beteiligter/tns:beteiligtennummer, 0)) + 1"/>
         <!-- Wählt den in der Anwendung ausgewählten Sachbearbeiter aus -->
         <xsl:variable name="selectedCaseworker" select="$caseworkers/caseworkers/entry[@name = $caseworkerName]"/>
 
