@@ -6,16 +6,52 @@ import java.time.format.DateTimeFormatter;
 
 public final class OutputPathUtil {
 
-    private static final DateTimeFormatter TIMESTAMP_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+    private static final DateTimeFormatter TIMESTAMP_FORMAT =
+            DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
     private OutputPathUtil() {
+    }
+
+    public record OutputPaths(Path xmlPath, Path htmlPath) {
     }
 
     public static Path createOutputPath(Path inputPath, String extension) {
         return createOutputPath(inputPath, "", extension);
     }
 
-    public static Path createOutputPath(Path inputPath, String fileNameSuffix, String extension) {
+    public static Path createOutputPath(
+            Path inputPath,
+            String fileNameSuffix,
+            String extension
+    ) {
+        Path basePath = createOutputBasePath(inputPath, fileNameSuffix);
+
+        return basePath.resolveSibling(
+                basePath.getFileName() + extension
+        );
+    }
+
+    public static OutputPaths createOutputPaths(
+            Path inputPath,
+            String fileNameSuffix
+    ) {
+        Path basePath = createOutputBasePath(inputPath, fileNameSuffix);
+
+        Path xmlPath = basePath.resolveSibling(
+                basePath.getFileName() + ".xml"
+        );
+
+        Path htmlPath = basePath.resolveSibling(
+                basePath.getFileName() + ".htm"
+        );
+
+        return new OutputPaths(xmlPath, htmlPath);
+    }
+
+    private static Path createOutputBasePath(
+            Path inputPath,
+            String fileNameSuffix
+    ) {
         Path normalizedInputPath = inputPath.toAbsolutePath().normalize();
 
         Path outputDirectory = normalizedInputPath.getParent();
@@ -34,8 +70,7 @@ public final class OutputPathUtil {
                 baseName
                         + suffixPart
                         + "-"
-                        + timestamp
-                        + extension;
+                        + timestamp;
 
         return outputDirectory.resolve(outputFileName);
     }
