@@ -2,7 +2,7 @@
 <html lang="de">
   <head>
     <meta charset="UTF-8"/>
-    <title>eNoVa</title>
+    <title>eNoVa - Output</title>
     <style>
       .kopf-zeile {
           display: flex;
@@ -99,9 +99,13 @@
       </div>
 
       <div class="kontakt">
-        Telefon:
-        {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:telekommunikation[tns:telekommunikationsart/code='007'
-        ]/tns:verbindung}}
+        {{#each xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:telekommunikation}}
+
+          {{codelist:telekommunikationsart xpath:tns:telekommunikationsart/code}}:
+          {{xpath:tns:verbindung}}
+
+          <br>
+        {{/each}}
 
         <br>
 
