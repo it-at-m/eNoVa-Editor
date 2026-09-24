@@ -7,7 +7,7 @@
       <tns:absender>
          <tns:informationen><!--Type.GDS.Kommunikationspartner-->
             <tns:auswahl_kommunikationspartner>
-               <tns:sonstige>LH Münchens</tns:sonstige>
+               <tns:sonstige>LH München</tns:sonstige>
             </tns:auswahl_kommunikationspartner>
             <tns:auswahl_verweisGrunddaten><!--optional-->
                <tns:ref.rollennummer>5</tns:ref.rollennummer>
@@ -44,7 +44,7 @@
          <tns:verfahrensnummer>100000019136</tns:verfahrensnummer>
          <tns:instanzdaten>
             <tns:auswahl_instanzbehoerde> <!--Im Regelfall sollte dies identisch mit nachrichtenkopf.empfaenger sein -->
-               <tns:sonstige>LH Münchens</tns:sonstige>
+               <tns:sonstige>LH München</tns:sonstige>
             </tns:auswahl_instanzbehoerde>
             <tns:verfahrensgegenstand>
                <tns:gegenstand>Ersuchen Genehmigung GrdstVG; 100000019136</tns:gegenstand>
