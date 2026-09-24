@@ -3,19 +3,19 @@
 <tns:nachricht.enova.entscheidung.2900003 xmlns:tns="http://www.xjustiz.de"
                                           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <tns:nachrichtenkopf xjustizVersion="3.6.2">
-      <tns:erstellungszeitpunkt>2026-09-18T11:55:34.3346701+02:00</tns:erstellungszeitpunkt>
+      <tns:erstellungszeitpunkt>2026-09-22T15:22:43.3832225+02:00</tns:erstellungszeitpunkt>
       <tns:absender>
          <tns:informationen><!--Type.GDS.Kommunikationspartner-->
             <tns:auswahl_kommunikationspartner>
                <tns:sonstige>LH München</tns:sonstige>
             </tns:auswahl_kommunikationspartner>
             <tns:auswahl_verweisGrunddaten><!--optional-->
-               <tns:ref.rollennummer>1</tns:ref.rollennummer>
+               <tns:ref.rollennummer>5</tns:ref.rollennummer>
                <!--Verweis auf grunddaten.verfahrensdaten.beteiliung.beteiligter.beteiligtennummer, nicht auf rolle.rollennummer!-->
             </tns:auswahl_verweisGrunddaten>
          </tns:informationen>
-         <tns:aktenzeichen>Test-Aktenzeichen</tns:aktenzeichen>
-         <tns:eigeneNachrichtenID>b3ba909a-075b-4f43-b4d3-3b8dc2d8766e</tns:eigeneNachrichtenID>
+         <tns:aktenzeichen>Test123</tns:aktenzeichen>
+         <tns:eigeneNachrichtenID>0cbe527b-5b6f-4bb4-a526-22cd67f7c799</tns:eigeneNachrichtenID>
          <!--TODO: Es ist zu klären, wie wir die eigene Nachrichten-ID bekommen. -->
       </tns:absender>
       <tns:empfaenger>
@@ -244,7 +244,7 @@
       <tns:auswahl_GegenstandDerNachricht><!-- 011='Erteilung der Genehmigung nach § 2 GrdstVG'-->
          <tns:sachentscheidung>
             <tns:sachentscheidung listVersionID="1.0">
-               <code>001</code>
+               <code>002</code>
             </tns:sachentscheidung>
          </tns:sachentscheidung>
       </tns:auswahl_GegenstandDerNachricht>

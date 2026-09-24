@@ -36,6 +36,17 @@
 
 
     <!-- ========================================================= -->
+    <!-- Abgeleitete Werte                                         -->
+    <!-- ========================================================= -->
+
+    <!-- Ermittelt die nächste freie Rollennummer -->
+    <xsl:variable name="nextRoleNumber" select="max((//tns:verfahrensdaten/tns:beteiligung/tns:rolle/tns:rollennummer, 0)) + 1"/>
+
+    <!-- Ermittelt die nächste freie Beteiligtennummer -->
+    <xsl:variable name="nextParticipantNumber" select="max((//tns:verfahrensdaten/tns:beteiligung/tns:beteiligter/tns:beteiligtennummer, 0)) + 1"/>
+
+
+    <!-- ========================================================= -->
     <!-- externe Konfiguration                                     -->
     <!-- ========================================================= -->
 
@@ -84,6 +95,13 @@
         </xsl:copy>
     </xsl:template>
 
+    <!-- Absender-Rollennummer: Verweist auf die neu angelegte Beteiligung des ausgewählten Sachbearbeiters -->
+    <xsl:template
+            match="tns:nachrichtenkopf/tns:absender/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer">
+        <xsl:copy>
+            <xsl:value-of select="$nextRoleNumber"/>
+        </xsl:copy>
+    </xsl:template>
 
     <!-- Aktenzeichen: Ersetzt das vorhandene Aktenzeichen durch den Wert aus dem Eingabefeld -->
     <xsl:template match="tns:nachrichtenkopf/tns:absender/tns:aktenzeichen">
@@ -137,14 +155,16 @@
     <!-- Grunddaten                                                -->
     <!-- ========================================================= -->
 
+    <!-- Instanzbehörde: Ersetzt die bisherige Behördenbezeichnung durch den konfigurierten Absendernamen -->
+    <xsl:template
+            match="tns:grunddaten/tns:verfahrensdaten/tns:instanzdaten/tns:auswahl_instanzbehoerde/tns:sonstige">
+        <xsl:copy>
+            <xsl:value-of select="$senderName"/>
+        </xsl:copy>
+    </xsl:template>
+
     <xsl:template match="tns:grunddaten/tns:verfahrensdaten">
 
-        <!-- Variablen -->
-
-        <!-- Ermittelt die nächste freie Rollennummer -->
-        <xsl:variable name="nextRoleNumber" select="max((tns:beteiligung/tns:rolle/tns:rollennummer, 0)) + 1"/>
-        <!-- Ermittelt die nächste freie Beteiligtennummer -->
-        <xsl:variable name="nextParticipantNumber" select="max((tns:beteiligung/tns:beteiligter/tns:beteiligtennummer, 0)) + 1"/>
         <!-- Wählt den in der Anwendung ausgewählten Sachbearbeiter aus -->
         <xsl:variable name="selectedCaseworker" select="$caseworkers/caseworkers/entry[@name = $caseworkerName]"/>
 

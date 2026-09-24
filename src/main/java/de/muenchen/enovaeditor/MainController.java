@@ -11,7 +11,7 @@ import de.muenchen.enovaeditor.config.caseworker.CaseworkerConfigLoader;
 import de.muenchen.enovaeditor.config.caseworker.CaseworkerEntry;
 import de.muenchen.enovaeditor.config.manufacturer.ManufacturerInfo;
 import de.muenchen.enovaeditor.config.manufacturer.ManufacturerInfoLoader;
-import de.muenchen.enovaeditor.template.HtmlOutputWriter;
+import de.muenchen.enovaeditor.template.HtmlWriter;
 import de.muenchen.enovaeditor.template.TemplateLoader;
 import de.muenchen.enovaeditor.template.XPathTemplateRenderer;
 import de.muenchen.enovaeditor.util.OutputPathUtil;
@@ -32,7 +32,6 @@ import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
 import org.w3c.dom.Document;
 
-import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -51,7 +50,7 @@ public class MainController {
     private final ErsuchenSachentscheidungChecker checker = new ErsuchenSachentscheidungChecker();
     private final TemplateLoader templateLoader = new TemplateLoader();
     private final XPathTemplateRenderer templateRenderer = new XPathTemplateRenderer();
-    private final HtmlOutputWriter htmlOutputWriter = new HtmlOutputWriter();
+    private final HtmlWriter htmlWriter = new HtmlWriter();
     private final AnswerTransformer answerTransformer = new AnswerTransformer();
     private final XmlWriter xmlWriter = new XmlWriter();
     private final CaseworkerConfigLoader caseworkerConfigLoader = new CaseworkerConfigLoader();
@@ -117,22 +116,15 @@ public class MainController {
 
             String renderedHtml = templateRenderer.render(inputTemplate, document);
 
-            Path outputHtml = htmlOutputWriter.write(renderedHtml, selectedXmlPath);
+            Path outputHtmlPath = OutputPathUtil.createOutputPath(selectedXmlPath, ".htm");
+
+            Path outputHtml = htmlWriter.write(renderedHtml, outputHtmlPath);
 
             fileStatusLabel.setText(selectedFile.getName());
             clearDecisionFields();
             openedDocument.set(document);
             openedXmlPath = selectedXmlPath;
-            try {
-                browserOpener.open(outputHtml);
-            } catch (IOException e) {
-                showWarning(
-                        "HTML-Datei wurde erstellt",
-                        "Die HTML-Datei wurde erfolgreich erstellt, "
-                                + "konnte aber nicht automatisch im Browser geöffnet werden.\n\n"
-                                + outputHtml
-                );
-            }
+            openHtmlInBrowser(outputHtml);
 
         } catch (Exception e) {
             openedDocument.set(null);
@@ -163,15 +155,18 @@ public class MainController {
             );
 
             Document answerDocument = answerTransformer.transform(inputDocument, parameters);
-            Path outputXmlPath = OutputPathUtil.createOutputPath(openedXmlPath, "Output", ".xml");
-            xmlWriter.write(answerDocument, outputXmlPath.toFile());
+            OutputPathUtil.OutputPaths outputPaths = OutputPathUtil.createOutputPaths(openedXmlPath, "Output");
+            xmlWriter.write(answerDocument, outputPaths.xmlPath().toFile());
 
-            showSuccess(
-                    "Antwort wurde erzeugt",
-                    "Die Antwort wurde erfolgreich erstellt:\n\n"
-                            + outputXmlPath
-            );
-        } catch (IOException | TransformerException e) {
+            String outputTemplate = templateLoader.loadOutputTemplate();
+
+            String renderedOutputHtml = templateRenderer.render(outputTemplate, answerDocument);
+
+            Path outputHtml = htmlWriter.write(renderedOutputHtml, outputPaths.htmlPath());
+
+            openHtmlInBrowser(outputHtml);
+
+        } catch (Exception e) {
             showError("Antwort konnte nicht erzeugt werden", e.getMessage());
         }
     }
@@ -345,6 +340,19 @@ public class MainController {
         fileNumber.disableProperty().bind(openedDocument.isNull());
         caseworkerComboBox.disableProperty().bind(openedDocument.isNull());
         decisionComboBox.disableProperty().bind(openedDocument.isNull());
+    }
+
+    private void openHtmlInBrowser(Path htmlPath) {
+        try {
+            browserOpener.open(htmlPath);
+        } catch (IOException e) {
+            showWarning(
+                    "HTML-Datei wurde erstellt",
+                    "Die HTML-Datei wurde erfolgreich erstellt, "
+                            + "konnte aber nicht automatisch im Browser geöffnet werden.\n\n"
+                            + htmlPath
+            );
+        }
     }
 
     private void showError(String title, String message) {
