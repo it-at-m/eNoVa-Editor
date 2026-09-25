@@ -81,14 +81,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>de.muenchen.enovaeditor/de.muenchen.enovaeditor.EnovaEditorApplication
-                            </mainClass>
-                            <launcher>app</launcher>
-                            <jlinkZipName>app</jlinkZipName>
-                            <jlinkImageName>app</jlinkImageName>
-                            <noManPages>true</noManPages>
-                            <stripDebug>true</stripDebug>
-                            <noHeaderFiles>true</noHeaderFiles>
+                            <mainClass>de.muenchen.enovaeditor.Launcher</mainClass>
                         </configuration>
                     </execution>
                 </executions>
@@ -106,25 +99,21 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.openjfx</groupId>
-                        <artifactId>javafx-maven-plugin</artifactId>
-                        <version>0.0.8</version>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>3.8.1</version>
                         <executions>
                             <execution>
-                                <id>create-runtime-image</id>
+                                <id>copy-runtime-dependencies</id>
                                 <phase>prepare-package</phase>
                                 <goals>
-                                    <goal>jlink</goal>
+                                    <goal>copy-dependencies</goal>
                                 </goals>
                                 <configuration>
-                                    <mainClass>
-                                        de.muenchen.enovaeditor/de.muenchen.enovaeditor.EnovaEditorApplication
-                                    </mainClass>
-                                    <launcher>app</launcher>
-                                    <jlinkImageName>app</jlinkImageName>
-                                    <noManPages>true</noManPages>
-                                    <stripDebug>true</stripDebug>
-                                    <noHeaderFiles>true</noHeaderFiles>
+                                    <includeScope>runtime</includeScope>
+                                    <outputDirectory>
+                                        ${project.build.directory}/runtime-libs
+                                    </outputDirectory>
                                 </configuration>
                             </execution>
                         </executions>
@@ -142,49 +131,62 @@
                                 </goals>
                                 <configuration>
                                     <target>
+                                        <delete
+                                                dir="${project.build.directory}/distribution"
+                                                quiet="true"/>
                                         <mkdir
                                                 dir="${project.build.directory}/distribution/eNoVa-editor"/>
+                                        <exec
+                                                executable="${java.home}/bin/jlink.exe"
+                                                failonerror="true">
 
+                                            <arg value="--add-modules"/>
+                                            <arg value="java.se,jdk.unsupported,jdk.accessibility"/>
+
+                                            <arg value="--strip-debug"/>
+                                            <arg value="--no-header-files"/>
+                                            <arg value="--no-man-pages"/>
+
+                                            <arg value="--output"/>
+                                            <arg path="${project.build.directory}/distribution/eNoVa-editor/app"/>
+                                        </exec>
+                                        <mkdir
+                                                dir="${project.build.directory}/distribution/eNoVa-editor/app/app-libs"/>
                                         <copy
-                                                todir="${project.build.directory}/distribution/eNoVa-editor/app">
-                                            <fileset
-                                                    dir="${project.build.directory}/app"/>
+                                                file="${project.build.directory}/${project.build.finalName}.jar"
+                                                todir="${project.build.directory}/distribution/eNoVa-editor/app/app-libs"/>
+                                        <copy
+                                                todir="${project.build.directory}/distribution/eNoVa-editor/app/app-libs">
+                                            <fileset dir="${project.build.directory}/runtime-libs"/>
                                         </copy>
-
                                         <copy
                                                 file="${project.basedir}/Input.htm"
                                                 todir="${project.build.directory}/distribution/eNoVa-editor"/>
-
+                                        <copy
+                                                file="${project.basedir}/Output.htm"
+                                                todir="${project.build.directory}/distribution/eNoVa-editor"/>
                                         <copy
                                                 file="${project.basedir}/codelists.properties"
                                                 todir="${project.build.directory}/distribution/eNoVa-editor"/>
-
-                                        <copy
-                                                todir="${project.build.directory}/distribution/eNoVa-editor/codelists">
-                                            <fileset
-                                                    dir="${project.basedir}/codelists"/>
-                                        </copy>
-
-                                        <copy
-                                                file="${project.basedir}/src/main/dist/eNoVa-editor.cmd"
-                                                todir="${project.build.directory}/distribution/eNoVa-editor"/>
-
                                         <copy
                                                 file="${project.basedir}/sender-config.xml"
                                                 todir="${project.build.directory}/distribution/eNoVa-editor"/>
-
                                         <copy
                                                 file="${project.basedir}/caseworkers.xml"
                                                 todir="${project.build.directory}/distribution/eNoVa-editor"/>
-
                                         <copy
                                                 file="${project.basedir}/answer-transform.xsl"
                                                 todir="${project.build.directory}/distribution/eNoVa-editor"/>
-
+                                        <copy
+                                                todir="${project.build.directory}/distribution/eNoVa-editor/codelists">
+                                            <fileset dir="${project.basedir}/codelists"/>
+                                        </copy>
+                                        <copy
+                                                file="${project.basedir}/src/main/dist/eNoVa-editor.cmd"
+                                                todir="${project.build.directory}/distribution/eNoVa-editor"/>
                                         <zip
                                                 destfile="${project.build.directory}/${project.artifactId}-${project.version}.zip"
                                                 basedir="${project.build.directory}/distribution"/>
-
                                     </target>
                                 </configuration>
                             </execution>
