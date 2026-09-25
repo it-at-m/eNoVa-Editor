@@ -2,22 +2,27 @@
 <!--Kommentierte Version von Dr. Rupert Späth, it@M, LH München. Stand: 19.08.2026-->
 <tns:nachricht.enova.entscheidung.2900003 xmlns:tns="http://www.xjustiz.de"
                                           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-   <tns:nachrichtenkopf xjustizVersion="3.6.2">
-      <tns:erstellungszeitpunkt>2026-09-22T15:22:43.3832225+02:00</tns:erstellungszeitpunkt>
+   <tns:nachrichtenkopf xjustizVersion="3.6.2"><!--In der Antwort muss der Nachrichtenkopf praktisch komplett neu geschrieben werden. 
+			Lediglich die Absenderdaten können für den Notar-Empfänger verwendet werden. 
+			Derzeit gehe ich davon aus, dass das Grundbuchamt eine eigene Nachricht bekommt, das bedeutet, dass dieses separat als Empfänger in einer eigenene XML-Datei zu benennen ist.--><!--eNoVa: Erstellungszeitpunkt wurde durch den aktuellen Systemzeitpunkt ersetzt-->
+      <tns:erstellungszeitpunkt>2026-09-25T11:53:16.8390402+02:00</tns:erstellungszeitpunkt>
       <tns:absender>
          <tns:informationen><!--Type.GDS.Kommunikationspartner-->
-            <tns:auswahl_kommunikationspartner>
+            <tns:auswahl_kommunikationspartner><!--eNoVa: Kommunikationspartner wurde durch den Wert aus sender-config.xml ersetzt-->
                <tns:sonstige>LH München</tns:sonstige>
             </tns:auswahl_kommunikationspartner>
-            <tns:auswahl_verweisGrunddaten><!--optional-->
+            <tns:auswahl_verweisGrunddaten><!--optional--><!--eNoVa: Rollennummer wurde durch die nächste freie Rollennummer aus den vorhandenen Verfahrensdaten ersetzt-->
                <tns:ref.rollennummer>5</tns:ref.rollennummer>
                <!--Verweis auf grunddaten.verfahrensdaten.beteiliung.beteiligter.beteiligtennummer, nicht auf rolle.rollennummer!-->
             </tns:auswahl_verweisGrunddaten>
          </tns:informationen>
-         <tns:aktenzeichen>Test123</tns:aktenzeichen>
-         <tns:eigeneNachrichtenID>0cbe527b-5b6f-4bb4-a526-22cd67f7c799</tns:eigeneNachrichtenID>
+         <!--eNoVa: Aktenzeichen wurde durch den Wert aus dem Eingabefeld ersetzt-->
+         <tns:aktenzeichen>Test</tns:aktenzeichen>
+         <!--eNoVa: Nachrichten-ID wurde durch eine von der Anwendung neu erzeugte eindeutige Nachrichten-ID ersetzt-->
+         <tns:eigeneNachrichtenID>9987beba-6d5a-4bf8-9ae0-9cbf9d00db2d</tns:eigeneNachrichtenID>
          <!--TODO: Es ist zu klären, wie wir die eigene Nachrichten-ID bekommen. -->
       </tns:absender>
+      <!--eNoVa: Empfängerdaten wurden aus den Daten des ursprünglichen Absenders übernommen-->
       <tns:empfaenger>
          <tns:informationen><!--Type.GDS.Kommunikationspartner-->
             <tns:auswahl_kommunikationspartner>
@@ -29,10 +34,13 @@
             </tns:auswahl_verweisGrunddaten>
          </tns:informationen>
          <tns:eigeneNachrichtenID>f8f9e173-58ac-4db1-b709-845e8306bd65</tns:eigeneNachrichtenID>
+         <!--TODO: Es ist zu klären, wie wir die eigene Nachrichten-ID bekommen. -->
+         <!--eNoVa: Empfänger-Aktenzeichen wurde aus dem Aktenzeichen des ursprünglichen Absenders übernommen-->
          <tns:auswahl_aktenzeichen>
             <tns:aktenzeichen.freitext>UVZ-4697</tns:aktenzeichen.freitext>
          </tns:auswahl_aktenzeichen>
       </tns:empfaenger>
+      <!--eNoVa: Herstellerinformationen wurden aus den internen Herstellerinformationen der Anwendung übernommen-->
       <tns:herstellerinformation>
          <tns:nameDesProdukts>LHM-eNoVA-Generator</tns:nameDesProdukts>
          <tns:herstellerDesProdukts>Landeshauptstadt München it@M</tns:herstellerDesProdukts>
@@ -40,16 +48,20 @@
       </tns:herstellerinformation>
    </tns:nachrichtenkopf>
    <tns:grunddaten>
-      <tns:verfahrensdaten>
+      <tns:verfahrensdaten><!--Bei den Verfahrensdaten ist bezüglich der Antwort zu klären:
+								- Sind die Instanzdaten unverändert zurück zu schicken?
+								- Ist der Sachbearbeiter, der die Entscheidung trifft als Beteiligter zu nennen? Als Rolle wäre insbesondere denkbar 141(Sachbearbeiter), 186(Vertreter des öffentlichen Interesses), 189(Verwaltungsbehörde), 212(Aussteller, von Fachabteilung präferiert) -->
          <tns:verfahrensnummer>100000019136</tns:verfahrensnummer>
+         <!--alphanumerisch-->
          <tns:instanzdaten>
-            <tns:auswahl_instanzbehoerde> <!--Im Regelfall sollte dies identisch mit nachrichtenkopf.empfaenger sein -->
+            <tns:auswahl_instanzbehoerde><!--Im Regelfall sollte dies identisch mit nachrichtenkopf.empfaenger sein --><!--eNoVa: Instanzbehörde wurde durch den Wert aus sender-config.xml ersetzt-->
                <tns:sonstige>LH München</tns:sonstige>
             </tns:auswahl_instanzbehoerde>
             <tns:verfahrensgegenstand>
                <tns:gegenstand>Ersuchen Genehmigung GrdstVG; 100000019136</tns:gegenstand>
             </tns:verfahrensgegenstand>
          </tns:instanzdaten>
+         <!--Achtung: XML kennt keine Reihenfolge! Welche Rolle zuerst kommt ist beliebig-->
          <tns:beteiligung>
             <tns:rolle><!-- 208='Notar(in)' -->
                <tns:rollennummer>1</tns:rollennummer>
@@ -67,7 +79,7 @@
                <tns:beteiligtennummer>1</tns:beteiligtennummer>
                <tns:auswahl_beteiligter>
                   <tns:natuerlichePerson>
-                     <tns:vollerName> <!-- Type.GDS.NameNatuerlichePerson -->
+                     <tns:vollerName><!-- Type.GDS.NameNatuerlichePerson -->
                         <tns:vorname>Martin</tns:vorname>
                         <tns:titel>Dr.</tns:titel>
                         <tns:nachname>Müller</tns:nachname>
@@ -164,6 +176,7 @@
                </tns:auswahl_beteiligter>
             </tns:beteiligter>
          </tns:beteiligung>
+         <!--eNoVa: Beteiligung wurde für den ausgewählten Sachbearbeiter aus caseworkers.xml ergänzt; Rollen- und Beteiligtennummer wurden als nächste freie Nummern aus den vorhandenen Verfahrensdaten ermittelt-->
          <tns:beteiligung>
             <tns:rolle>
                <tns:rollennummer>5</tns:rollennummer>
@@ -175,7 +188,7 @@
                <tns:beteiligtennummer>4</tns:beteiligtennummer>
                <tns:auswahl_beteiligter>
                   <tns:natuerlichePerson>
-                     <tns:vollerName> <!-- Type.GDS.NameNatuerlichePerson -->
+                     <tns:vollerName><!-- Type.GDS.NameNatuerlichePerson -->
                         <tns:vorname>Hubert</tns:vorname>
                         <tns:nachname>Bewiesen</tns:nachname>
                      </tns:vollerName>
@@ -241,10 +254,10 @@
       </tns:dokument>
    </tns:schriftgutobjekte>
    <tns:fachdaten><!--Derzeit gehe ich davon aus, dass bei der Antwort in den Fachdaten lediglich der Bereich 'ersuchenSachentscheidung' durch 'sachentscheidung' zu tauschen ist.-->
-      <tns:auswahl_GegenstandDerNachricht><!-- 011='Erteilung der Genehmigung nach § 2 GrdstVG'-->
+      <tns:auswahl_GegenstandDerNachricht><!-- 011='Erteilung der Genehmigung nach § 2 GrdstVG'--><!--eNoVa: Ersuchen um Sachentscheidung wurde durch die vom Benutzer ausgewählte Sachentscheidung ersetzt-->
          <tns:sachentscheidung>
             <tns:sachentscheidung listVersionID="1.0">
-               <code>002</code>
+               <code>001</code>
             </tns:sachentscheidung>
          </tns:sachentscheidung>
       </tns:auswahl_GegenstandDerNachricht>
