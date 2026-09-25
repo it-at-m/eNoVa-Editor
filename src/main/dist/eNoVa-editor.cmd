@@ -6,7 +6,8 @@ cd /d "%~dp0"
 set "ENOVA_HOME=%~dp0"
 
 start "" "%~dp0app\bin\javaw.exe" ^
-    -m de.muenchen.enovaeditor/de.muenchen.enovaeditor.EnovaEditorApplication
+    -cp "%~dp0app\app-libs\*" ^
+    de.muenchen.enovaeditor.Launcher
 
 endlocal
 exit
