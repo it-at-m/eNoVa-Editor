@@ -1,31 +1,458 @@
 <!doctype html>
 <html lang="de">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
-    <meta name="description" content="" >
-    <link rel="icon" href="https://assets.muenchen.de/logos/lhm/icon-lhm-muenchen-32.png">
+
+    <title>eNoVa-Editor</title>
+    <meta
+            name="description"
+            content="eNoVa-Editor – Desktop-Anwendung zur Bearbeitung von XJustiz.enova.2900003-Dateien."
+    >
+
+    <link
+            rel="icon"
+            type="image/svg+xml"
+            href="assets/icons/enova-editor.svg"
+    >
+
+    <style>
+        :root {
+            font-family:
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            color: #1d1d1f;
+            background: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        a {
+            color: #005a9c;
+        }
+
+        .container {
+            width: min(1100px, calc(100% - 40px));
+            margin: 0 auto;
+        }
+
+        header {
+            border-bottom: 1px solid #e3e3e3;
+        }
+
+        .header-content {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: inherit;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .brand img {
+            width: 42px;
+            height: 42px;
+        }
+
+        .language-switcher {
+            display: flex;
+            gap: 6px;
+        }
+
+        .language-switcher button {
+            border: 1px solid #cccccc;
+            background: #ffffff;
+            border-radius: 6px;
+            padding: 7px 12px;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .language-switcher button.active {
+            background: #005a9c;
+            border-color: #005a9c;
+            color: #ffffff;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            gap: 40px;
+            align-items: center;
+            padding: 72px 0 52px;
+        }
+
+        .hero-logo {
+            width: 160px;
+            max-width: 100%;
+        }
+
+        h1 {
+            margin: 0 0 16px;
+            font-size: clamp(2.2rem, 6vw, 4rem);
+            line-height: 1.05;
+        }
+
+        .lead {
+            max-width: 760px;
+            margin: 0;
+            font-size: 1.2rem;
+            color: #444444;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 1px solid #005a9c;
+        }
+
+        .button-primary {
+            background: #005a9c;
+            color: #ffffff;
+        }
+
+        .button-secondary {
+            background: #ffffff;
+            color: #005a9c;
+        }
+
+        .notice {
+            margin: 10px 0 50px;
+            padding: 20px 24px;
+            background: #f4f7fa;
+            border-left: 4px solid #005a9c;
+            border-radius: 4px;
+        }
+
+        section {
+            padding: 28px 0;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 1.8rem;
+        }
+
+        .screenshot {
+            display: block;
+            width: 100%;
+            margin-top: 24px;
+            border: 1px solid #dddddd;
+            border-radius: 8px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+        }
+
+        .meeting {
+            margin-top: 24px;
+            padding: 22px;
+            border: 1px solid #dddddd;
+            border-radius: 8px;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding: 28px 0;
+            border-top: 1px solid #e3e3e3;
+            color: #555555;
+            font-size: 0.95rem;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                width: min(100% - 28px, 1100px);
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 24px;
+                padding-top: 48px;
+            }
+
+            .hero-logo {
+                width: 110px;
+            }
+
+            .header-content {
+                min-height: 68px;
+            }
+
+            .brand img {
+                width: 36px;
+                height: 36px;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <div class="panel">
-    <header id="header">
-        <a href="/" class="noicon" accesskey="i" >eNoVa-Editor</a>
-    </header>
+
+<header>
+    <div class="container header-content">
+        <a class="brand" href="/">
+            <span>eNoVa-Editor</span>
+        </a>
+
+        <div class="language-switcher" aria-label="Sprache auswählen">
+            <button
+                    id="lang-de"
+                    class="active"
+                    type="button"
+                    onclick="setLanguage('de')"
+            >
+                DE
+            </button>
+
+            <button
+                    id="lang-en"
+                    type="button"
+                    onclick="setLanguage('en')"
+            >
+                EN
+            </button>
+        </div>
     </div>
-    <div id="main" class="panel" role="main" >
-        <section>
-            <article><h1 id="enova-editor">eNoVa-Editor</h1>
-<p>eNoVa-Editor</p>
-            </article>
+</header>
+
+<main class="container">
+
+    <div id="content-de">
+
+        <section class="hero">
+            <img
+                    class="hero-logo"
+                    src="assets/icons/enova-editor.svg"
+                    alt="eNoVa-Editor Logo"
+            >
+
+            <div>
+                <h1>eNoVa-Editor</h1>
+
+                <p class="lead">
+                    Der eNoVa-Editor ermöglicht Kommunen, Dateien im Format
+                    XJustiz.enova.2900003 in einer menschenlesbaren Form
+                    anzuzeigen und eine XJustiz-Antwortdatei zu erstellen.
+                </p>
+
+                <div class="actions">
+                    <a
+                            class="button button-primary"
+                            href="https://github.com/it-at-m/eNoVa-Editor"
+                    >
+                        GitHub
+                    </a>
+
+                    <a
+                            class="button button-secondary"
+                            href="https://xjustiz.justiz.de/Anwendungsfaelle/eNoVA/index.php"
+                    >
+                        XJustiz eNoVa
+                    </a>
+                </div>
+            </div>
         </section>
+
+        <div class="notice">
+            <strong>Ab Januar 2027</strong> sind Kommunen in Deutschland
+            verpflichtet, Vorkaufsrechtsanfragen von Notaren digital im Format
+            XJustiz.enova.2900003 zu bearbeiten.
+        </div>
+
+        <section>
+            <h2>Was macht der eNoVa-Editor?</h2>
+
+            <p>
+                Der eNoVa-Editor kann Dateien im Format
+                <a href="https://xjustiz.justiz.de/Anwendungsfaelle/eNoVA/index.php">
+                    XJustiz.enova.2900003
+                </a>,
+                die über das
+                <a href="https://de.wikipedia.org/wiki/Besonderes_elektronisches_Beh%C3%B6rdenpostfach">
+                    beBPo
+                </a>
+                übermittelt wurden, in einer menschenlesbaren Form verkürzt
+                anzeigen.
+            </p>
+
+            <p>
+                Sachbearbeiter*innen können anschließend ihre Entscheidung
+                eintragen und daraus eine XJustiz-Antwortdatei erstellen.
+            </p>
+
+            <img
+                    class="screenshot"
+                    src="assets/images/enova-editor-screenshot.png"
+                    alt="Screenshot der Benutzeroberfläche des eNoVa-Editors"
+            >
+        </section>
+
+        <section>
+            <h2>Offenes Meeting</h2>
+
+            <div class="meeting">
+                Jeden Freitag ab <strong>14:00 Uhr</strong> findet ein offenes
+                Meeting statt, in dem Fragen zum eNoVa-Editor beantwortet werden.
+
+                <p>
+                    <a href="https://meet.jit.si/eNoVa-Editor">
+                        Zum offenen Meeting
+                    </a>
+                </p>
+            </div>
+        </section>
+
     </div>
-    <div class="panel cb" role="contentinfo" >
-    <footer id="footer">
-        <p>
-            <a href="mailto:opensource@muenchen.de" rel="me">opensource@muenchen.de</a> 
-        </p>
-    </footer>
+
+
+    <div id="content-en" hidden>
+
+        <section class="hero">
+            <img
+                    class="hero-logo"
+                    src="assets/icons/enova-editor.svg"
+                    alt="eNoVa Editor logo"
+            >
+
+            <div>
+                <h1>eNoVa Editor</h1>
+
+                <p class="lead">
+                    The eNoVa Editor enables German municipalities to display
+                    XJustiz.enova.2900003 files in a human-readable format and
+                    create an XJustiz response file.
+                </p>
+
+                <div class="actions">
+                    <a
+                            class="button button-primary"
+                            href="https://github.com/it-at-m/eNoVa-Editor"
+                    >
+                        GitHub
+                    </a>
+
+                    <a
+                            class="button button-secondary"
+                            href="https://xjustiz.justiz.de/Anwendungsfaelle/eNoVA/index.php"
+                    >
+                        XJustiz eNoVa
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <div class="notice">
+            Starting in <strong>January 2027</strong>, municipalities in Germany
+            are required to process pre-emption right requests from notaries
+            digitally in the XJustiz.enova.2900003 format.
+        </div>
+
+        <section>
+            <h2>What does the eNoVa Editor do?</h2>
+
+            <p>
+                The eNoVa Editor can open files in the
+                <a href="https://xjustiz.justiz.de/Anwendungsfaelle/eNoVA/index.php">
+                    XJustiz.enova.2900003
+                </a>
+                format that were submitted via
+                <a href="https://de.wikipedia.org/wiki/Besonderes_elektronisches_Beh%C3%B6rdenpostfach">
+                    beBPo
+                </a>
+                and display them in a condensed, human-readable format.
+            </p>
+
+            <p>
+                The case worker can enter their decision and create an XJustiz
+                response file.
+            </p>
+
+            <img
+                    class="screenshot"
+                    src="assets/images/enova-editor-screenshot.png"
+                    alt="Screenshot of the eNoVa Editor user interface"
+            >
+        </section>
+
+        <section>
+            <h2>Open meeting</h2>
+
+            <div class="meeting">
+                Every Friday at <strong>2 p.m. German time</strong>, an open
+                meeting is held to answer questions about the eNoVa Editor.
+
+                <p>
+                    <a href="https://meet.jit.si/eNoVa-Editor">
+                        Join the open meeting
+                    </a>
+                </p>
+            </div>
+        </section>
+
     </div>
+
+</main>
+
+<footer>
+    <div class="container">
+        <a href="https://www.muenchen.de/meta">
+            Impressum, Datenschutz und weitere Informationen
+        </a>
+    </div>
+</footer>
+
+<script>
+    function setLanguage(language) {
+        const german = language === "de";
+
+        document.getElementById("content-de").hidden = !german;
+        document.getElementById("content-en").hidden = german;
+
+        document.getElementById("lang-de").classList.toggle("active", german);
+        document.getElementById("lang-en").classList.toggle("active", !german);
+
+        document.documentElement.lang = language;
+        localStorage.setItem("language", language);
+    }
+
+    const savedLanguage = localStorage.getItem("language");
+
+    if (savedLanguage === "en") {
+        setLanguage("en");
+    }
+</script>
+
 </body>
 </html>
