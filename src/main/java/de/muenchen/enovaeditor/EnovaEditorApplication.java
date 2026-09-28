@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
 
 import java.io.IOException;
 
@@ -17,6 +18,14 @@ public class EnovaEditorApplication extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 800, 520);
 
         stage.setTitle("eNoVa Editor");
+
+        stage.getIcons().add(
+                new Image(
+                        EnovaEditorApplication.class
+                                .getResourceAsStream("icon.png")
+                )
+        );
+
         stage.setScene(scene);
         stage.show();
     }
