@@ -1,0 +1,100 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Ensure main branch
+        shell: pwsh
+        run: |
+          if ("${{ github.ref }}" -ne "refs/heads/main") {
+            throw "Releases must be created from the main branch."
+          }
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Read Java version
+        id: java-version
+        shell: pwsh
+        run: |
+          [xml]$pom = Get-Content -Raw pom.xml
+          $javaVersion = $pom.project.properties.'java.version'
+
+          if ([string]::IsNullOrWhiteSpace($javaVersion)) {
+            throw "Could not determine Java version from pom.xml."
+          }
+
+          "version=$javaVersion" >> $env:GITHUB_OUTPUT
+          Write-Host "Java version: $javaVersion"
+          
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ steps.java-version.outputs.version }}
+          cache: maven
+
+      - name: Read project version
+        id: version
+        shell: pwsh
+        run: |
+          $version = (& .\mvnw.cmd help:evaluate "-Dexpression=project.version" -q "-DforceStdout").Trim()
+
+          if ([string]::IsNullOrWhiteSpace($version)) {
+            throw "Could not determine project version."
+          }
+
+          if ($version -match "-SNAPSHOT$") {
+            throw "Snapshot versions cannot be released: $version"
+          }
+
+          "version=$version" >> $env:GITHUB_OUTPUT
+          Write-Host "Release version: $version"
+
+      - name: Check release tag
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $tag = "v$version"
+
+          $existingTag = git ls-remote --tags origin "refs/tags/$tag"
+
+          if ($existingTag) {
+            throw "Tag $tag already exists."
+          }
+
+      - name: Build distribution
+        shell: pwsh
+        run: .\mvnw.cmd clean package -Pdist
+
+      - name: Verify distribution
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $file = "target/eNoVa-editor-$version.zip"
+
+          if (-not (Test-Path $file)) {
+            throw "Distribution ZIP not found: $file"
+          }
+
+      - name: Create GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $file = "target/eNoVa-editor-$version.zip"
+
+          gh release create "v$version" `
+            "$file" `
+            --title "eNoVa Editor $version" `
+            --target "${{ github.sha }}" `
+            --generate-notes
