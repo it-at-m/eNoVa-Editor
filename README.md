@@ -2,11 +2,15 @@ The __eNoVa Editor__ can open files in the [XJustiz.enova. 2900003](https://xjus
 
 Starting in __January 2027__, municipalities in Germany are required to process preemptive right requests from notaries digitally in the _XJustiz.enova.2900003_ format.
 
+The ongoing project steps can be seen at our kanban board: https://github.com/orgs/it-at-m/projects/36/ 
+
 Further information and contact details at: https://enova-editor.oss.muenchen.de/
 
 ## German
 Der __eNoVa-Editor__ kann Dateien im Format [XJustiz.enova.2900003](https://xjustiz.justiz.de/Anwendungsfaelle/eNoVA/index.php), die über das [beBPo](https://de.wikipedia.org/wiki/Besonderes_elektronisches_Beh%C3%B6rdenpostfach) übermittelt wurden, in einer menschenlesbaren Form verkürzt anzeigen. Weiterhin kann der Sachbearbeiter*in seine/ihre Entscheidung eintragen und so eine XJustiz-Antwortdatei erstellen. 
 
 Ab __Januar 2027__ sind die Kommunen in Deutschland verpflichtet Vorkaufsrechtsanfragen von den Notaren digital im Format _XJustiz.enova.2900003_ zu bearbeiten. 
+
+Die aktuellen Projektschritte sind auf unserem Kandan-Board abgebildet: https://github.com/orgs/it-at-m/projects/36/ 
 
 Weitere Informationen und Kontaktmöglichkeiten: https://enova-editor.oss.muenchen.de/
