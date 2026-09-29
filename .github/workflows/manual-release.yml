@@ -1,6 +1,10 @@
 name: Create Release
 
 on:
+  pull_request:
+    branches:
+      - main
+
   workflow_dispatch:
 
 permissions:
@@ -12,6 +16,7 @@ jobs:
 
     steps:
       - name: Ensure main branch
+        if: github.event_name == 'workflow_dispatch'
         shell: pwsh
         run: |
           if ("${{ github.ref }}" -ne "refs/heads/main") {
@@ -52,14 +57,15 @@ jobs:
             throw "Could not determine project version."
           }
 
-          if ($version -match "-SNAPSHOT$") {
+          if ("${{ github.event_name }}" -eq "workflow_dispatch" -and $version -match "-SNAPSHOT$") {
             throw "Snapshot versions cannot be released: $version"
           }
 
           "version=$version" >> $env:GITHUB_OUTPUT
-          Write-Host "Release version: $version"
+          Write-Host "Project version: $version"
 
       - name: Check release tag
+        if: github.event_name == 'workflow_dispatch'
         shell: pwsh
         run: |
           $version = "${{ steps.version.outputs.version }}"
@@ -86,6 +92,7 @@ jobs:
           }
 
       - name: Create GitHub release
+        if: github.event_name == 'workflow_dispatch'
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
