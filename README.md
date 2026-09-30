@@ -6,6 +6,8 @@ The ongoing project steps can be seen at our kanban board: https://github.com/or
 
 Further information and contact details at: https://enova-editor.oss.muenchen.de/
 
+Installation instructions: https://enova-editor.oss.muenchen.de/installation-en.html
+
 ## German
 Der __eNoVa-Editor__ kann Dateien im Format [XJustiz.enova.2900003](https://xjustiz.justiz.de/Anwendungsfaelle/eNoVA/index.php), die über das [beBPo](https://de.wikipedia.org/wiki/Besonderes_elektronisches_Beh%C3%B6rdenpostfach) übermittelt wurden, in einer menschenlesbaren Form verkürzt anzeigen. Weiterhin kann der Sachbearbeiter*in seine/ihre Entscheidung eintragen und so eine XJustiz-Antwortdatei erstellen. 
 
@@ -14,3 +16,5 @@ Ab __Januar 2027__ sind die Kommunen in Deutschland verpflichtet Vorkaufsrechtsa
 Die aktuellen Projektschritte sind auf unserem Kandan-Board abgebildet: https://github.com/orgs/it-at-m/projects/36/ 
 
 Weitere Informationen und Kontaktmöglichkeiten: https://enova-editor.oss.muenchen.de/
+
+Installationsanleitung: https://enova-editor.oss.muenchen.de/installation.html

@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Installation – eNoVa-Editor</title>
+
+    <style>
+        :root {
+            font-family:
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            color: #1d1d1f;
+            background: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        main {
+            width: min(900px, calc(100% - 40px));
+            margin: 0 auto;
+            padding: 48px 0;
+        }
+
+        h1,
+        h2,
+        h3 {
+            line-height: 1.2;
+        }
+
+        h2 {
+            margin-top: 48px;
+        }
+
+        h3 {
+            margin-top: 32px;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        pre {
+            padding: 16px 20px;
+            background: #f4f4f4;
+            border-radius: 6px;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        .notice {
+            margin: 20px 0;
+            padding: 16px 20px;
+            background: #f4f7fa;
+            border-left: 4px solid #005a9c;
+            border-radius: 4px;
+        }
+
+        a {
+            color: #005a9c;
+        }
+    </style>
+</head>
+
+<body>
+
+<main>
+    <p>
+        <a href="index.html">← Zurück zum eNoVa-Editor</a>
+    </p>
+
+    <h1>Installationsanleitung</h1>
+
+    <p>
+        Diese Anleitung richtet sich an Administratorinnen und Administratoren,
+        die den eNoVa-Editor für ihre Kommune bereitstellen möchten.
+    </p>
+
+
+    <h2>1. eNoVa-Editor herunterladen</h2>
+
+    <p>
+        Laden Sie die aktuelle Version des eNoVa-Editors von der
+        GitHub-Releases-Seite herunter.
+    </p>
+
+    <p>
+        <a href="https://github.com/it-at-m/eNoVa-Editor/releases">
+            Zu den GitHub Releases
+        </a>
+    </p>
+
+    <p>
+        Laden Sie die Datei
+        <code>eNoVa-editor-&lt;Version&gt;.zip</code>
+        herunter.
+    </p>
+
+
+    <h2>2. Installation</h2>
+
+    <p>
+        Entpacken Sie die ZIP-Datei in das gewünschte Installationsverzeichnis.
+    </p>
+
+    <p>
+        Die Verzeichnisstruktur darf dabei nicht verändert werden.
+    </p>
+
+    <pre>
+eNoVa-editor/
+├── app/
+├── codelists/
+├── Input.htm
+├── Output.htm
+├── sender-config.xml
+├── caseworkers.xml
+├── codelists.properties
+├── answer-transform.xsl
+└── eNoVa-editor.cmd
+    </pre>
+
+    <p>
+        Eine separate Java-Installation ist nicht erforderlich.
+        Die benötigte Java-Laufzeitumgebung ist Bestandteil des
+        eNoVa-Editor-Pakets.
+    </p>
+
+
+    <h2>3. Absender konfigurieren</h2>
+
+    <p>
+        Öffnen Sie die Datei <code>sender-config.xml</code>.
+    </p>
+
+    <p>
+        Tragen Sie dort den Namen Ihrer Kommune bzw. Behörde ein.
+    </p>
+
+    <p>
+        Beispiel:
+    </p>
+
+    <pre>
+&lt;sender&gt;
+    &lt;name&gt;Gemeinde Musterstadt&lt;/name&gt;
+&lt;/sender&gt;
+    </pre>
+
+    <p>
+        Dieser Name wird vom eNoVa-Editor unter anderem bei der Erzeugung
+        der XJustiz-Antwort verwendet.
+    </p>
+
+
+    <h2>4. Sachbearbeiter konfigurieren</h2>
+
+    <p>
+        Die im eNoVa-Editor auswählbaren Sachbearbeiterinnen und Sachbearbeiter
+        werden in der Datei <code>caseworkers.xml</code> konfiguriert.
+    </p>
+
+    <p>
+        Die mitgelieferten Beispieldaten müssen durch die Daten der eigenen
+        Organisation ersetzt werden.
+    </p>
+
+    <p>
+        Die dort hinterlegten Einträge werden beim Start der Anwendung geladen
+        und stehen anschließend im Auswahlfeld für die Sachbearbeitung zur Verfügung.
+    </p>
+
+
+    <h2>5. Anpassbare Dateien</h2>
+
+    <p>
+        Folgende Dateien können bei Bedarf angepasst werden:
+    </p>
+
+    <ul>
+        <li>
+            <code>Input.htm</code> – bestimmt die HTML-Darstellung der
+            eingehenden XJustiz-Nachricht.
+        </li>
+        <li>
+            <code>Output.htm</code> – bestimmt die HTML-Darstellung der
+            erzeugten XJustiz-Antwort.
+        </li>
+    </ul>
+
+    <p>
+        Änderungen an diesen Dateien betreffen die Darstellung im Browser.
+        Die eigentliche XJustiz-Antwort-XML wird dadurch nicht direkt definiert.
+    </p>
+
+
+    <h2>6. Technische Dateien</h2>
+
+    <div class="notice">
+        Die folgenden Dateien und Verzeichnisse gehören zur technischen
+        Konfiguration bzw. Programmlogik und sollten normalerweise nicht
+        verändert werden.
+    </div>
+
+
+    <h3><code>app/</code></h3>
+
+    <p>
+        Enthält die Anwendung, ihre benötigten Bibliotheken und die mitgelieferte
+        Java-Laufzeitumgebung.
+    </p>
+
+    <p class="notice">
+        Dateien in diesem Verzeichnis sollten nicht manuell verändert, verschoben
+        oder gelöscht werden.
+    </p>
+
+
+    <h3><code>codelists/</code></h3>
+
+    <p>
+        Enthält die XML-Dateien der vom eNoVa-Editor verwendeten
+        XJustiz-Codelisten.
+    </p>
+
+    <p>
+        <strong>Verwendung:</strong>
+        Codelisten übersetzen technische Codes in verständliche Bezeichnungen
+        oder liefern die zulässigen Werte für Auswahlfelder.
+    </p>
+
+    <p>
+        Beispielsweise wird die Auswahl „Sachentscheidung“ aus einer Codelist
+        dieses Verzeichnisses aufgebaut.
+    </p>
+
+    <p>
+        Auch bei der Darstellung einer XJustiz-Nachricht können technische Codes,
+        beispielsweise Rollen- oder Telekommunikationsarten, mit Hilfe dieser
+        Dateien in ihre Bezeichnungen aufgelöst werden.
+    </p>
+
+    <p>
+        <strong>Konfiguration:</strong>
+        Welche konkrete Codelist-Datei für einen bestimmten Zweck verwendet wird,
+        legt die Datei <code>codelists.properties</code> fest.
+    </p>
+
+    <p class="notice">
+        Die Dateien sollten nicht einzeln ersetzt oder verändert werden, ohne zu
+        prüfen, ob Codelist-Version und Konfiguration weiterhin zusammenpassen.
+    </p>
+
+
+    <h3><code>codelists.properties</code></h3>
+
+    <p>
+        Diese Datei verbindet die im eNoVa-Editor verwendeten Codelist-Namen
+        mit den dazugehörigen XML-Dateien im Verzeichnis
+        <code>codelists/</code>.
+    </p>
+
+    <p>
+        <strong>Beispiel:</strong>
+        <code>sachentscheidung.file</code> legt fest, welche Datei
+        <code>ENOVA.Sachentscheidung-*.xml</code> für das Auswahlfeld
+        „Sachentscheidung“ verwendet wird.
+    </p>
+
+    <p>
+        Zusätzlich beschreibt die Datei, wie die Codelist-XML-Dateien
+        technisch aufgebaut sind. Dazu gehört beispielsweise, welche Spalte
+        den technischen Code und welche Spalte die sichtbare Bezeichnung enthält.
+    </p>
+
+    <p>
+        Der Ablauf ist vereinfacht:
+    </p>
+
+    <pre>
+codelists.properties
+        ↓
+legt die verwendete Codelist-Datei fest
+        ↓
+codelists/*.xml
+        ↓
+technischer Code → sichtbare Bezeichnung
+    </pre>
+
+    <p class="notice">
+        Änderungen an <code>codelists.properties</code> können dazu führen,
+        dass eine andere Codelist-Version oder eine nicht passende Datei
+        verwendet wird. Änderungen sollten daher nur gezielt vorgenommen werden.
+    </p>
+
+
+    <h3><code>answer-transform.xsl</code></h3>
+
+    <p>
+        Diese Datei enthält die XSLT-Transformation zur Erzeugung der
+        XJustiz-Antwort.
+    </p>
+
+    <p>
+        <strong>Verwendung:</strong>
+        Beim Erzeugen einer Antwort übergibt der eNoVa-Editor die zuvor
+        eingelesene XJustiz-XML zusammen mit den Eingaben aus der Anwendung
+        an diese XSLT-Datei.
+    </p>
+
+    <p>
+        Dazu gehören aktuell unter anderem:
+    </p>
+
+    <ul>
+        <li>Aktenzeichen</li>
+        <li>ausgewählte Sachentscheidung</li>
+        <li>ausgewählte Sachbearbeiterin bzw. ausgewählter Sachbearbeiter</li>
+        <li>neu erzeugte Nachrichten-ID</li>
+        <li>Herstellerinformationen des eNoVa-Editors</li>
+    </ul>
+
+    <p>
+        Die XSLT-Datei legt anschließend fest, an welchen Stellen diese Werte
+        in der erzeugten XJustiz-Antwort verwendet werden und welche Inhalte
+        der ursprünglichen Nachricht übernommen oder verändert werden.
+    </p>
+
+    <p>
+        Der Ablauf ist vereinfacht:
+    </p>
+
+    <pre>
+eingehende XJustiz-XML
+        +
+Benutzereingaben
+        ↓
+answer-transform.xsl
+        ↓
+XJustiz-Antwort-XML
+    </pre>
+
+    <p class="notice">
+        Änderungen wirken sich direkt auf die erzeugte XJustiz-Antwort aus.
+        Fehlerhafte Änderungen können dazu führen, dass falsche Inhalte erzeugt
+        werden oder die Antwort nicht mehr dem erwarteten XJustiz-Format entspricht.
+        Änderungen sollten daher nur mit entsprechenden XSLT- und
+        XJustiz-Kenntnissen vorgenommen und anschließend getestet werden.
+    </p>
+
+
+    <h3><code>eNoVa-editor.cmd</code></h3>
+
+    <p>
+        Startet den eNoVa-Editor unter Windows.
+    </p>
+
+    <p>
+        Die Datei setzt beim Start das Installationsverzeichnis als
+        Anwendungsverzeichnis und startet anschließend die mitgelieferte
+        Java-Laufzeitumgebung aus dem Verzeichnis <code>app/</code>.
+    </p>
+
+    <p class="notice">
+        Die Datei sollte normalerweise nicht verändert werden.
+    </p>
+
+
+    <h2>7. Berechtigungen</h2>
+
+    <p>
+        Der eNoVa-Editor erzeugt die HTML-Ansichten und die Antwortdateien
+        im selben Verzeichnis wie die geöffnete XML-Datei.
+    </p>
+
+    <div class="notice">
+        Für die normale Nutzung sind keine Schreibrechte auf das
+        Installationsverzeichnis erforderlich. Schreibrechte dort werden
+        nur benötigt, wenn Konfigurationsdateien wie
+        <code>sender-config.xml</code>,
+        <code>caseworkers.xml</code>,
+        <code>Input.htm</code> oder
+        <code>Output.htm</code>
+        administrativ geändert werden sollen.
+    </div>
+
+
+    <h2>8. Anwendung starten</h2>
+
+    <p>
+        Starten Sie den eNoVa-Editor über:
+    </p>
+
+    <pre>eNoVa-editor.cmd</pre>
+
+    <p>
+        Nach dem Start kann eine XJustiz-XML-Datei über die Anwendung geöffnet
+        und verarbeitet werden.
+    </p>
+
+</main>
+
+</body>
+</html>

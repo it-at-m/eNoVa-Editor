@@ -1,0 +1,107 @@
+name: Create Release
+
+on:
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Ensure main branch
+        if: github.event_name == 'workflow_dispatch'
+        shell: pwsh
+        run: |
+          if ("${{ github.ref }}" -ne "refs/heads/main") {
+            throw "Releases must be created from the main branch."
+          }
+
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Read Java version
+        id: java-version
+        shell: pwsh
+        run: |
+          [xml]$pom = Get-Content -Raw pom.xml
+          $javaVersion = $pom.project.properties.'java.version'
+
+          if ([string]::IsNullOrWhiteSpace($javaVersion)) {
+            throw "Could not determine Java version from pom.xml."
+          }
+
+          "version=$javaVersion" >> $env:GITHUB_OUTPUT
+          Write-Host "Java version: $javaVersion"
+
+      - name: Set up Java
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: ${{ steps.java-version.outputs.version }}
+          cache: maven
+
+      - name: Read project version
+        id: version
+        shell: pwsh
+        run: |
+          $version = (& .\mvnw.cmd help:evaluate "-Dexpression=project.version" -q "-DforceStdout").Trim()
+
+          if ([string]::IsNullOrWhiteSpace($version)) {
+            throw "Could not determine project version."
+          }
+
+          if ("${{ github.event_name }}" -eq "workflow_dispatch" -and $version -match "-SNAPSHOT$") {
+            throw "Snapshot versions cannot be released: $version"
+          }
+
+          "version=$version" >> $env:GITHUB_OUTPUT
+          Write-Host "Project version: $version"
+
+      - name: Check release tag
+        if: github.event_name == 'workflow_dispatch'
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $tag = "v$version"
+
+          $existingTag = git ls-remote --tags origin "refs/tags/$tag"
+
+          if ($existingTag) {
+            throw "Tag $tag already exists."
+          }
+
+      - name: Build distribution
+        shell: pwsh
+        run: .\mvnw.cmd clean package -Pdist
+
+      - name: Verify distribution
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $file = "target/eNoVa-editor-$version.zip"
+
+          if (-not (Test-Path $file)) {
+            throw "Distribution ZIP not found: $file"
+          }
+
+      - name: Create GitHub release
+        if: github.event_name == 'workflow_dispatch'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $file = "target/eNoVa-editor-$version.zip"
+
+          gh release create "v$version" `
+            "$file" `
+            --title "eNoVa Editor $version" `
+            --target "${{ github.sha }}" `
+            --generate-notes
