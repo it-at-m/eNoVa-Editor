@@ -24,7 +24,7 @@ public class ErsuchenSachentscheidungChecker {
 
         if (!EXPECTED_ROOT.equals(root.getLocalName())) {
             throw new IllegalArgumentException(
-                    "Die ausgewählte Datei ist keine eNoVa-Nachricht 2900003."
+                    "Die ausgewählte Datei ist keine eNoVA-Nachricht 2900003."
             );
         }
 
@@ -33,7 +33,7 @@ public class ErsuchenSachentscheidungChecker {
 
         if (fachdaten == null) {
             throw new IllegalArgumentException(
-                    "Die Nachricht enthält keine eNoVa-Fachdaten."
+                    "Die Nachricht enthält keine eNoVA-Fachdaten."
             );
         }
 

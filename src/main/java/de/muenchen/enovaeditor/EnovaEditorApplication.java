@@ -17,7 +17,7 @@ public class EnovaEditorApplication extends Application {
 
         Scene scene = new Scene(fxmlLoader.load(), 800, 520);
 
-        stage.setTitle("eNoVa Editor");
+        stage.setTitle("eNoVA Editor");
 
         stage.getIcons().add(
                 new Image(

@@ -1,5 +1,5 @@
 @startuml
-title eNoVa-Editor – aktueller Ablauf
+title eNoVA-Editor – aktueller Ablauf
 
 start
 
@@ -28,7 +28,7 @@ if (XML-Datei ausgewählt?) then (ja)
 
     partition "ErsuchenSachentscheidungChecker" {
 
-        :Prüfen, ob die XML ein\nErsuchen um Sachentscheidung\n(eNoVa 2900003) ist;
+        :Prüfen, ob die XML ein\nErsuchen um Sachentscheidung\n(eNoVA 2900003) ist;
 
         if (Nachricht gültig?) then (ja)
         else (nein)

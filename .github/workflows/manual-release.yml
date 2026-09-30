@@ -85,7 +85,7 @@ jobs:
         shell: pwsh
         run: |
           $version = "${{ steps.version.outputs.version }}"
-          $file = "target/eNoVa-editor-$version.zip"
+          $file = "target/eNoVA-editor-$version.zip"
 
           if (-not (Test-Path $file)) {
             throw "Distribution ZIP not found: $file"
@@ -98,10 +98,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           $version = "${{ steps.version.outputs.version }}"
-          $file = "target/eNoVa-editor-$version.zip"
+          $file = "target/eNoVA-editor-$version.zip"
 
           gh release create "v$version" `
             "$file" `
-            --title "eNoVa Editor $version" `
+            --title "eNoVA Editor $version" `
             --target "${{ github.sha }}" `
             --generate-notes
