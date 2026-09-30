@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Installation – eNoVa Editor</title>
+    <title>Installation – eNoVA Editor</title>
 
     <style>
         :root {
@@ -80,21 +80,21 @@
 
 <main>
     <p>
-        <a href="index.html">← Back to the eNoVa Editor</a>
+        <a href="index.html">← Back to the eNoVA Editor</a>
     </p>
 
     <h1>Installation Guide</h1>
 
     <p>
         This guide is intended for administrators who want to deploy
-        the eNoVa Editor for their municipality or organization.
+        the eNoVA Editor for their municipality or organization.
     </p>
 
 
-    <h2>1. Download the eNoVa Editor</h2>
+    <h2>1. Download the eNoVA Editor</h2>
 
     <p>
-        Download the current version of the eNoVa Editor from the
+        Download the current version of the eNoVA Editor from the
         GitHub Releases page.
     </p>
 
@@ -106,7 +106,7 @@
 
     <p>
         Download the file
-        <code>eNoVa-editor-&lt;Version&gt;.zip</code>.
+        <code>eNoVA-editor-&lt;Version&gt;.zip</code>.
     </p>
 
 
@@ -121,7 +121,7 @@
     </p>
 
     <pre>
-eNoVa-editor/
+eNoVA-editor/
 ├── app/
 ├── codelists/
 ├── Input.htm
@@ -130,12 +130,12 @@ eNoVa-editor/
 ├── caseworkers.xml
 ├── codelists.properties
 ├── answer-transform.xsl
-└── eNoVa-editor.cmd
+└── eNoVA-editor.cmd
     </pre>
 
     <p>
         A separate Java installation is not required.
-        The required Java runtime is included in the eNoVa Editor package.
+        The required Java runtime is included in the eNoVA Editor package.
     </p>
 
 
@@ -160,7 +160,7 @@ eNoVa-editor/
     </pre>
 
     <p>
-        The eNoVa Editor uses this name, among other things,
+        The eNoVA Editor uses this name, among other things,
         when generating the XJustiz response.
     </p>
 
@@ -168,7 +168,7 @@ eNoVa-editor/
     <h2>4. Configure caseworkers</h2>
 
     <p>
-        The caseworkers available for selection in the eNoVa Editor
+        The caseworkers available for selection in the eNoVA Editor
         are configured in the file <code>caseworkers.xml</code>.
     </p>
 
@@ -231,7 +231,7 @@ eNoVa-editor/
 
     <p>
         Contains the XML files for the XJustiz codelists used by the
-        eNoVa Editor.
+        eNoVA Editor.
     </p>
 
     <p>
@@ -266,7 +266,7 @@ eNoVa-editor/
     <h3><code>codelists.properties</code></h3>
 
     <p>
-        This file maps the codelist names used by the eNoVa Editor
+        This file maps the codelist names used by the eNoVA Editor
         to the corresponding XML files in the
         <code>codelists/</code> directory.
     </p>
@@ -314,7 +314,7 @@ technical code → human-readable description
 
     <p>
         <strong>Usage:</strong>
-        When a response is generated, the eNoVa Editor passes the previously
+        When a response is generated, the eNoVA Editor passes the previously
         loaded XJustiz XML together with the data entered in the application
         to this XSLT file.
     </p>
@@ -328,7 +328,7 @@ technical code → human-readable description
         <li>selected decision</li>
         <li>selected caseworker</li>
         <li>newly generated message ID</li>
-        <li>eNoVa Editor manufacturer information</li>
+        <li>eNoVA Editor manufacturer information</li>
     </ul>
 
     <p>
@@ -360,10 +360,10 @@ XJustiz response XML
     </p>
 
 
-    <h3><code>eNoVa-editor.cmd</code></h3>
+    <h3><code>eNoVA-editor.cmd</code></h3>
 
     <p>
-        Starts the eNoVa Editor on Windows.
+        Starts the eNoVA Editor on Windows.
     </p>
 
     <p>
@@ -380,7 +380,7 @@ XJustiz response XML
     <h2>7. Permissions</h2>
 
     <p>
-        The eNoVa Editor creates the HTML views and response files
+        The eNoVA Editor creates the HTML views and response files
         in the same directory as the opened XML file.
     </p>
 
@@ -398,10 +398,10 @@ XJustiz response XML
     <h2>8. Start the application</h2>
 
     <p>
-        Start the eNoVa Editor using:
+        Start the eNoVA Editor using:
     </p>
 
-    <pre>eNoVa-editor.cmd</pre>
+    <pre>eNoVA-editor.cmd</pre>
 
     <p>
         After startup, an XJustiz XML file can be opened and processed

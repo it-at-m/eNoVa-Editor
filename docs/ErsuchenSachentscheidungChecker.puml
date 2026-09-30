@@ -15,7 +15,7 @@ endif
 
 if (Root = nachricht.enova.entscheidung.2900003 ?) then (Ja)
 else (Nein)
-    :Fehler:\nkeine eNoVa-Nachricht 2900003;
+    :Fehler:\nkeine eNoVA-Nachricht 2900003;
     stop
 endif
 
@@ -23,7 +23,7 @@ endif
 
 if (fachdaten vorhanden?) then (Ja)
 else (Nein)
-    :Fehler:\nkeine eNoVa-Fachdaten;
+    :Fehler:\nkeine eNoVA-Fachdaten;
     stop
 endif
 

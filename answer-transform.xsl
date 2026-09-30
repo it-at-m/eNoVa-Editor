@@ -11,7 +11,7 @@
     <!-- Standardregel: Gibt es für ein Element keine eigene Regel, wird es kopiert und seine Kinder werden weiterverarbeitet -->
     <xsl:mode on-no-match="shallow-copy"/>
 
-    <!-- Steuert, ob eNoVa-Kommentare in die erzeugte XML geschrieben werden -->
+    <!-- Steuert, ob eNoVA-Kommentare in die erzeugte XML geschrieben werden -->
     <xsl:param name="includeEnovaComments" select="true()"/>
 
 
@@ -87,7 +87,7 @@
     <!-- Erstellungszeitpunkt: Ersetzt den vorhandenen Wert durch den aktuellen Zeitpunkt -->
     <xsl:template match="tns:nachrichtenkopf/tns:erstellungszeitpunkt">
         <xsl:if test="$includeEnovaComments">
-            <xsl:comment>eNoVa: Erstellungszeitpunkt wurde durch den aktuellen Systemzeitpunkt ersetzt</xsl:comment>
+            <xsl:comment>eNoVA: Erstellungszeitpunkt wurde durch den aktuellen Systemzeitpunkt ersetzt</xsl:comment>
         </xsl:if>
         <xsl:copy>
             <xsl:value-of select="current-dateTime()"/>
@@ -98,7 +98,7 @@
     <!-- Absendername: Ersetzt den vorhandenen Kommunikationspartner durch den konfigurierten Absender -->
     <xsl:template match="tns:nachrichtenkopf/tns:absender/tns:informationen/tns:auswahl_kommunikationspartner/tns:sonstige">
         <xsl:if test="$includeEnovaComments">
-            <xsl:comment>eNoVa: Kommunikationspartner wurde durch den Wert aus sender-config.xml ersetzt</xsl:comment>
+            <xsl:comment>eNoVA: Kommunikationspartner wurde durch den Wert aus sender-config.xml ersetzt</xsl:comment>
         </xsl:if>
         <xsl:copy>
             <xsl:value-of select="$senderName"/>
@@ -108,7 +108,7 @@
     <!-- Absender-Rollennummer: Verweist auf die neu angelegte Beteiligung des ausgewählten Sachbearbeiters -->
     <xsl:template match="tns:nachrichtenkopf/tns:absender/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer">
         <xsl:if test="$includeEnovaComments">
-            <xsl:comment>eNoVa: Rollennummer wurde durch die nächste freie Rollennummer aus den vorhandenen Verfahrensdaten ersetzt</xsl:comment>
+            <xsl:comment>eNoVA: Rollennummer wurde durch die nächste freie Rollennummer aus den vorhandenen Verfahrensdaten ersetzt</xsl:comment>
         </xsl:if>
         <xsl:copy>
             <xsl:value-of select="$nextRoleNumber"/>
@@ -118,7 +118,7 @@
     <!-- Aktenzeichen: Ersetzt das vorhandene Aktenzeichen durch den Wert aus dem Eingabefeld -->
     <xsl:template match="tns:nachrichtenkopf/tns:absender/tns:aktenzeichen">
         <xsl:if test="$includeEnovaComments">
-            <xsl:comment>eNoVa: Aktenzeichen wurde durch den Wert aus dem Eingabefeld ersetzt</xsl:comment>
+            <xsl:comment>eNoVA: Aktenzeichen wurde durch den Wert aus dem Eingabefeld ersetzt</xsl:comment>
         </xsl:if>
         <xsl:copy>
             <xsl:value-of select="$fileNumber"/>
@@ -129,7 +129,7 @@
     <!-- Nachrichten-ID: Ersetzt die vorhandene ID durch eine neu erzeugte eindeutige Nachrichten-ID -->
     <xsl:template match="tns:nachrichtenkopf/tns:absender/tns:eigeneNachrichtenID">
         <xsl:if test="$includeEnovaComments">
-            <xsl:comment>eNoVa: Nachrichten-ID wurde durch eine von der Anwendung neu erzeugte eindeutige Nachrichten-ID ersetzt</xsl:comment>
+            <xsl:comment>eNoVA: Nachrichten-ID wurde durch eine von der Anwendung neu erzeugte eindeutige Nachrichten-ID ersetzt</xsl:comment>
         </xsl:if>
         <xsl:copy>
             <xsl:value-of select="$messageId"/>
@@ -139,7 +139,7 @@
     <!-- Empfänger: Übernimmt die Daten des ursprünglichen Absenders und wandelt dessen Aktenzeichen in die Empfängerstruktur um -->
     <xsl:template match="tns:nachrichtenkopf/tns:empfaenger">
         <xsl:if test="$includeEnovaComments">
-            <xsl:comment>eNoVa: Empfängerdaten wurden aus den Daten des ursprünglichen Absenders übernommen</xsl:comment>
+            <xsl:comment>eNoVA: Empfängerdaten wurden aus den Daten des ursprünglichen Absenders übernommen</xsl:comment>
         </xsl:if>
         <xsl:copy>
             <!-- Übernimmt alle Kindelemente des ursprünglichen Absenders außer dem Aktenzeichen -->
@@ -147,7 +147,7 @@
 
             <!-- Übernimmt das Aktenzeichen des ursprünglichen Absenders in die Empfängerstruktur -->
             <xsl:if test="$includeEnovaComments">
-                <xsl:comment>eNoVa: Empfänger-Aktenzeichen wurde aus dem Aktenzeichen des ursprünglichen Absenders übernommen</xsl:comment>
+                <xsl:comment>eNoVA: Empfänger-Aktenzeichen wurde aus dem Aktenzeichen des ursprünglichen Absenders übernommen</xsl:comment>
             </xsl:if>
             <tns:auswahl_aktenzeichen>
                 <tns:aktenzeichen.freitext>
@@ -160,7 +160,7 @@
     <!-- Herstellerinformationen: Fügt die internen Herstellerdaten der Anwendung hinzu -->
     <xsl:template name="manufacturerInfo">
         <xsl:if test="$includeEnovaComments">
-            <xsl:comment>eNoVa: Herstellerinformationen wurden aus den internen Herstellerinformationen der Anwendung übernommen</xsl:comment>
+            <xsl:comment>eNoVA: Herstellerinformationen wurden aus den internen Herstellerinformationen der Anwendung übernommen</xsl:comment>
         </xsl:if>
         <tns:herstellerinformation>
             <tns:nameDesProdukts>
@@ -185,7 +185,7 @@
     <!-- Instanzbehörde: Ersetzt die bisherige Behördenbezeichnung durch den konfigurierten Absendernamen -->
     <xsl:template match="tns:grunddaten/tns:verfahrensdaten/tns:instanzdaten/tns:auswahl_instanzbehoerde/tns:sonstige">
         <xsl:if test="$includeEnovaComments">
-            <xsl:comment>eNoVa: Instanzbehörde wurde durch den Wert aus sender-config.xml ersetzt</xsl:comment>
+            <xsl:comment>eNoVA: Instanzbehörde wurde durch den Wert aus sender-config.xml ersetzt</xsl:comment>
         </xsl:if>
         <xsl:copy>
             <xsl:value-of select="$senderName"/>
@@ -203,7 +203,7 @@
             <xsl:apply-templates select="@* | node()"/>
 
             <xsl:if test="$includeEnovaComments">
-                <xsl:comment>eNoVa: Beteiligung wurde für den ausgewählten Sachbearbeiter aus caseworkers.xml ergänzt; Rollen- und Beteiligtennummer wurden als nächste freie Nummern aus den vorhandenen Verfahrensdaten ermittelt</xsl:comment>
+                <xsl:comment>eNoVA: Beteiligung wurde für den ausgewählten Sachbearbeiter aus caseworkers.xml ergänzt; Rollen- und Beteiligtennummer wurden als nächste freie Nummern aus den vorhandenen Verfahrensdaten ermittelt</xsl:comment>
             </xsl:if>
 
             <!-- Fügt den ausgewählten Sachbearbeiter als neue Beteiligung hinzu -->
@@ -241,7 +241,7 @@
     <!-- Sachentscheidung: Ersetzt das Ersuchen um Sachentscheidung durch die ausgewählte Sachentscheidung -->
     <xsl:template match="tns:fachdaten/tns:auswahl_GegenstandDerNachricht/tns:ersuchenSachentscheidung">
         <xsl:if test="$includeEnovaComments">
-            <xsl:comment>eNoVa: Ersuchen um Sachentscheidung wurde durch die vom Benutzer ausgewählte Sachentscheidung ersetzt</xsl:comment>
+            <xsl:comment>eNoVA: Ersuchen um Sachentscheidung wurde durch die vom Benutzer ausgewählte Sachentscheidung ersetzt</xsl:comment>
         </xsl:if>
         <tns:sachentscheidung>
             <tns:sachentscheidung listVersionID="1.0">
