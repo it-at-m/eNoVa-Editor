@@ -5,7 +5,7 @@
    <tns:nachrichtenkopf xjustizVersion="3.6.2"><!--In der Antwort muss der Nachrichtenkopf praktisch komplett neu geschrieben werden. 
 			Lediglich die Absenderdaten können für den Notar-Empfänger verwendet werden. 
 			Derzeit gehe ich davon aus, dass das Grundbuchamt eine eigene Nachricht bekommt, das bedeutet, dass dieses separat als Empfänger in einer eigenene XML-Datei zu benennen ist.--><!--eNoVA: Erstellungszeitpunkt wurde durch den aktuellen Systemzeitpunkt ersetzt-->
-      <tns:erstellungszeitpunkt>2026-09-25T11:53:16.8390402+02:00</tns:erstellungszeitpunkt>
+      <tns:erstellungszeitpunkt>2026-10-05T15:04:08.6185479+02:00</tns:erstellungszeitpunkt>
       <tns:absender>
          <tns:informationen><!--Type.GDS.Kommunikationspartner-->
             <tns:auswahl_kommunikationspartner><!--eNoVA: Kommunikationspartner wurde durch den Wert aus sender-config.xml ersetzt-->
@@ -17,9 +17,9 @@
             </tns:auswahl_verweisGrunddaten>
          </tns:informationen>
          <!--eNoVA: Aktenzeichen wurde durch den Wert aus dem Eingabefeld ersetzt-->
-         <tns:aktenzeichen>Test</tns:aktenzeichen>
+         <tns:aktenzeichen>Test123</tns:aktenzeichen>
          <!--eNoVA: Nachrichten-ID wurde durch eine von der Anwendung neu erzeugte eindeutige Nachrichten-ID ersetzt-->
-         <tns:eigeneNachrichtenID>9987beba-6d5a-4bf8-9ae0-9cbf9d00db2d</tns:eigeneNachrichtenID>
+         <tns:eigeneNachrichtenID>34cf11c5-37d2-432f-b9cb-c2c0d1b9d0cf</tns:eigeneNachrichtenID>
          <!--TODO: Es ist zu klären, wie wir die eigene Nachrichten-ID bekommen. -->
       </tns:absender>
       <!--eNoVA: Empfängerdaten wurden aus den Daten des ursprünglichen Absenders übernommen-->
@@ -44,7 +44,7 @@
       <tns:herstellerinformation>
          <tns:nameDesProdukts>LHM-eNoVA-Generator</tns:nameDesProdukts>
          <tns:herstellerDesProdukts>Landeshauptstadt München it@M</tns:herstellerDesProdukts>
-         <tns:version>0.1.0</tns:version>
+         <tns:version>0.9.0</tns:version>
       </tns:herstellerinformation>
    </tns:nachrichtenkopf>
    <tns:grunddaten>
@@ -254,10 +254,22 @@
       </tns:dokument>
    </tns:schriftgutobjekte>
    <tns:fachdaten><!--Derzeit gehe ich davon aus, dass bei der Antwort in den Fachdaten lediglich der Bereich 'ersuchenSachentscheidung' durch 'sachentscheidung' zu tauschen ist.-->
-      <tns:auswahl_GegenstandDerNachricht><!-- 011='Erteilung der Genehmigung nach § 2 GrdstVG'--><!--eNoVA: Ersuchen um Sachentscheidung wurde durch die vom Benutzer ausgewählte Sachentscheidung ersetzt-->
+      <tns:auswahl_GegenstandDerNachricht><!-- 011='Erteilung der Genehmigung nach § 2 GrdstVG'--><!--eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt-->
          <tns:sachentscheidung>
             <tns:sachentscheidung listVersionID="1.0">
-               <code>001</code>
+               <code>019</code>
+            </tns:sachentscheidung>
+         </tns:sachentscheidung>
+         <!--eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt-->
+         <tns:sachentscheidung>
+            <tns:sachentscheidung listVersionID="1.0">
+               <code>022</code>
+            </tns:sachentscheidung>
+         </tns:sachentscheidung>
+         <!--eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt-->
+         <tns:sachentscheidung>
+            <tns:sachentscheidung listVersionID="1.0">
+               <code>023</code>
             </tns:sachentscheidung>
          </tns:sachentscheidung>
       </tns:auswahl_GegenstandDerNachricht>

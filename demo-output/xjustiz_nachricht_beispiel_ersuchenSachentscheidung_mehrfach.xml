@@ -194,6 +194,16 @@
 					<code>011</code>
 				</tns:ersuchenSachentscheidung>
 			</tns:ersuchenSachentscheidung>
+			<tns:ersuchenSachentscheidung><!--Das Format gibt hier tatsächlich vor, dass das Tag des Kind-Element identisch mit dem Eltern-Element ist-->
+				<tns:ersuchenSachentscheidung listVersionID="1.0"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:enova.ersuchensachentscheidung -->
+					<code>012</code>
+				</tns:ersuchenSachentscheidung>
+			</tns:ersuchenSachentscheidung>
+			<tns:ersuchenSachentscheidung><!--Das Format gibt hier tatsächlich vor, dass das Tag des Kind-Element identisch mit dem Eltern-Element ist-->
+				<tns:ersuchenSachentscheidung listVersionID="1.0"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:enova.ersuchensachentscheidung -->
+					<code>013</code>
+				</tns:ersuchenSachentscheidung>
+			</tns:ersuchenSachentscheidung>
 		</tns:auswahl_GegenstandDerNachricht>
 		<tns:datenDerUrkunde>
 			<tns:urNr>4697</tns:urNr>
