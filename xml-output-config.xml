@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmlOutput>
-    <lineEnding>NONE</lineEnding>
+    <!-- Erlaubte Werte: CRLF, LF, CR, NONE -->
+    <lineEnding>CRLF</lineEnding>
 </xmlOutput>
