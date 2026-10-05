@@ -28,8 +28,8 @@
     <!-- Name des ausgewählten Sachbearbeiters, der von der Anwendung übergeben wird -->
     <xsl:param name="caseworkerName"/>
 
-    <!-- Code der ausgewählten Sachentscheidung, der von der Anwendung übergeben wird -->
-    <xsl:param name="decisionCode"/>
+    <!-- Codes der ausgewählten Sachentscheidungen, die von der Anwendung übergeben wird -->
+    <xsl:param name="decisionCodes"/>
 
     <!-- Produktname der Anwendung, der aus den internen Herstellerinformationen übergeben wird -->
     <xsl:param name="productName"/>
@@ -240,16 +240,21 @@
 
     <!-- Sachentscheidung: Ersetzt das Ersuchen um Sachentscheidung durch die ausgewählte Sachentscheidung -->
     <xsl:template match="tns:fachdaten/tns:auswahl_GegenstandDerNachricht/tns:ersuchenSachentscheidung">
+
+        <xsl:variable name="decisionIndex" select="count(preceding-sibling::tns:ersuchenSachentscheidung) + 1"/>
+
         <xsl:if test="$includeEnovaComments">
-            <xsl:comment>eNoVA: Ersuchen um Sachentscheidung wurde durch die vom Benutzer ausgewählte Sachentscheidung ersetzt</xsl:comment>
+            <xsl:comment>eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt</xsl:comment>
         </xsl:if>
+
         <tns:sachentscheidung>
             <tns:sachentscheidung listVersionID="1.0">
                 <code>
-                    <xsl:value-of select="$decisionCode"/>
+                    <xsl:value-of select="$decisionCodes[$decisionIndex]"/>
                 </code>
             </tns:sachentscheidung>
         </tns:sachentscheidung>
+
     </xsl:template>
 
 </xsl:stylesheet>

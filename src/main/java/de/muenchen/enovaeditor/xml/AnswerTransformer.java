@@ -32,7 +32,7 @@ public class AnswerTransformer {
         transformer.setParameter("fileNumber", parameters.fileNumber());
         transformer.setParameter("messageId", parameters.messageId());
         transformer.setParameter("caseworkerName", parameters.caseworkerName());
-        transformer.setParameter("decisionCode", parameters.decisionCode());
+        transformer.setParameter("decisionCodes", parameters.decisionCodes());
 
         transformer.setParameter("productName", parameters.manufacturerInfo().productName());
         transformer.setParameter("manufacturerName", parameters.manufacturerInfo().manufacturerName());

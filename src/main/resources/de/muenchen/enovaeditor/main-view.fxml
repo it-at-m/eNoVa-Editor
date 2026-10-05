@@ -11,6 +11,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.StackPane?>
 
 <BorderPane
         xmlns:fx="http://javafx.com/fxml"
@@ -23,7 +25,7 @@
                 <Insets
                         top="20.0"
                         right="20.0"
-                        bottom="15.0"
+                        bottom="0.0"
                         left="20.0"/>
             </padding>
 
@@ -44,18 +46,18 @@
     </top>
 
     <center>
-        <GridPane hgap="15.0" vgap="15.0">
+        <GridPane fx:id="formGrid" hgap="15.0" vgap="15.0">
             <padding>
                 <Insets
                         top="20.0"
                         right="20.0"
-                        bottom="15.0"
+                        bottom="20.0"
                         left="20.0"/>
             </padding>
 
             <columnConstraints>
                 <ColumnConstraints minWidth="-Infinity"/>
-                <ColumnConstraints/>
+                <ColumnConstraints hgrow="ALWAYS"/>
             </columnConstraints>
 
             <Label text="Absender:"
@@ -82,15 +84,58 @@
                     GridPane.columnIndex="1"
                     GridPane.rowIndex="2"/>
 
-            <Label text="Entscheidung:"
-                   GridPane.columnIndex="0"
-                   GridPane.rowIndex="3"/>
-            <ComboBox
-                    fx:id="decisionComboBox"
-                    minWidth="180.0"
-                    GridPane.columnIndex="1"
-                    GridPane.rowIndex="3"/>
+            <StackPane
+                    fx:id="multipleDecisionBox"
+                    visible="false"
+                    managed="false"
+                    GridPane.columnIndex="0"
+                    GridPane.columnSpan="2"
+                    GridPane.rowIndex="3">
 
+                <GridPane.margin>
+                    <Insets top="10.0"/>
+                </GridPane.margin>
+
+                <VBox
+                        spacing="10.0"
+                        style="-fx-border-color: #c8c8c8; -fx-border-radius: 4.0;">
+
+                    <padding>
+                        <Insets
+                                top="20.0"
+                                right="12.0"
+                                bottom="12.0"
+                                left="12.0"/>
+                    </padding>
+
+                    <GridPane
+                            fx:id="multipleDecisionGrid"
+                            hgap="15.0"
+                            vgap="15.0">
+
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50.0"/>
+                            <ColumnConstraints percentWidth="50.0"/>
+                        </columnConstraints>
+
+                    </GridPane>
+
+                </VBox>
+
+                <Label
+                        text="Entscheidungen"
+                        style="-fx-font-weight: bold; -fx-background-color: -fx-background; -fx-padding: 0 6 0 6;"
+                        StackPane.alignment="TOP_LEFT">
+
+                    <StackPane.margin>
+                        <Insets
+                                top="-7.0"
+                                left="10.0"/>
+                    </StackPane.margin>
+
+                </Label>
+
+            </StackPane>
             <Button
                     fx:id="generateAnswer"
                     text="Antwort generieren"
@@ -102,7 +147,6 @@
                 <GridPane.margin>
                     <Insets top="20"/>
                 </GridPane.margin>
-
             </Button>
         </GridPane>
     </center>

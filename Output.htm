@@ -132,10 +132,36 @@
     <!-- Betreff / Verfahrensgegenstand -->
     <p>
       {{xpath://tns:grunddaten/tns:verfahrensdaten/tns:instanzdaten/tns:verfahrensgegenstand/tns:gegenstand}}
+
+      <!-- Genau eine Sachentscheidung -->
+      {{#each xpath://tns:fachdaten/tns:auswahl_GegenstandDerNachricht[
+      count(tns:sachentscheidung) = 1
+      ]}}
+
       <br>
       ({{codelist:sachentscheidung
-      xpath://tns:fachdaten/tns:auswahl_GegenstandDerNachricht/tns:sachentscheidung/tns:sachentscheidung/code}})
+      xpath:tns:sachentscheidung/tns:sachentscheidung/code}})
+
+      {{/each}}
     </p>
+
+    <!-- Mehrere Sachentscheidungen -->
+    {{#each xpath://tns:fachdaten/tns:auswahl_GegenstandDerNachricht[
+    count(tns:sachentscheidung) > 1
+    ]}}
+
+    <ol>
+      {{#each xpath:tns:sachentscheidung}}
+
+      <li>
+        {{codelist:sachentscheidung
+        xpath:tns:sachentscheidung/code}}
+      </li>
+
+      {{/each}}
+    </ol>
+
+    {{/each}}
 
     <p>
       Sehr geehrte Damen und Herren,
