@@ -173,6 +173,12 @@
                                                 file="${project.basedir}/sender-config.xml"
                                                 todir="${project.build.directory}/distribution/eNoVA-editor"/>
                                         <copy
+                                                file="${project.basedir}/xml-output-config.xml"
+                                                todir="${project.build.directory}/distribution/eNoVA-editor"/>
+                                        <copy
+                                                file="${project.basedir}/decision-config.xml"
+                                                todir="${project.build.directory}/distribution/eNoVA-editor"/>
+                                        <copy
                                                 file="${project.basedir}/caseworkers.xml"
                                                 todir="${project.build.directory}/distribution/eNoVA-editor"/>
                                         <copy
