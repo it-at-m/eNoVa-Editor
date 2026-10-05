@@ -9,6 +9,7 @@ import de.muenchen.enovaeditor.config.ApplicationPaths;
 import de.muenchen.enovaeditor.config.SenderConfigLoader;
 import de.muenchen.enovaeditor.config.caseworker.CaseworkerConfigLoader;
 import de.muenchen.enovaeditor.config.caseworker.CaseworkerEntry;
+import de.muenchen.enovaeditor.config.decision.DecisionConfigLoader;
 import de.muenchen.enovaeditor.config.manufacturer.ManufacturerInfo;
 import de.muenchen.enovaeditor.config.manufacturer.ManufacturerInfoLoader;
 import de.muenchen.enovaeditor.template.HtmlWriter;
@@ -18,29 +19,32 @@ import de.muenchen.enovaeditor.util.OutputPathUtil;
 import de.muenchen.enovaeditor.xml.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
+import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class MainController {
 
-    private static final double DECISION_TEXT_WRAP_WIDTH = 500;
     private static final double FILE_NUMBER_MIN_WIDTH = 150;
     private static final double FILE_NUMBER_PADDING = 30;
     private static final double CASEWORKER_WIDTH_PADDING = 50;
@@ -56,11 +60,27 @@ public class MainController {
     private final CaseworkerConfigLoader caseworkerConfigLoader = new CaseworkerConfigLoader();
     private final SenderConfigLoader senderConfigLoader = new SenderConfigLoader();
     private final ManufacturerInfoLoader manufacturerInfoLoader = new ManufacturerInfoLoader();
+    private final ErsuchenSachentscheidungReader ersuchenSachentscheidungReader = new ErsuchenSachentscheidungReader();
+    private final DecisionConfigLoader decisionConfigLoader = new DecisionConfigLoader();
 
     private final ObjectProperty<Document> openedDocument = new SimpleObjectProperty<>(null);
-    private Path openedXmlPath;
 
+    private final BooleanProperty decisionMissing = new SimpleBooleanProperty(true);
+    private final List<ComboBox<CodelistEntry>> decisionComboBoxes = new ArrayList<>();
+    private final List<CodelistEntry> decisionEntries = new ArrayList<>();
+    private final List<javafx.scene.Node> singleDecisionNodes = new ArrayList<>();
+    private Path openedXmlPath;
     private String senderName;
+    private Map<String, List<String>> allowedDecisionsByRequestCode = Map.of();
+    private Map<String, String> requestLabelsByCode = Map.of();
+    @FXML
+    private GridPane formGrid;
+
+    @FXML
+    private StackPane multipleDecisionBox;
+
+    @FXML
+    private GridPane multipleDecisionGrid;
 
     @FXML
     private Label fileStatusLabel;
@@ -70,9 +90,6 @@ public class MainController {
 
     @FXML
     private ComboBox<CaseworkerEntry> caseworkerComboBox;
-
-    @FXML
-    private ComboBox<CodelistEntry> decisionComboBox;
 
     @FXML
     private TextField fileNumber;
@@ -85,12 +102,13 @@ public class MainController {
         setupBindings();
 
         configureCaseworkerComboBox();
-        configureDecisionComboBox();
         configureFileNumberField();
 
         loadSenderName();
         loadCaseworkers();
         loadDecisions();
+        loadDecisionMappings();
+        loadRequestLabels();
     }
 
     @FXML
@@ -112,6 +130,8 @@ public class MainController {
 
             checker.check(document);
 
+            List<Node> requests = ersuchenSachentscheidungReader.read(document);
+
             String inputTemplate = templateLoader.loadInputTemplate();
 
             String renderedHtml = templateRenderer.render(inputTemplate, document);
@@ -120,17 +140,23 @@ public class MainController {
 
             Path outputHtml = htmlWriter.write(renderedHtml, outputHtmlPath);
 
+            openHtmlInBrowser(outputHtml);
+
+            createDecisionFields(requests);
+
             fileStatusLabel.setText(selectedFile.getName());
-            clearDecisionFields();
+            clearFormFields();
             openedDocument.set(document);
             openedXmlPath = selectedXmlPath;
-            openHtmlInBrowser(outputHtml);
 
         } catch (Exception e) {
             openedDocument.set(null);
             openedXmlPath = null;
             fileStatusLabel.setText("");
-            clearDecisionFields();
+
+            clearFormFields();
+            clearDecisionUi();
+
             showError("Datei kann nicht verarbeitet werden", e.getMessage());
         }
     }
@@ -144,15 +170,9 @@ public class MainController {
 
             CaseworkerEntry selectedCaseworker = caseworkerComboBox.getValue();
 
-            CodelistEntry selectedDecision = decisionComboBox.getValue();
+            List<String> decisionCodes = decisionComboBoxes.stream().map(ComboBox::getValue).map(CodelistEntry::code).toList();
 
-            AnswerParameters parameters = new AnswerParameters(
-                    fileNumber.getText(),
-                    UUID.randomUUID().toString(),
-                    manufacturerInfo,
-                    selectedCaseworker.name(),
-                    selectedDecision.code()
-            );
+            AnswerParameters parameters = new AnswerParameters(fileNumber.getText(), UUID.randomUUID().toString(), manufacturerInfo, selectedCaseworker.name(), decisionCodes);
 
             Document answerDocument = answerTransformer.transform(inputDocument, parameters);
             OutputPathUtil.OutputPaths outputPaths = OutputPathUtil.createOutputPaths(openedXmlPath, "Output");
@@ -197,49 +217,178 @@ public class MainController {
         });
     }
 
-    private void configureDecisionComboBox() {
-        decisionComboBox.setCellFactory(listView -> new ListCell<CodelistEntry>() {
+    private void createDecisionFields(List<Node> requests) throws XPathExpressionException {
 
-            @Override
-            protected void updateItem(CodelistEntry item, boolean empty) {
-                super.updateItem(item, empty);
+        clearDecisionUi();
 
-                if (empty || item == null) {
-                    setText(null);
-                    setGraphic(null);
-                    setStyle(null);
-                } else {
-                    setText(null);
-                    setGraphic(createDecisionText(item));
+        List<String> requestCodes = readRequestCodes(requests);
 
-                    setStyle(
-                            "-fx-border-color: transparent transparent #d0d0d0 transparent;"
-                                    + "-fx-border-width: 0 0 1 0;"
-                    );
-                }
+        boolean multipleRequests = requestCodes.size() > 1;
+
+        multipleDecisionBox.setVisible(multipleRequests);
+        multipleDecisionBox.setManaged(multipleRequests);
+
+        for (int row = 0; row < requestCodes.size(); row++) {
+            String requestCode = requestCodes.get(row);
+
+            Label label = createDecisionLabel(requestCode, row, multipleRequests);
+
+            List<CodelistEntry> allowedDecisionEntries = getAllowedDecisionEntries(requestCode);
+
+            ComboBox<CodelistEntry> comboBox = createDecisionComboBox(allowedDecisionEntries);
+
+            addDecisionField(label, comboBox, row, multipleRequests);
+
+            decisionComboBoxes.add(comboBox);
+        }
+
+        updateDecisionMissing();
+    }
+
+    private void addDecisionField(Label label, ComboBox<CodelistEntry> comboBox, int row, boolean multipleRequests) {
+
+        if (multipleRequests) {
+            multipleDecisionGrid.add(label, 0, row);
+            multipleDecisionGrid.add(comboBox, 1, row);
+        } else {
+            int decisionRow = GridPane.getRowIndex(multipleDecisionBox);
+
+            formGrid.add(label, 0, decisionRow);
+            formGrid.add(comboBox, 1, decisionRow);
+
+            singleDecisionNodes.add(label);
+            singleDecisionNodes.add(comboBox);
+        }
+    }
+
+    private Label createDecisionLabel(String requestCode, int row, boolean multipleRequests) {
+
+        String requestLabel = requestLabelsByCode.get(requestCode);
+
+        if (requestLabel == null) {
+            throw new IllegalArgumentException("Kein Label für Request-Code '" + requestCode + "' gefunden.");
+        }
+
+        Label label = new Label(multipleRequests ? (row + 1) + ". " + requestLabel : "Entscheidung:");
+
+        if (multipleRequests) {
+            label.setWrapText(true);
+        }
+
+        return label;
+    }
+
+    private ComboBox<CodelistEntry> createDecisionComboBox(List<CodelistEntry> allowedDecisionEntries) {
+
+        ComboBox<CodelistEntry> comboBox = new ComboBox<>();
+
+        comboBox.setMaxWidth(Double.MAX_VALUE);
+        comboBox.getItems().addAll(allowedDecisionEntries);
+
+        configureDecisionComboBox(comboBox);
+
+        comboBox.valueProperty().addListener((observable, oldValue, newValue) -> updateDecisionMissing());
+
+        return comboBox;
+    }
+
+    private List<CodelistEntry> getAllowedDecisionEntries(String requestCode) {
+
+        List<String> allowedDecisionCodes = allowedDecisionsByRequestCode.get(requestCode);
+
+        return decisionEntries.stream().filter(entry -> allowedDecisionCodes.contains(entry.code())).toList();
+    }
+
+    private List<String> readRequestCodes(List<Node> requests) throws XPathExpressionException {
+
+        List<String> requestCodes = new ArrayList<>();
+
+        for (Node request : requests) {
+            String requestCode = ersuchenSachentscheidungReader.readRequestCode(request);
+
+            if (!allowedDecisionsByRequestCode.containsKey(requestCode)) {
+                throw new IllegalArgumentException("Kein Decision-Mapping für Request-Code '" + requestCode + "' gefunden.");
             }
-        });
 
-        decisionComboBox.setButtonCell(new ListCell<CodelistEntry>() {
-            @Override
-            protected void updateItem(CodelistEntry item, boolean empty) {
-                super.updateItem(item, empty);
+            requestCodes.add(requestCode);
+        }
 
-                if (empty || item == null) {
-                    setText(null);
-                    setGraphic(null);
-                } else {
-                    setText(null);
-                    setGraphic(createDecisionText(item));
+        return requestCodes;
+    }
+
+    private void updateDecisionMissing() {
+        boolean missing = decisionComboBoxes.stream().anyMatch(comboBox -> comboBox.getValue() == null);
+
+        decisionMissing.set(missing);
+    }
+
+    private void configureDecisionComboBox(ComboBox<CodelistEntry> comboBox) {
+        configureDecisionOptions(comboBox);
+        configureSelectedDecision(comboBox);
+    }
+
+    private void configureDecisionOptions(ComboBox<CodelistEntry> comboBox) {
+        comboBox.setCellFactory(listView -> {
+
+            listView.minWidthProperty().bind(comboBox.widthProperty());
+            listView.prefWidthProperty().bind(comboBox.widthProperty());
+            listView.maxWidthProperty().bind(comboBox.widthProperty());
+
+            return new ListCell<CodelistEntry>() {
+
+                private final Text valueText = new Text();
+
+                {
+                    valueText.wrappingWidthProperty().bind(Bindings.createDoubleBinding(() -> Math.max(0, getWidth() - snappedLeftInset() - snappedRightInset()), widthProperty(), paddingProperty()));
                 }
-            }
+
+                @Override
+                protected void updateItem(CodelistEntry item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (empty || item == null) {
+                        valueText.setText("");
+                        setText(null);
+                        setGraphic(null);
+                        setStyle(null);
+                    } else {
+                        valueText.setText(item.value());
+
+                        setText(null);
+                        setGraphic(valueText);
+
+                        setStyle("-fx-border-color: transparent transparent #d0d0d0 transparent;" + "-fx-border-width: 0 0 1 0;");
+                    }
+                }
+            };
         });
     }
 
-    private Text createDecisionText(CodelistEntry item) {
-        Text text = new Text(item.value());
-        text.setWrappingWidth(DECISION_TEXT_WRAP_WIDTH);
-        return text;
+    private void configureSelectedDecision(ComboBox<CodelistEntry> comboBox) {
+        comboBox.setButtonCell(new ListCell<CodelistEntry>() {
+
+            private final Text valueText = new Text();
+
+            {
+                valueText.wrappingWidthProperty().bind(widthProperty());
+            }
+
+            @Override
+            protected void updateItem(CodelistEntry item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    valueText.setText("");
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    valueText.setText(item.value());
+
+                    setText(null);
+                    setGraphic(valueText);
+                }
+            }
+        });
     }
 
     private void configureFileNumberField() {
@@ -289,27 +438,63 @@ public class MainController {
 
     private void loadDecisions() {
         try {
-            CodelistConfig config = new CodelistConfig();
+            List<CodelistEntry> entries = loadCodelistEntries("sachentscheidung");
 
-            CodelistDefinition definition = config.get("sachentscheidung");
-
-            GenericodeReader genericodeReader = new GenericodeReader();
-
-            Path codelistFile = ApplicationPaths.getApplicationDirectory().resolve("codelists").resolve(definition.file());
-
-            List<CodelistEntry> entries = genericodeReader.readAll(codelistFile, definition);
-
-            decisionComboBox.getItems().addAll(entries);
+            decisionEntries.clear();
+            decisionEntries.addAll(entries);
 
         } catch (Exception e) {
             showError("Sachentscheidung-Codelist konnte nicht geladen werden", e.getMessage());
         }
     }
 
-    private void clearDecisionFields() {
+    private void loadRequestLabels() {
+        try {
+            requestLabelsByCode = loadCodelistEntries("ersuchenSachentscheidung").stream().collect(Collectors.toMap(CodelistEntry::code, CodelistEntry::value));
+
+        } catch (Exception e) {
+            showError("Ersuchen-Sachentscheidung-Codelist konnte nicht geladen werden", e.getMessage());
+        }
+    }
+
+    private List<CodelistEntry> loadCodelistEntries(String configKey) throws Exception {
+        CodelistConfig config = new CodelistConfig();
+
+        CodelistDefinition definition = config.get(configKey);
+
+        GenericodeReader genericodeReader = new GenericodeReader();
+
+        Path codelistFile = ApplicationPaths.getApplicationDirectory().resolve("codelists").resolve(definition.file());
+
+        return genericodeReader.readAll(codelistFile, definition);
+    }
+
+    private void loadDecisionMappings() {
+        try {
+            allowedDecisionsByRequestCode = decisionConfigLoader.load();
+        } catch (IOException e) {
+            showError("Entscheidungskonfiguration konnte nicht geladen werden", e.getMessage());
+        }
+    }
+
+    private void clearFormFields() {
         fileNumber.clear();
         caseworkerComboBox.setValue(null);
-        decisionComboBox.setValue(null);
+        for (ComboBox<CodelistEntry> comboBox : decisionComboBoxes) {
+            comboBox.setValue(null);
+        }
+    }
+
+    private void clearDecisionUi() {
+        formGrid.getChildren().removeAll(singleDecisionNodes);
+        singleDecisionNodes.clear();
+
+        multipleDecisionGrid.getChildren().clear();
+
+        multipleDecisionBox.setVisible(false);
+        multipleDecisionBox.setManaged(false);
+
+        decisionComboBoxes.clear();
     }
 
     private void setupBindings() {
@@ -318,20 +503,9 @@ public class MainController {
     }
 
     private void setupGenerateAnswerButtonBinding() {
-        BooleanBinding fileNumberMissing = Bindings.createBooleanBinding(
-                () -> fileNumber.getText().isBlank(),
-                fileNumber.textProperty()
-        );
+        BooleanBinding fileNumberMissing = Bindings.createBooleanBinding(() -> fileNumber.getText().isBlank(), fileNumber.textProperty());
 
-        BooleanBinding caseworkerMissing = caseworkerComboBox
-                .getSelectionModel()
-                .selectedItemProperty()
-                .isNull();
-
-        BooleanBinding decisionMissing = decisionComboBox
-                .getSelectionModel()
-                .selectedItemProperty()
-                .isNull();
+        BooleanBinding caseworkerMissing = caseworkerComboBox.getSelectionModel().selectedItemProperty().isNull();
 
         generateAnswer.disableProperty().bind(fileNumberMissing.or(caseworkerMissing).or(decisionMissing).or(openedDocument.isNull()));
     }
@@ -339,19 +513,13 @@ public class MainController {
     private void setupDecisionFieldsDisabledBinding() {
         fileNumber.disableProperty().bind(openedDocument.isNull());
         caseworkerComboBox.disableProperty().bind(openedDocument.isNull());
-        decisionComboBox.disableProperty().bind(openedDocument.isNull());
     }
 
     private void openHtmlInBrowser(Path htmlPath) {
         try {
             browserOpener.open(htmlPath);
         } catch (IOException e) {
-            showWarning(
-                    "HTML-Datei wurde erstellt",
-                    "Die HTML-Datei wurde erfolgreich erstellt, "
-                            + "konnte aber nicht automatisch im Browser geöffnet werden.\n\n"
-                            + htmlPath
-            );
+            showWarning("HTML-Datei wurde erstellt", "Die HTML-Datei wurde erfolgreich erstellt, " + "konnte aber nicht automatisch im Browser geöffnet werden.\n\n" + htmlPath);
         }
     }
 
@@ -368,15 +536,6 @@ public class MainController {
     private void showWarning(String title, String message) {
 
         Alert alert = new Alert(Alert.AlertType.WARNING);
-
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    private void showSuccess(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
         alert.setTitle(title);
         alert.setHeaderText(null);

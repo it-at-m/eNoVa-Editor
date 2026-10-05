@@ -1,5 +1,7 @@
 package de.muenchen.enovaeditor.xml;
 
+import de.muenchen.enovaeditor.config.output.LineEnding;
+import de.muenchen.enovaeditor.config.output.OutputConfigLoader;
 import org.w3c.dom.Document;
 
 import javax.xml.XMLConstants;
@@ -10,13 +12,21 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 public class XmlWriter {
+
+    private final OutputConfigLoader outputConfigLoader = new OutputConfigLoader();
 
     public void write(
             Document document,
             File targetFile
-    ) throws TransformerException {
+    ) throws TransformerException, IOException {
+
+        LineEnding lineEnding = outputConfigLoader.loadLineEnding();
 
         TransformerFactory factory =
                 TransformerFactory.newInstance();
@@ -44,9 +54,33 @@ public class XmlWriter {
                 "yes"
         );
 
+        StringWriter writer = new StringWriter();
+
         transformer.transform(
                 new DOMSource(document),
-                new StreamResult(targetFile)
+                new StreamResult(writer)
+        );
+
+        String xml = writer.toString();
+
+        String formattedXml = applyLineEnding(xml, lineEnding);
+
+        Files.writeString(
+                targetFile.toPath(),
+                formattedXml,
+                StandardCharsets.UTF_8
+        );
+    }
+
+    private String applyLineEnding(String xml, LineEnding lineEnding) {
+
+        String normalized = xml
+                .replace("\r\n", "\n")
+                .replace("\r", "\n");
+
+        return normalized.replace(
+                "\n",
+                lineEnding.value()
         );
     }
 }
