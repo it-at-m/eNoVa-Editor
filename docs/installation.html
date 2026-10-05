@@ -129,6 +129,8 @@ eNoVA-editor/
 ├── Output.htm
 ├── sender-config.xml
 ├── caseworkers.xml
+├── decision-config.xml
+├── xml-output-config.xml
 ├── codelists.properties
 ├── answer-transform.xsl
 └── eNoVA-editor.cmd
@@ -185,7 +187,62 @@ eNoVA-editor/
     </p>
 
 
-    <h2>5. Anpassbare Dateien</h2>
+    <h2>5. Sachentscheidungen konfigurieren</h2>
+
+    <p>
+        In der Datei <code>decision-config.xml</code> wird festgelegt,
+        welche Sachentscheidungen für ein bestimmtes Ersuchen ausgewählt
+        werden können.
+    </p>
+
+    <p>
+        Für jeden Request-Code werden die erlaubten Decision-Codes angegeben.
+    </p>
+
+    <p>
+        Beispiel:
+    </p>
+
+    <pre>
+&lt;request code="011"&gt;
+    &lt;decision code="019"/&gt;
+    &lt;decision code="020"/&gt;
+    &lt;decision code="031"/&gt;
+&lt;/request&gt;
+    </pre>
+
+
+    <h2>6. XML-Ausgabe konfigurieren</h2>
+
+    <p>
+        In der Datei <code>xml-output-config.xml</code> wird festgelegt,
+        welche Zeilenenden beim Speichern der erzeugten XML-Datei verwendet werden.
+    </p>
+
+    <p>
+        Erlaubte Werte sind <code>CRLF</code>, <code>LF</code>,
+        <code>CR</code> und <code>NONE</code>.
+    </p>
+
+    <p>
+        Beispiel:
+    </p>
+
+    <pre>
+&lt;xmlOutput&gt;
+    &lt;lineEnding&gt;LF&lt;/lineEnding&gt;
+&lt;/xmlOutput&gt;
+    </pre>
+
+    <ul>
+        <li><code>CRLF</code> – Carriage Return + Line Feed</li>
+        <li><code>LF</code> – Line Feed</li>
+        <li><code>CR</code> – Carriage Return</li>
+        <li><code>NONE</code> – Zeilenumbrüche werden entfernt</li>
+    </ul>
+
+
+    <h2>7. Anpassbare Dateien</h2>
 
     <p>
         Folgende Dateien können bei Bedarf angepasst werden:
@@ -208,7 +265,7 @@ eNoVA-editor/
     </p>
 
 
-    <h2>6. Technische Dateien</h2>
+    <h2>8. Technische Dateien</h2>
 
     <div class="notice">
         Die folgenden Dateien und Verzeichnisse gehören zur technischen
@@ -380,7 +437,7 @@ XJustiz-Antwort-XML
     </p>
 
 
-    <h2>7. Berechtigungen</h2>
+    <h2>9. Berechtigungen</h2>
 
     <p>
         Der eNoVA-Editor erzeugt die HTML-Ansichten und die Antwortdateien
@@ -393,6 +450,8 @@ XJustiz-Antwort-XML
         nur benötigt, wenn Konfigurationsdateien wie
         <code>sender-config.xml</code>,
         <code>caseworkers.xml</code>,
+        <code>decision-config.xml</code>,
+        <code>xml-output-config.xml</code>,
         <code>Input.htm</code> oder
         <code>Output.htm</code>
         administrativ geändert werden sollen.
@@ -414,7 +473,7 @@ XJustiz-Antwort-XML
     <p>
         Für einen ersten Test kann die Datei: 
         <a href="https://github.com/it-at-m/eNoVa-Editor/blob/main/demo-output/xjustiz_nachricht_beispiel_ersuchenSachentscheidung_mehrfach.xml">xjustiz_nachricht_beispiel_ersuchenSachentscheidung_mehrfach.xml</a>
-        im Verzeichnis <a href="https://github.com/it-at-m/eNoVa-Editor/blob/main/demo-output/">https://github.com/it-at-m/eNoVa-Editor/blob/main/demo-output/</a> verwendet werden. 
+        im Verzeichnis <a href="https://github.com/it-at-m/eNoVa-Editor/blob/main/demo-output/">https://github.com/it-at-m/eNoVa-Editor/blob/main/demo-output/</a> verwendet werden.
     </p>
 
 </main>

@@ -130,6 +130,8 @@ eNoVA-editor/
 ├── Output.htm
 ├── sender-config.xml
 ├── caseworkers.xml
+├── decision-config.xml
+├── xml-output-config.xml
 ├── codelists.properties
 ├── answer-transform.xsl
 └── eNoVA-editor.cmd
@@ -185,7 +187,61 @@ eNoVA-editor/
     </p>
 
 
-    <h2>5. Customizable files</h2>
+    <h2>5. Configure decisions</h2>
+
+    <p>
+        The file <code>decision-config.xml</code> defines which decisions
+        can be selected for a particular request.
+    </p>
+
+    <p>
+        For each request code, the permitted decision codes are specified.
+    </p>
+
+    <p>
+        Example:
+    </p>
+
+    <pre>
+&lt;request code="011"&gt;
+    &lt;decision code="019"/&gt;
+    &lt;decision code="020"/&gt;
+    &lt;decision code="031"/&gt;
+&lt;/request&gt;
+    </pre>
+
+
+    <h2>6. Configure XML output</h2>
+
+    <p>
+        The file <code>xml-output-config.xml</code> defines which line endings
+        are used when the generated XML file is saved.
+    </p>
+
+    <p>
+        Allowed values are <code>CRLF</code>, <code>LF</code>,
+        <code>CR</code> and <code>NONE</code>.
+    </p>
+
+    <p>
+        Example:
+    </p>
+
+    <pre>
+&lt;xmlOutput&gt;
+    &lt;lineEnding&gt;LF&lt;/lineEnding&gt;
+&lt;/xmlOutput&gt;
+    </pre>
+
+    <ul>
+        <li><code>CRLF</code> – Carriage Return + Line Feed</li>
+        <li><code>LF</code> – Line Feed</li>
+        <li><code>CR</code> – Carriage Return</li>
+        <li><code>NONE</code> – line breaks are removed</li>
+    </ul>
+
+
+    <h2>7. Customizable files</h2>
 
     <p>
         The following files may be customized if required:
@@ -208,7 +264,7 @@ eNoVA-editor/
     </p>
 
 
-    <h2>6. Technical files</h2>
+    <h2>8. Technical files</h2>
 
     <div class="notice">
         The following files and directories are part of the technical
@@ -379,7 +435,7 @@ XJustiz response XML
     </p>
 
 
-    <h2>7. Permissions</h2>
+    <h2>9. Permissions</h2>
 
     <p>
         The eNoVA Editor creates the HTML views and response files
@@ -391,13 +447,15 @@ XJustiz response XML
         Write access is only required there when configuration files such as
         <code>sender-config.xml</code>,
         <code>caseworkers.xml</code>,
+        <code>decision-config.xml</code>,
+        <code>xml-output-config.xml</code>,
         <code>Input.htm</code> or
         <code>Output.htm</code>
         need to be changed administratively.
     </div>
 
 
-    <h2>8. Start the application</h2>
+    <h2>10. Start the application</h2>
 
     <p>
         Start the eNoVA Editor using:
