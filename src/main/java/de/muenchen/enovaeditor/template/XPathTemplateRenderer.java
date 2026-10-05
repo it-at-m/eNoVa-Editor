@@ -4,34 +4,23 @@ import de.muenchen.enovaeditor.codelist.CodelistConfig;
 import de.muenchen.enovaeditor.codelist.CodelistDefinition;
 import de.muenchen.enovaeditor.codelist.GenericodeReader;
 import de.muenchen.enovaeditor.config.ApplicationPaths;
+import de.muenchen.enovaeditor.xml.XPathReader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-import javax.xml.XMLConstants;
-import javax.xml.namespace.NamespaceContext;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class XPathTemplateRenderer {
 
-    private static final String XJUSTIZ_NAMESPACE = "http://www.xjustiz.de";
-
     private static final Pattern EACH_START = Pattern.compile("\\{\\{#each\\s+xpath:(.+?)}}", Pattern.DOTALL);
-
     private static final String EACH_END = "{{/each}}";
-
     private static final Pattern XPATH_PLACEHOLDER = Pattern.compile("\\{\\{xpath:(.+?)}}", Pattern.DOTALL);
-
     private static final Pattern CODELIST_PLACEHOLDER = Pattern.compile("\\{\\{codelist:([\\w.-]+)\\s+xpath:(.+?)}}", Pattern.DOTALL);
+    private final XPathReader xpathReader = new XPathReader();
 
     public String render(String template, Document document) throws Exception {
 
@@ -42,9 +31,7 @@ public class XPathTemplateRenderer {
         return renderXPathPlaceholders(result, document);
     }
 
-    private String renderEachBlocks(String template, Object context) throws Exception {
-
-        XPath xpath = createXPath();
+    private String renderEachBlocks(String template, Node context) throws Exception {
 
         Matcher matcher = EACH_START.matcher(template);
 
@@ -68,13 +55,11 @@ public class XPathTemplateRenderer {
 
             String block = template.substring(blockStart, blockEnd);
 
-            NodeList nodes = (NodeList) xpath.evaluate(xpathExpression, context, XPathConstants.NODESET);
+            List<Node> nodes = xpathReader.findNodes(context, xpathExpression);
 
             StringBuilder renderedBlock = new StringBuilder();
 
-            for (int i = 0; i < nodes.getLength(); i++) {
-
-                Node node = nodes.item(i);
+            for (Node node : nodes) {
 
                 String renderedItem = renderEachBlocks(block, node);
 
@@ -129,9 +114,7 @@ public class XPathTemplateRenderer {
         return -1;
     }
 
-    private String renderXPathPlaceholders(String template, Object context) throws XPathExpressionException {
-
-        XPath xpath = createXPath();
+    private String renderXPathPlaceholders(String template, Node context) throws XPathExpressionException {
 
         Matcher matcher = XPATH_PLACEHOLDER.matcher(template);
 
@@ -141,7 +124,7 @@ public class XPathTemplateRenderer {
 
             String xpathExpression = matcher.group(1).trim();
 
-            String value = xpath.evaluate(xpathExpression, context);
+            String value = xpathReader.readValue(context, xpathExpression);
 
             String safeValue = escapeHtml(value);
 
@@ -153,9 +136,7 @@ public class XPathTemplateRenderer {
         return result.toString();
     }
 
-    private String renderCodelistPlaceholders(String template, Object context) throws Exception {
-
-        XPath xpath = createXPath();
+    private String renderCodelistPlaceholders(String template, Node context) throws Exception {
 
         Matcher matcher = CODELIST_PLACEHOLDER.matcher(template);
 
@@ -171,7 +152,7 @@ public class XPathTemplateRenderer {
 
             String xpathExpression = matcher.group(2).trim();
 
-            String keyValue = xpath.evaluate(xpathExpression, context).trim();
+            String keyValue = xpathReader.readValue(context, xpathExpression).trim();
 
             CodelistDefinition definition = config.get(codelistName);
 
@@ -189,50 +170,8 @@ public class XPathTemplateRenderer {
         return result.toString();
     }
 
-    private XPath createXPath() {
-
-        XPath xpath = XPathFactory.newInstance().newXPath();
-
-        xpath.setNamespaceContext(new XJustizNamespaceContext());
-
-        return xpath;
-    }
-
     private String escapeHtml(String value) {
 
         return value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&#39;");
-    }
-
-    private static class XJustizNamespaceContext implements NamespaceContext {
-
-        @Override
-        public String getNamespaceURI(String prefix) {
-
-            if ("tns".equals(prefix)) {
-                return XJUSTIZ_NAMESPACE;
-            }
-
-            return XMLConstants.NULL_NS_URI;
-        }
-
-        @Override
-        public String getPrefix(String namespaceURI) {
-
-            if (XJUSTIZ_NAMESPACE.equals(namespaceURI)) {
-                return "tns";
-            }
-
-            return null;
-        }
-
-        @Override
-        public Iterator<String> getPrefixes(String namespaceURI) {
-
-            if (XJUSTIZ_NAMESPACE.equals(namespaceURI)) {
-                return Set.of("tns").iterator();
-            }
-
-            return Collections.emptyIterator();
-        }
     }
 }
