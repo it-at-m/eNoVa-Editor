@@ -19,7 +19,6 @@ import de.muenchen.enovaeditor.template.HtmlWriter;
 import de.muenchen.enovaeditor.template.TemplateLoader;
 import de.muenchen.enovaeditor.template.TemplateSource;
 import de.muenchen.enovaeditor.template.XPathTemplateRenderer;
-import de.muenchen.enovaeditor.util.ApplicationFileUtil;
 import de.muenchen.enovaeditor.util.OutputPathUtil;
 import de.muenchen.enovaeditor.xml.*;
 import javafx.beans.binding.Bindings;
