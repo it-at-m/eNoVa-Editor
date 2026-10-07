@@ -21,66 +21,42 @@ public class XmlWriter {
 
     private final OutputConfigLoader outputConfigLoader = new OutputConfigLoader();
 
-    public void write(
-            Document document,
-            File targetFile
-    ) throws TransformerException, IOException {
+    public void write(Document document, File targetFile) throws TransformerException, IOException {
 
         LineEnding lineEnding = outputConfigLoader.loadLineEnding();
 
-        TransformerFactory factory =
-                TransformerFactory.newInstance();
+        TransformerFactory factory = TransformerFactory.newInstance();
 
-        factory.setAttribute(
-                XMLConstants.ACCESS_EXTERNAL_DTD,
-                ""
-        );
+        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
 
-        factory.setAttribute(
-                XMLConstants.ACCESS_EXTERNAL_STYLESHEET,
-                ""
-        );
+        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
 
-        Transformer transformer =
-                factory.newTransformer();
+        Transformer transformer = factory.newTransformer();
 
-        transformer.setOutputProperty(
-                OutputKeys.ENCODING,
-                "UTF-8"
-        );
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 
-        transformer.setOutputProperty(
-                OutputKeys.INDENT,
-                "yes"
-        );
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 
         StringWriter writer = new StringWriter();
 
-        transformer.transform(
-                new DOMSource(document),
-                new StreamResult(writer)
-        );
+        transformer.transform(new DOMSource(document), new StreamResult(writer));
 
         String xml = writer.toString();
 
         String formattedXml = applyLineEnding(xml, lineEnding);
 
-        Files.writeString(
-                targetFile.toPath(),
-                formattedXml,
-                StandardCharsets.UTF_8
-        );
+        try {
+            Files.writeString(targetFile.toPath(), formattedXml, StandardCharsets.UTF_8);
+
+        } catch (IOException e) {
+            throw new IOException("Die XML-Datei konnte nicht geschrieben werden: " + targetFile.toPath(), e);
+        }
     }
 
     private String applyLineEnding(String xml, LineEnding lineEnding) {
 
-        String normalized = xml
-                .replace("\r\n", "\n")
-                .replace("\r", "\n");
+        String normalized = xml.replace("\r\n", "\n").replace("\r", "\n");
 
-        return normalized.replace(
-                "\n",
-                lineEnding.value()
-        );
+        return normalized.replace("\n", lineEnding.value());
     }
 }

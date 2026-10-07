@@ -11,21 +11,33 @@ public final class ApplicationFileUtil {
     private ApplicationFileUtil() {
     }
 
-    public static Path resolveReadableFile(String fileName) throws IOException {
+    public static Path resolveReadableFile(String fileName)
+            throws IOException {
+
         Path filePath = ApplicationPaths
                 .getApplicationDirectory()
                 .resolve(fileName);
 
+        return requireReadableFile(filePath);
+    }
+
+    public static Path requireReadableFile(Path filePath)
+            throws IOException {
+
         if (!Files.isRegularFile(filePath)) {
             throw new IOException(
-                    "Die Datei " + fileName + " wurde nicht gefunden: "
+                    "Die Datei "
+                            + filePath.getFileName()
+                            + " wurde nicht gefunden: "
                             + filePath
             );
         }
 
         if (!Files.isReadable(filePath)) {
             throw new IOException(
-                    "Die Datei " + fileName + " kann nicht gelesen werden: "
+                    "Die Datei "
+                            + filePath.getFileName()
+                            + " kann nicht gelesen werden: "
                             + filePath
             );
         }

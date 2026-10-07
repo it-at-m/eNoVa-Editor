@@ -9,7 +9,12 @@ public class HtmlWriter {
 
     public Path write(String html, Path outputPath) throws IOException {
 
-        Files.writeString(outputPath, html, StandardCharsets.UTF_8);
+        try {
+            Files.writeString(outputPath, html, StandardCharsets.UTF_8);
+
+        } catch (IOException e) {
+            throw new IOException("Die HTML-Datei konnte nicht geschrieben werden: " + outputPath, e);
+        }
 
         return outputPath;
     }
