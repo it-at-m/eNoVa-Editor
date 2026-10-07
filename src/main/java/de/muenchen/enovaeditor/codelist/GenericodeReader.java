@@ -6,7 +6,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +22,7 @@ public class GenericodeReader {
 
         Path readableFile = ApplicationFileUtil.requireReadableFile(file);
 
-        Document document = xmlLoader.load(readableFile.toFile());
+        Document document = loadDocument(readableFile);
 
         NodeList rows = document.getElementsByTagName(definition.rowElement());
 
@@ -44,7 +47,7 @@ public class GenericodeReader {
 
         List<CodelistEntry> entries = new ArrayList<>();
 
-        Document document = xmlLoader.load(readableFile.toFile());
+        Document document = loadDocument(readableFile);
 
         NodeList rows = document.getElementsByTagName(definition.rowElement());
 
@@ -99,5 +102,26 @@ public class GenericodeReader {
         }
 
         return value;
+    }
+
+    private Document loadDocument(Path file) throws IOException {
+
+        try {
+            return xmlLoader.load(file.toFile());
+
+        } catch (SAXException e) {
+            throw new IOException(
+                    "Die Codelist-Datei \""
+                            + file.getFileName()
+                            + "\" enthält ungültiges XML.",
+                    e
+            );
+
+        } catch (ParserConfigurationException e) {
+            throw new IOException(
+                    "Der XML-Parser konnte nicht initialisiert werden.",
+                    e
+            );
+        }
     }
 }

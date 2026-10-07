@@ -71,35 +71,73 @@ public final class ErrorInfoFactory {
 
             SourceLocator locator = transformerException.getLocator();
 
+            String fileName = findFileName(locator.getSystemId());
+
+            if (fileName != null) {
+                details.add(new ErrorDetail("Datei", fileName));
+            }
+
             addPositionDetail(details, "Transformationsfehler erkannt bei", locator.getLineNumber(), locator.getColumnNumber());
         }
 
         return new ErrorInfo(createUserMessage(throwable, templateException, saxParseException, configurationException, transformerException), List.copyOf(details), createStackTrace(throwable));
     }
 
-    private static String createUserMessage(Throwable throwable, TemplateRenderException templateException, SAXParseException saxParseException, TransformerConfigurationException configurationException, TransformerException transformerException) {
+    private static String createUserMessage(
+            Throwable throwable,
+            TemplateRenderException templateException,
+            SAXParseException saxParseException,
+            TransformerConfigurationException configurationException,
+            TransformerException transformerException
+    ) {
+
         if (templateException != null) {
             return templateException.getMessage();
         }
 
         if (isAnswerTransformError(configurationException)) {
-            return "Die Transformationsregel " + "\"" + ANSWER_TRANSFORM_FILE + "\" " + "enthält einen Fehler und konnte nicht " + "verarbeitet werden.";
+            return "Die Transformationsregel "
+                    + "\""
+                    + ANSWER_TRANSFORM_FILE
+                    + "\" "
+                    + "enthält einen Fehler und konnte nicht "
+                    + "verarbeitet werden.";
         }
 
         if (isDoctypeNotAllowed(saxParseException)) {
-            return "Die ausgewählte XML-Datei enthält eine " + "DOCTYPE-Deklaration. " + "DOCTYPE-Deklarationen werden aus " + "Sicherheitsgründen nicht unterstützt.";
+            return "Die XML-Datei enthält eine "
+                    + "DOCTYPE-Deklaration. "
+                    + "DOCTYPE-Deklarationen werden aus "
+                    + "Sicherheitsgründen nicht unterstützt.";
         }
 
-        if (saxParseException != null && saxParseException.getMessage() != null && !saxParseException.getMessage().isBlank()) {
-            return saxParseException.getMessage();
+        if (saxParseException != null) {
+
+            String wrapperMessage =
+                    findMessageBefore(
+                            throwable,
+                            saxParseException
+                    );
+
+            if (wrapperMessage != null) {
+                return wrapperMessage;
+            }
+
+            if (saxParseException.getMessage() != null
+                    && !saxParseException.getMessage().isBlank()) {
+
+                return saxParseException.getMessage();
+            }
         }
 
         if (configurationException != null) {
-            return "Eine Transformationskomponente konnte " + "nicht vorbereitet werden.";
+            return "Eine Transformationskomponente konnte "
+                    + "nicht vorbereitet werden.";
         }
 
         if (transformerException != null) {
-            return "Bei der Erstellung der Antwort ist ein " + "Transformationsfehler aufgetreten.";
+            return "Bei der Erstellung der Antwort ist ein "
+                    + "Transformationsfehler aufgetreten.";
         }
 
         return findMessage(throwable);
@@ -139,6 +177,26 @@ public final class ErrorInfoFactory {
         }
 
         return throwable.getClass().getSimpleName();
+    }
+
+    private static String findMessageBefore(
+            Throwable throwable,
+            Throwable stopException
+    ) {
+        Throwable current = throwable;
+
+        while (current != null && current != stopException) {
+
+            if (current.getMessage() != null
+                    && !current.getMessage().isBlank()) {
+
+                return current.getMessage();
+            }
+
+            current = current.getCause();
+        }
+
+        return null;
     }
 
     private static String findFileName(String systemId) {
