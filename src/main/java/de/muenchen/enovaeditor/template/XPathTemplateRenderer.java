@@ -22,16 +22,16 @@ public class XPathTemplateRenderer {
     private static final Pattern CODELIST_PLACEHOLDER = Pattern.compile("\\{\\{codelist:([\\w.-]+)\\s+xpath:(.+?)}}", Pattern.DOTALL);
     private final XPathReader xpathReader = new XPathReader();
 
-    public String render(String template, Document document) throws Exception {
+    public String render(TemplateSource template, Document document) throws Exception {
 
-        String result = renderEachBlocks(template, document);
+        String result = renderEachBlocks(template, template.content(), 0, document);
 
-        result = renderCodelistPlaceholders(result, document);
+        result = renderCodelistPlaceholders(template, result, document);
 
-        return renderXPathPlaceholders(result, document);
+        return renderXPathPlaceholders(template, result, document);
     }
 
-    private String renderEachBlocks(String template, Node context) throws Exception {
+    private String renderEachBlocks(TemplateSource source, String template, int sourceOffset, Node context) throws Exception {
 
         Matcher matcher = EACH_START.matcher(template);
 
@@ -50,22 +50,38 @@ public class XPathTemplateRenderer {
             int blockEnd = findMatchingEachEnd(template, blockStart);
 
             if (blockEnd == -1) {
-                throw new IllegalArgumentException("Fehlendes {{/each}} im Template.");
+
+                int absolutePosition = sourceOffset + matcher.start();
+
+                TemplateSource.Position errorPosition = source.positionAt(absolutePosition);
+
+                throw new TemplateRenderException("Im Template fehlt das zugehörige {{/each}}.", source.fileName(), errorPosition.line(), errorPosition.column(), xpathExpression, null);
             }
 
             String block = template.substring(blockStart, blockEnd);
 
-            List<Node> nodes = xpathReader.findNodes(context, xpathExpression);
+            List<Node> nodes;
+
+            try {
+                nodes = xpathReader.findNodes(context, xpathExpression);
+            } catch (XPathExpressionException exception) {
+
+                int absolutePosition = sourceOffset + matcher.start();
+
+                TemplateSource.Position errorPosition = source.positionAt(absolutePosition);
+
+                throw new TemplateRenderException("Das Template enthält einen ungültigen XPath-Ausdruck.", source.fileName(), errorPosition.line(), errorPosition.column(), xpathExpression, exception);
+            }
 
             StringBuilder renderedBlock = new StringBuilder();
 
             for (Node node : nodes) {
 
-                String renderedItem = renderEachBlocks(block, node);
+                String renderedItem = renderEachBlocks(source, block, sourceOffset + blockStart, node);
 
-                renderedItem = renderCodelistPlaceholders(renderedItem, node);
+                renderedItem = renderCodelistPlaceholders(source, renderedItem, node);
 
-                renderedItem = renderXPathPlaceholders(renderedItem, node);
+                renderedItem = renderXPathPlaceholders(source, renderedItem, node);
 
                 renderedBlock.append(renderedItem);
             }
@@ -114,7 +130,7 @@ public class XPathTemplateRenderer {
         return -1;
     }
 
-    private String renderXPathPlaceholders(String template, Node context) throws XPathExpressionException {
+    private String renderXPathPlaceholders(TemplateSource source, String template, Node context) throws TemplateRenderException {
 
         Matcher matcher = XPATH_PLACEHOLDER.matcher(template);
 
@@ -124,7 +140,21 @@ public class XPathTemplateRenderer {
 
             String xpathExpression = matcher.group(1).trim();
 
-            String value = xpathReader.readValue(context, xpathExpression);
+            String value;
+
+            try {
+                value = xpathReader.readValue(context, xpathExpression);
+            } catch (XPathExpressionException exception) {
+
+                throw new TemplateRenderException(
+                        "Das Template enthält einen ungültigen XPath-Ausdruck.",
+                        source.fileName(),
+                        0,
+                        0,
+                        xpathExpression,
+                        exception
+                );
+            }
 
             String safeValue = escapeHtml(value);
 
@@ -136,7 +166,7 @@ public class XPathTemplateRenderer {
         return result.toString();
     }
 
-    private String renderCodelistPlaceholders(String template, Node context) throws Exception {
+    private String renderCodelistPlaceholders(TemplateSource source, String template, Node context) throws Exception {
 
         Matcher matcher = CODELIST_PLACEHOLDER.matcher(template);
 
@@ -152,7 +182,21 @@ public class XPathTemplateRenderer {
 
             String xpathExpression = matcher.group(2).trim();
 
-            String keyValue = xpathReader.readValue(context, xpathExpression).trim();
+            String keyValue;
+
+            try {
+                keyValue = xpathReader.readValue(context, xpathExpression).trim();
+            } catch (XPathExpressionException exception) {
+
+                throw new TemplateRenderException(
+                        "Das Template enthält einen ungültigen XPath-Ausdruck.",
+                        source.fileName(),
+                        0,
+                        0,
+                        xpathExpression,
+                        exception
+                );
+            }
 
             CodelistDefinition definition = config.get(codelistName);
 

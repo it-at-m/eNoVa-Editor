@@ -12,22 +12,28 @@ public class TemplateLoader {
     private static final String INPUT_TEMPLATE = "Input.htm";
     private static final String OUTPUT_TEMPLATE = "Output.htm";
 
-    public String loadInputTemplate() throws IOException {
+    public TemplateSource loadInputTemplate() throws IOException {
         return loadTemplate(INPUT_TEMPLATE);
     }
 
-    public String loadOutputTemplate() throws IOException {
+    public TemplateSource loadOutputTemplate() throws IOException {
         return loadTemplate(OUTPUT_TEMPLATE);
     }
 
-    private String loadTemplate(String templateName) throws IOException {
-        Path templatePath = ApplicationFileUtil.resolveReadableFile(templateName);
+    private TemplateSource loadTemplate(String templateName)
+            throws IOException {
 
-        return Files.readString(
+        Path templatePath =
+                ApplicationFileUtil.resolveReadableFile(templateName);
+
+        String content = Files.readString(
                 templatePath,
                 StandardCharsets.UTF_8
         );
+
+        return new TemplateSource(
+                templatePath,
+                content
+        );
     }
-
-
 }
