@@ -10,7 +10,7 @@
           margin-top: 40px;
       }
 
-      .behoerde {
+      .empfaenger {
           flex: 1;
       }
 
@@ -41,10 +41,16 @@
       .flurstueck-block {
           margin-bottom: 8px;
       }
+
+      .hinweis {
+          color: red;
+          text-align: center;
+      }
     </style>
   </head>
 
   <body>
+    <div class="hinweis">Internes Eingangsdokument generiert aus der XJustiz-Nachricht</div>
 
     <!--
         Absender suchen:
@@ -94,9 +100,56 @@
 
     <div class="kopf-zeile">
 
-      <div class="behoerde">
-        {{xpath://tns:grunddaten/tns:verfahrensdaten/tns:instanzdaten/tns:auswahl_instanzbehoerde/tns:sonstige}}
+
+      <div class="empfaenger">
+        <!-- Fall 1: Empfänger über ref.rollennummer -->
+        <div>
+          {{xpath://tns:beteiligung[
+          tns:rolle/tns:rollennummer =
+          //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+          ]/tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:titel}}
+
+          {{xpath://tns:beteiligung[
+          tns:rolle/tns:rollennummer =
+          //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+          ]/tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:vorname}}
+
+          {{xpath://tns:beteiligung[
+          tns:rolle/tns:rollennummer =
+          //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+          ]/tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:nachname}}
+        </div>
+
+        <div>
+          {{xpath://tns:beteiligung[
+          tns:rolle/tns:rollennummer =
+          //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+          ]/tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:strasse}}
+
+          {{xpath://tns:beteiligung[
+          tns:rolle/tns:rollennummer =
+          //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+          ]/tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:hausnummer}}
+        </div>
+
+        <div>
+          {{xpath://tns:beteiligung[
+          tns:rolle/tns:rollennummer =
+          //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+          ]/tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:postleitzahl}}
+
+          {{xpath://tns:beteiligung[
+          tns:rolle/tns:rollennummer =
+          //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+          ]/tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:ort}}
+        </div>
+
+        <!-- Fall 2: Keine ref.rollennummer -->
+        {{xpath://tns:empfaenger/tns:informationen[
+        not(tns:auswahl_verweisGrunddaten/tns:ref.rollennummer)
+        ]/tns:auswahl_kommunikationspartner/tns:sonstige}}
       </div>
+
 
       <div class="kontakt">
         {{#each xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:telekommunikation}}
@@ -132,46 +185,17 @@
     <!-- Betreff / Verfahrensgegenstand -->
     <p>
       {{xpath://tns:grunddaten/tns:verfahrensdaten/tns:instanzdaten/tns:verfahrensgegenstand/tns:gegenstand}}
-
-      <!-- Genau eine Sachentscheidung -->
-      {{#each xpath://tns:fachdaten/tns:auswahl_GegenstandDerNachricht[
-      count(tns:sachentscheidung) = 1
-      ]}}
-
-      <br>
-      ({{codelist:sachentscheidung
-      xpath:tns:sachentscheidung/tns:sachentscheidung/code}})
-
-      {{/each}}
-    </p>
-
-    <!-- Mehrere Sachentscheidungen -->
-    {{#each xpath://tns:fachdaten/tns:auswahl_GegenstandDerNachricht[
-    count(tns:sachentscheidung) > 1
-    ]}}
-
-    <ol>
-      {{#each xpath:tns:sachentscheidung}}
-
-      <li>
-        {{codelist:sachentscheidung
-        xpath:tns:sachentscheidung/code}}
-      </li>
-
-      {{/each}}
-    </ol>
-
-    {{/each}}
-
-    <p>
-      Sehr geehrte Damen und Herren,
     </p>
 
     <p>
-      hiermit zeigen wir die Beurkundung nachfolgenden Grundstücksverkauf an:
+        Guten Tag,
     </p>
 
-    <h3>Verkäufer:</h3>
+    <p>
+      Bezüglich Ihrer Anfrage teilen wir Ihnen mit:
+    </p>
+
+    <h3>Verkäufer (in/innen):</h3>
 
     {{#each xpath://tns:beteiligung[
     tns:rolle/tns:rollenbezeichnung/code='168'
@@ -207,7 +231,7 @@
 
     {{/each}}
 
-    <h3>Käufer:</h3>
+    <h3>Käufer (in/innen):</h3>
 
     {{#each xpath://tns:beteiligung[
     tns:rolle/tns:rollenbezeichnung/code='072'
@@ -243,8 +267,9 @@
 
     {{/each}}
 
+    <h3>Urkundendaten:</h3>
     <p>
-      Urkunde:
+      Urkundenverzeichnisnummer (UVZ):
       {{xpath://tns:datenDerUrkunde/tns:urNr}}
 
       <br>
@@ -257,7 +282,7 @@
       )}}
     </p>
 
-    <h3>Grundstück:</h3>
+    <h3>Grundstück(e):</h3>
 
     {{#each xpath://tns:fachdaten/tns:beschreibungDesBetroffenenRechts}}
 
@@ -306,12 +331,70 @@
 
     {{/each}}
 
+    <!-- Genau eine Sachentscheidung -->
+    {{#each xpath://tns:fachdaten/tns:auswahl_GegenstandDerNachricht[
+    count(tns:sachentscheidung) = 1
+    ]}}
+
+    <p>
+      <strong>Unsere Entscheidung:</strong>
+      {{codelist:sachentscheidung
+      xpath:tns:sachentscheidung/tns:sachentscheidung/code}}
+    </p>
+
+    {{/each}}
+
+    <!-- Mehrere Sachentscheidungen -->
+    {{#each xpath://tns:fachdaten/tns:auswahl_GegenstandDerNachricht[
+    count(tns:sachentscheidung) > 1
+    ]}}
+
+    <p style="margin-bottom: 0;"><strong>Unsere Entscheidungen:</strong></p>
+
+    <ol style="margin-top: 0;">
+      {{#each xpath:tns:sachentscheidung}}
+
+      <li>
+        {{codelist:sachentscheidung
+        xpath:tns:sachentscheidung/code}}
+      </li>
+
+      {{/each}}
+    </ol>
+
+    {{/each}}
+
     <p>
       Mit freundlichen Grüßen
     </p>
 
-    <p>
-      {{xpath://tns:absender/tns:informationen/tns:auswahl_kommunikationspartner/tns:sonstige}}
-    </p>
+    <!--
+        Sachbearbeiter:
+        Fall 1: Absender verweist über ref.rollennummer auf eine Beteiligung.
+        Dann werden Vorname und Nachname dieser Person ausgegeben.
+
+        Fall 2: Keine ref.rollennummer vorhanden.
+        Dann wird auswahl_kommunikationspartner/sonstige verwendet.
+    -->
+    <div>
+      {{xpath://tns:beteiligung[
+      tns:rolle/tns:rollennummer =
+      //tns:absender/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+      ]/tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:vorname}}
+
+      {{xpath://tns:beteiligung[
+      tns:rolle/tns:rollennummer =
+      //tns:absender/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+      ]/tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:nachname}}
+
+      {{xpath://tns:absender/tns:informationen[
+      not(tns:auswahl_verweisGrunddaten/tns:ref.rollennummer)
+      ]/tns:auswahl_kommunikationspartner/tns:sonstige}}
+    </div>
+
+    <!-- Instanzbehörde -->
+    <div>
+      {{xpath://tns:grunddaten/tns:verfahrensdaten/tns:instanzdaten/tns:auswahl_instanzbehoerde/tns:sonstige}}
+    </div>
   </body>
 </html>
