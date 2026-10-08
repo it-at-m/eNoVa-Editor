@@ -30,7 +30,7 @@ public class CaseworkerConfigLoader {
         try {
             document = xmlLoader.load(configPath.toFile());
         } catch (SAXException e) {
-            throw new IOException("Die Datei caseworkers.xml enthält ungültiges XML.", e);
+            throw new IOException("Die Datei \"" + CONFIG_FILE + "\" enthält ungültiges XML.", e);
         } catch (ParserConfigurationException e) {
             throw new IOException("Der XML-Parser konnte nicht initialisiert werden.", e);
         }
@@ -38,7 +38,7 @@ public class CaseworkerConfigLoader {
         Element root = document.getDocumentElement();
 
         if (!root.getTagName().equals("caseworkers")) {
-            throw new IOException("Ungültige caseworkers.xml: Erwartetes Root-Element <caseworkers>, gefunden <" + root.getTagName() + ">.");
+            throw new IOException("Ungültige \"" + CONFIG_FILE + "\": Erwartetes Root-Element <caseworkers>, gefunden <" + root.getTagName() + ">.");
         }
 
         NodeList children = root.getChildNodes();
@@ -48,32 +48,29 @@ public class CaseworkerConfigLoader {
 
         for (int i = 0; i < children.getLength(); i++) {
             Node child = children.item(i);
+
             if (child.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
             }
+
             if (!child.getNodeName().equals("entry")) {
-                throw new IOException("Ungültige caseworkers.xml: Unerwartetes Element <" + child.getNodeName() + "> unter <caseworkers>. Erwartet wird dort nur <entry>.");
+                throw new IOException("Ungültige \"" + CONFIG_FILE + "\": Unerwartetes Element <" + child.getNodeName() + "> unter <caseworkers>. " + "Erwartet wird dort nur <entry>.");
             }
 
             Element entry = (Element) child;
 
             if (!entry.hasAttribute("name")) {
-                throw new IOException("Ungültige caseworkers.xml: Jedes <entry>-Element muss ein nicht-leeres Attribut 'name' besitzen.");
+                throw new IOException("Ungültige \"" + CONFIG_FILE + "\": Jedes <entry>-Element muss ein " + "nicht-leeres Attribut 'name' besitzen.");
             }
 
             String name = entry.getAttribute("name");
 
             if (name.isBlank()) {
-                throw new IOException("Ungültige caseworkers.xml: Das Attribut 'name' eines <entry>-Elements darf nicht leer sein.");
+                throw new IOException("Ungültige \"" + CONFIG_FILE + "\": Das Attribut 'name' eines " + "<entry>-Elements darf nicht leer sein.");
             }
 
             if (!names.add(name)) {
-                throw new IOException(
-                        "Ungültige caseworkers.xml: "
-                                + "Der Sachbearbeitername '"
-                                + name
-                                + "' ist mehrfach vorhanden."
-                );
+                throw new IOException("Ungültige \"" + CONFIG_FILE + "\": Der Sachbearbeitername '" + name + "' ist mehrfach vorhanden.");
             }
 
             caseworkers.add(new CaseworkerEntry(name));

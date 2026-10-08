@@ -30,7 +30,7 @@ public class DecisionConfigLoader {
         try {
             document = xmlLoader.load(configPath.toFile());
         } catch (SAXException e) {
-            throw new IOException("Die Datei " + CONFIG_FILE + " enthält ungültiges XML.", e);
+            throw new IOException("Die Datei \"" + CONFIG_FILE + "\" enthält ungültiges XML.", e);
         } catch (ParserConfigurationException e) {
             throw new IOException("Der XML-Parser konnte nicht initialisiert werden.", e);
         }
@@ -38,7 +38,7 @@ public class DecisionConfigLoader {
         Element root = document.getDocumentElement();
 
         if (!root.getTagName().equals("decisionMappings")) {
-            throw new IOException("Ungültige " + CONFIG_FILE + ": Erwartetes Root-Element <decisionMappings>, gefunden <" + root.getTagName() + ">.");
+            throw new IOException("Ungültige \"" + CONFIG_FILE + "\": Erwartetes Root-Element " + "<decisionMappings>, gefunden <" + root.getTagName() + ">.");
         }
 
         NodeList requestNodes = root.getChildNodes();
@@ -111,6 +111,10 @@ public class DecisionConfigLoader {
             }
 
             allowedDecisionsByRequestCode.put(requestCode, allowedDecisionCodes);
+        }
+
+        if (allowedDecisionsByRequestCode.isEmpty()) {
+            throw new IOException("Ungültige \"" + CONFIG_FILE + "\": Es ist kein <request>-Eintrag definiert.");
         }
 
         return allowedDecisionsByRequestCode;

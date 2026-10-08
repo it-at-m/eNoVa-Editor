@@ -25,25 +25,19 @@ public class SenderConfigLoader {
         try {
             document = xmlLoader.load(configFile.toFile());
         } catch (ParserConfigurationException | SAXException e) {
-            throw new IOException(
-                    "Absender-Konfiguration konnte nicht gelesen werden.",
-                    e
-            );
+            throw new IOException("Die Konfigurationsdatei \"" + CONFIG_FILE + "\" konnte nicht gelesen werden.", e);
         }
 
-        Node nameNode = document
-                .getDocumentElement()
-                .getElementsByTagName("name")
-                .item(0);
+        Node nameNode = document.getDocumentElement().getElementsByTagName("name").item(0);
 
         if (nameNode == null) {
-            throw new IOException("Das Element 'name' fehlt.");
+            throw new IOException("In \"" + CONFIG_FILE + "\" fehlt das Element <name>.");
         }
 
         String senderName = nameNode.getTextContent();
 
         if (senderName == null || senderName.isBlank()) {
-            throw new IOException("Das Element 'name' ist leer.");
+            throw new IOException("In \"" + CONFIG_FILE + "\" ist das Element <name> leer.");
         }
 
         return senderName.trim();

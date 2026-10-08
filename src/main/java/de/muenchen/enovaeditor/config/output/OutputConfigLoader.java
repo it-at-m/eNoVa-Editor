@@ -19,48 +19,35 @@ public class OutputConfigLoader {
 
     public LineEnding loadLineEnding() throws IOException {
 
-        Path configFile =
-                ApplicationFileUtil.resolveReadableFile(CONFIG_FILE);
+        Path configFile = ApplicationFileUtil.resolveReadableFile(CONFIG_FILE);
 
         Document document;
 
         try {
             document = xmlLoader.load(configFile.toFile());
+
         } catch (ParserConfigurationException | SAXException e) {
-            throw new IOException(
-                    "Ausgabe-Konfiguration konnte nicht gelesen werden.",
-                    e
-            );
+            throw new IOException("Die Konfigurationsdatei \"" + CONFIG_FILE + "\" konnte nicht gelesen werden.", e);
         }
 
-        Node lineEndingNode = document
-                .getDocumentElement()
-                .getElementsByTagName("lineEnding")
-                .item(0);
+        Node lineEndingNode = document.getDocumentElement().getElementsByTagName("lineEnding").item(0);
 
         if (lineEndingNode == null) {
-            throw new IOException(
-                    "Das Element 'lineEnding' fehlt."
-            );
+            throw new IOException("In \"" + CONFIG_FILE + "\" fehlt das Element <lineEnding>.");
         }
 
         String value = lineEndingNode.getTextContent();
 
         if (value == null || value.isBlank()) {
-            throw new IOException(
-                    "Das Element 'lineEnding' ist leer."
-            );
+            throw new IOException("In \"" + CONFIG_FILE + "\" ist das Element <lineEnding> leer.");
         }
 
+        String normalizedValue = value.trim();
+
         try {
-            return LineEnding.valueOf(
-                    value.trim().toUpperCase(Locale.ROOT)
-            );
+            return LineEnding.valueOf(normalizedValue.toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException e) {
-            throw new IOException(
-                    "Ungültiger lineEnding-Wert '" + value
-                            + "'. Erlaubt sind: CRLF, LF, CR, NONE."
-            );
+            throw new IOException("In \"" + CONFIG_FILE + "\" enthält <lineEnding> den ungültigen Wert \"" + normalizedValue + "\". Erlaubt sind: CRLF, LF, CR, NONE.", e);
         }
     }
 }

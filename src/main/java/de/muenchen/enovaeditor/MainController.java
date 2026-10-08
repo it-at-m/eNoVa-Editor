@@ -12,8 +12,12 @@ import de.muenchen.enovaeditor.config.caseworker.CaseworkerEntry;
 import de.muenchen.enovaeditor.config.decision.DecisionConfigLoader;
 import de.muenchen.enovaeditor.config.manufacturer.ManufacturerInfo;
 import de.muenchen.enovaeditor.config.manufacturer.ManufacturerInfoLoader;
+import de.muenchen.enovaeditor.error.ErrorDetail;
+import de.muenchen.enovaeditor.error.ErrorInfo;
+import de.muenchen.enovaeditor.error.ErrorInfoFactory;
 import de.muenchen.enovaeditor.template.HtmlWriter;
 import de.muenchen.enovaeditor.template.TemplateLoader;
+import de.muenchen.enovaeditor.template.TemplateSource;
 import de.muenchen.enovaeditor.template.XPathTemplateRenderer;
 import de.muenchen.enovaeditor.util.OutputPathUtil;
 import de.muenchen.enovaeditor.xml.*;
@@ -27,6 +31,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
@@ -132,7 +137,7 @@ public class MainController {
 
             List<Node> requests = ersuchenSachentscheidungReader.read(document);
 
-            String inputTemplate = templateLoader.loadInputTemplate();
+            TemplateSource inputTemplate = templateLoader.loadInputTemplate();
 
             String renderedHtml = templateRenderer.render(inputTemplate, document);
 
@@ -157,7 +162,7 @@ public class MainController {
             clearFormFields();
             clearDecisionUi();
 
-            showError("Datei kann nicht verarbeitet werden", e.getMessage());
+            showError("Datei kann nicht verarbeitet werden", e);
         }
     }
 
@@ -178,7 +183,7 @@ public class MainController {
             OutputPathUtil.OutputPaths outputPaths = OutputPathUtil.createOutputPaths(openedXmlPath, "Output");
             xmlWriter.write(answerDocument, outputPaths.xmlPath().toFile());
 
-            String outputTemplate = templateLoader.loadOutputTemplate();
+            TemplateSource outputTemplate = templateLoader.loadOutputTemplate();
 
             String renderedOutputHtml = templateRenderer.render(outputTemplate, answerDocument);
 
@@ -187,7 +192,7 @@ public class MainController {
             openHtmlInBrowser(outputHtml);
 
         } catch (Exception e) {
-            showError("Antwort konnte nicht erzeugt werden", e.getMessage());
+            showError("Antwort konnte nicht erzeugt werden", e);
         }
     }
 
@@ -409,7 +414,7 @@ public class MainController {
             senderName = senderConfigLoader.loadSenderName();
             senderNameLabel.setText(senderName);
         } catch (IOException e) {
-            showError("Absender-Konfiguration konnte nicht geladen werden", e.getMessage());
+            showError("Absender-Konfiguration konnte nicht geladen werden", e);
         }
     }
 
@@ -432,7 +437,7 @@ public class MainController {
             caseworkerComboBox.getItems().addAll(caseworkerEntries);
 
         } catch (IOException e) {
-            showError("Sachbearbeiter*in-Konfiguration konnte nicht geladen werden", e.getMessage());
+            showError("Sachbearbeiter*in-Konfiguration konnte nicht geladen werden", e);
         }
     }
 
@@ -444,7 +449,7 @@ public class MainController {
             decisionEntries.addAll(entries);
 
         } catch (Exception e) {
-            showError("Sachentscheidung-Codelist konnte nicht geladen werden", e.getMessage());
+            showError("Sachentscheidung-Codelist konnte nicht geladen werden", e);
         }
     }
 
@@ -453,7 +458,7 @@ public class MainController {
             requestLabelsByCode = loadCodelistEntries("ersuchenSachentscheidung").stream().collect(Collectors.toMap(CodelistEntry::code, CodelistEntry::value));
 
         } catch (Exception e) {
-            showError("Ersuchen-Sachentscheidung-Codelist konnte nicht geladen werden", e.getMessage());
+            showError("Ersuchen-Sachentscheidung-Codelist konnte nicht geladen werden", e);
         }
     }
 
@@ -473,7 +478,7 @@ public class MainController {
         try {
             allowedDecisionsByRequestCode = decisionConfigLoader.load();
         } catch (IOException e) {
-            showError("Entscheidungskonfiguration konnte nicht geladen werden", e.getMessage());
+            showError("Entscheidungskonfiguration konnte nicht geladen werden", e);
         }
     }
 
@@ -516,20 +521,60 @@ public class MainController {
     }
 
     private void openHtmlInBrowser(Path htmlPath) {
+
         try {
             browserOpener.open(htmlPath);
+
         } catch (IOException e) {
-            showWarning("HTML-Datei wurde erstellt", "Die HTML-Datei wurde erfolgreich erstellt, " + "konnte aber nicht automatisch im Browser geöffnet werden.\n\n" + htmlPath);
+            showWarning(
+                    "Browser konnte nicht geöffnet werden",
+                    "Die HTML-Datei wurde erfolgreich erstellt, "
+                            + "konnte aber nicht automatisch im Browser geöffnet werden.\n\n"
+                            + "Grund: "
+                            + e.getMessage()
+                            + "\n\n"
+                            + "Datei: "
+                            + htmlPath
+            );
         }
     }
 
-    private void showError(String title, String message) {
+    private void showError(String title, Throwable throwable) {
+
+        ErrorInfo errorInfo = ErrorInfoFactory.from(throwable);
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
 
         alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText(message);
+
+        VBox content = new VBox(8);
+
+        Label messageLabel = new Label(errorInfo.message());
+        messageLabel.setWrapText(true);
+        content.getChildren().add(messageLabel);
+
+        for (ErrorDetail detail : errorInfo.details()) {
+            Label detailLabel = new Label(detail.label() + ": " + detail.value());
+
+            detailLabel.setWrapText(true);
+            content.getChildren().add(detailLabel);
+        }
+
+        alert.getDialogPane().setContent(content);
+
+        TextArea technicalDetails = new TextArea(errorInfo.technicalDetails());
+
+        technicalDetails.setEditable(false);
+        technicalDetails.setWrapText(false);
+        technicalDetails.setPrefColumnCount(80);
+        technicalDetails.setPrefRowCount(20);
+
+        alert.getDialogPane().setExpandableContent(technicalDetails);
+        alert.getDialogPane().setExpanded(false);
+
+        alert.setResizable(true);
+
         alert.showAndWait();
     }
 
@@ -539,7 +584,15 @@ public class MainController {
 
         alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText(message);
+
+        Label messageLabel = new Label(message);
+        messageLabel.setWrapText(true);
+
+        alert.getDialogPane().setContent(messageLabel);
+        alert.getDialogPane().setPrefWidth(700);
+
+        alert.setResizable(true);
+
         alert.showAndWait();
     }
 }

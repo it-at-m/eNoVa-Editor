@@ -1,11 +1,15 @@
 package de.muenchen.enovaeditor.codelist;
 
+import de.muenchen.enovaeditor.util.ApplicationFileUtil;
 import de.muenchen.enovaeditor.xml.XmlLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +20,9 @@ public class GenericodeReader {
 
     public String resolve(Path file, CodelistDefinition definition, String keyValue) throws Exception {
 
-        Document document = xmlLoader.load(file.toFile());
+        Path readableFile = ApplicationFileUtil.requireReadableFile(file);
+
+        Document document = loadDocument(readableFile);
 
         NodeList rows = document.getElementsByTagName(definition.rowElement());
 
@@ -28,17 +34,20 @@ public class GenericodeReader {
 
             if (keyValue.equals(currentKey)) {
 
-                return getRequiredValue(row, definition.valueColumn(), definition);
+                return getRequiredValue(readableFile, row, definition.valueColumn(), definition);
             }
         }
 
-        throw new IllegalArgumentException("Wert '" + keyValue + "' wurde in der Codeliste nicht gefunden.");
+        throw new IllegalArgumentException("Der Wert \"" + keyValue + "\" wurde in der Codelist-Datei \"" + file.getFileName() + "\" nicht gefunden.");
     }
 
     public List<CodelistEntry> readAll(Path file, CodelistDefinition definition) throws Exception {
+
+        Path readableFile = ApplicationFileUtil.requireReadableFile(file);
+
         List<CodelistEntry> entries = new ArrayList<>();
 
-        Document document = xmlLoader.load(file.toFile());
+        Document document = loadDocument(readableFile);
 
         NodeList rows = document.getElementsByTagName(definition.rowElement());
 
@@ -46,9 +55,9 @@ public class GenericodeReader {
 
             Element row = (Element) rows.item(i);
 
-            String currentKey = getRequiredValue(row, definition.keyColumn(), definition);
+            String currentKey = getRequiredValue(readableFile, row, definition.keyColumn(), definition);
 
-            String currentValue = getRequiredValue(row, definition.valueColumn(), definition);
+            String currentValue = getRequiredValue(readableFile, row, definition.valueColumn(), definition);
 
             entries.add(new CodelistEntry(currentKey, currentValue));
         }
@@ -84,13 +93,35 @@ public class GenericodeReader {
         return null;
     }
 
-    private String getRequiredValue(Element row, String column, CodelistDefinition definition) {
+    private String getRequiredValue(Path file, Element row, String column, CodelistDefinition definition) {
+
         String value = findValue(row, column, definition);
 
         if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException("Wert für konfigurierte Spalte '" + column + "' fehlt.");
+            throw new IllegalStateException("In der Codelist-Datei \"" + file.getFileName() + "\" fehlt ein Wert für die " + "konfigurierte Spalte \"" + column + "\".");
         }
 
         return value;
+    }
+
+    private Document loadDocument(Path file) throws IOException {
+
+        try {
+            return xmlLoader.load(file.toFile());
+
+        } catch (SAXException e) {
+            throw new IOException(
+                    "Die Codelist-Datei \""
+                            + file.getFileName()
+                            + "\" enthält ungültiges XML.",
+                    e
+            );
+
+        } catch (ParserConfigurationException e) {
+            throw new IOException(
+                    "Der XML-Parser konnte nicht initialisiert werden.",
+                    e
+            );
+        }
     }
 }
