@@ -13,7 +13,12 @@ public class HtmlWriter {
             Files.writeString(outputPath, html, StandardCharsets.UTF_8);
 
         } catch (IOException e) {
-            throw new IOException("Die HTML-Datei konnte nicht geschrieben werden: " + outputPath, e);
+            String errorMessage = String.format(
+                "Die HTML-Datei konnte nicht geschrieben werden:%n%s%n" +
+                "Öffnen Sie die XML-Datei bitte in einem Verzeichnis, in dem Sie Schreibrechte haben. (z. B. Dokumente)",
+                outputPath
+            );
+            throw new IOException(errorMessage, e);
         }
 
         return outputPath;
