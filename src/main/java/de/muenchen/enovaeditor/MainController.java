@@ -15,6 +15,7 @@ import de.muenchen.enovaeditor.config.manufacturer.ManufacturerInfoLoader;
 import de.muenchen.enovaeditor.error.AppException;
 import de.muenchen.enovaeditor.error.ErrorDetail;
 import de.muenchen.enovaeditor.error.ProblemDialog;
+import de.muenchen.enovaeditor.help.HelpLink;
 import de.muenchen.enovaeditor.template.HtmlWriter;
 import de.muenchen.enovaeditor.template.TemplateLoader;
 import de.muenchen.enovaeditor.template.TemplateSource;
@@ -100,6 +101,9 @@ public class MainController {
     private Button generateAnswer;
 
     @FXML
+    private Hyperlink helpLink;
+
+    @FXML
     private void initialize() {
         setupBindings();
 
@@ -113,6 +117,7 @@ public class MainController {
         loadDecisions();
         loadDecisionMappings();
         loadRequestLabels();
+        HelpLink.configure(helpLink);
     }
 
     @FXML

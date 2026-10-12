@@ -132,6 +132,7 @@ eNoVA-editor/
 ├── decision-config.xml
 ├── xml-output-config.xml
 ├── codelists.properties
+├── help-config.properties
 ├── answer-transform.xsl
 └── eNoVA-editor.cmd
     </pre>
@@ -142,6 +143,24 @@ eNoVA-editor/
         eNoVA-Editor-Pakets.
     </p>
 
+
+    <h3>Online-Hilfe konfigurieren (optional)</h3>
+
+    <p>
+        Über den Link <strong>Hilfe</strong> rechts oben öffnet sich die
+        Online-Hilfe im Standardbrowser. Die IT kann die Adresse in der UTF-8-Datei
+        <code>help-config.properties</code> im Hauptverzeichnis neben
+        <code>eNoVA-editor.cmd</code> anpassen:
+    </p>
+
+    <pre>help.url=https://enova-editor.oss.muenchen.de/</pre>
+
+    <p>
+        Fehlen Datei oder <code>help.url</code>, oder ist der Eintrag leer,
+        wird die Standard-Hilfeseite <code>https://enova-editor.oss.muenchen.de/</code> verwendet.
+        Eine ungültige Adresse oder nicht lesbare Konfiguration wird beim Start
+        gemeldet; der Editor bleibt nutzbar.
+    </p>
 
     <h2>3. Absender konfigurieren</h2>
 

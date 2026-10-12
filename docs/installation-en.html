@@ -133,6 +133,7 @@ eNoVA-editor/
 ├── decision-config.xml
 ├── xml-output-config.xml
 ├── codelists.properties
+├── help-config.properties
 ├── answer-transform.xsl
 └── eNoVA-editor.cmd
     </pre>
@@ -142,6 +143,24 @@ eNoVA-editor/
         The required Java runtime is included in the eNoVA Editor package.
     </p>
 
+
+    <h3>Configure online help (optional)</h3>
+
+    <p>
+        Select the <strong>Hilfe</strong> (Help) link in the top right
+        to open online help in the default browser. IT administrators can change
+        the address in the UTF-8 file <code>help-config.properties</code> in the
+        application root directory, next to <code>eNoVA-editor.cmd</code>:
+    </p>
+
+    <pre>help.url=https://enova-editor.oss.muenchen.de/</pre>
+
+    <p>
+        Use a complete HTTP or HTTPS address;
+        If the file or <code>help.url</code> is missing, or the entry is blank,
+        the default help page <code>https://enova-editor.oss.muenchen.de/</code> is used. Invalid addresses or unreadable
+        configuration files are reported at startup; the editor remains usable.
+    </p>
 
     <h2>3. Configure the sender</h2>
 

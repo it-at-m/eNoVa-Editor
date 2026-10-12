@@ -170,6 +170,9 @@
                                                 file="${project.basedir}/codelists.properties"
                                                 todir="${project.build.directory}/distribution/eNoVA-editor"/>
                                         <copy
+                                                file="${project.basedir}/help-config.properties"
+                                                todir="${project.build.directory}/distribution/eNoVA-editor"/>
+                                        <copy
                                                 file="${project.basedir}/sender-config.xml"
                                                 todir="${project.build.directory}/distribution/eNoVA-editor"/>
                                         <copy
