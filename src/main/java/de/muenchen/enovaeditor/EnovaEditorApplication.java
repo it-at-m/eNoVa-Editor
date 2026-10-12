@@ -1,5 +1,6 @@
 package de.muenchen.enovaeditor;
 
+import de.muenchen.enovaeditor.config.manufacturer.ManufacturerInfoLoader;
 import de.muenchen.enovaeditor.error.ProblemDialog;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -34,7 +35,10 @@ public class EnovaEditorApplication extends Application {
                     INITIAL_HEIGHT
             );
 
-            stage.setTitle("eNoVA Editor");
+            stage.setTitle(
+                "eNoVA Editor – Version "
+                        + new ManufacturerInfoLoader().load().version()
+                );
 
             stage.getIcons().add(
                     new Image(
