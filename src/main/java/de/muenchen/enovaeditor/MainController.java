@@ -12,9 +12,9 @@ import de.muenchen.enovaeditor.config.caseworker.CaseworkerEntry;
 import de.muenchen.enovaeditor.config.decision.DecisionConfigLoader;
 import de.muenchen.enovaeditor.config.manufacturer.ManufacturerInfo;
 import de.muenchen.enovaeditor.config.manufacturer.ManufacturerInfoLoader;
+import de.muenchen.enovaeditor.error.AppException;
 import de.muenchen.enovaeditor.error.ErrorDetail;
-import de.muenchen.enovaeditor.error.ErrorInfo;
-import de.muenchen.enovaeditor.error.ErrorInfoFactory;
+import de.muenchen.enovaeditor.error.ProblemDialog;
 import de.muenchen.enovaeditor.template.HtmlWriter;
 import de.muenchen.enovaeditor.template.TemplateLoader;
 import de.muenchen.enovaeditor.template.TemplateSource;
@@ -31,22 +31,19 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class MainController {
 
@@ -108,7 +105,9 @@ public class MainController {
 
         configureCaseworkerComboBox();
         configureFileNumberField();
+    }
 
+    public void loadStartupConfiguration() throws AppException {
         loadSenderName();
         loadCaseworkers();
         loadDecisions();
@@ -118,8 +117,20 @@ public class MainController {
 
     @FXML
     protected void onXmlOpenClick() {
+        File selectedFile;
 
-        File selectedFile = chooseXmlFile();
+        try {
+            selectedFile = chooseXmlFile();
+        } catch (Exception exception) {
+            ProblemDialog.show(
+                    Alert.AlertType.ERROR,
+                    "Dateiauswahl fehlgeschlagen",
+                    "Die bisher geöffnete Datei bleibt unverändert.",
+                    exception,
+                    List.of()
+            );
+            return;
+        }
 
         if (selectedFile == null) {
             return;
@@ -129,6 +140,8 @@ public class MainController {
 
         openedDocument.set(null);
         openedXmlPath = null;
+
+        Path outputHtml = null;
 
         try {
             Document document = xmlLoader.load(selectedFile);
@@ -143,9 +156,13 @@ public class MainController {
 
             Path outputHtmlPath = OutputPathUtil.createOutputPath(selectedXmlPath, ".htm");
 
-            Path outputHtml = htmlWriter.write(renderedHtml, outputHtmlPath);
+            outputHtml = htmlWriter.write(renderedHtml, outputHtmlPath);
 
-            openHtmlInBrowser(outputHtml);
+            openHtmlInBrowser(
+                    outputHtml,
+                    "Die HTML-Vorschau wurde gespeichert. Öffnen Sie die HTML-Datei bei Bedarf manuell.",
+                    List.of(new ErrorDetail("HTML-Datei", outputHtml.toString()))
+            );
 
             createDecisionFields(requests);
 
@@ -154,7 +171,7 @@ public class MainController {
             openedDocument.set(document);
             openedXmlPath = selectedXmlPath;
 
-        } catch (Exception e) {
+        } catch (Exception exception) {
             openedDocument.set(null);
             openedXmlPath = null;
             fileStatusLabel.setText("");
@@ -162,12 +179,29 @@ public class MainController {
             clearFormFields();
             clearDecisionUi();
 
-            showError("Datei kann nicht verarbeitet werden", e);
+            List<ErrorDetail> context = new ArrayList<>();
+            context.add(new ErrorDetail("Ausgewählte Datei", selectedXmlPath.toString()));
+
+            if (outputHtml != null) {
+                context.add(new ErrorDetail("Gespeicherte HTML-Datei", outputHtml.toString()));
+            }
+
+            ProblemDialog.show(
+                    Alert.AlertType.ERROR,
+                    "Datei kann nicht verarbeitet werden",
+                    "Die ausgewählte XML-Datei wurde nicht in das Formular übernommen.",
+                    exception,
+                    context
+            );
+            return;
         }
     }
 
     @FXML
     protected void onGenerateAnswer() {
+        Document answerDocument;
+        OutputPathUtil.OutputPaths outputPaths;
+
         try {
             Document inputDocument = openedDocument.get();
 
@@ -179,21 +213,47 @@ public class MainController {
 
             AnswerParameters parameters = new AnswerParameters(fileNumber.getText(), UUID.randomUUID().toString(), manufacturerInfo, selectedCaseworker.name(), decisionCodes);
 
-            Document answerDocument = answerTransformer.transform(inputDocument, parameters);
-            OutputPathUtil.OutputPaths outputPaths = OutputPathUtil.createOutputPaths(openedXmlPath, "Output");
+            answerDocument = answerTransformer.transform(inputDocument, parameters);
+            outputPaths = OutputPathUtil.createOutputPaths(openedXmlPath, "Output");
             xmlWriter.write(answerDocument, outputPaths.xmlPath().toFile());
+        } catch (Exception exception) {
+            ProblemDialog.show(
+                    Alert.AlertType.ERROR,
+                    "Antwort konnte nicht erzeugt werden",
+                    "Die Antwort-XML wurde nicht erfolgreich gespeichert.",
+                    exception,
+                    List.of()
+            );
+            return;
+        }
 
+        Path outputHtml;
+
+        try {
             TemplateSource outputTemplate = templateLoader.loadOutputTemplate();
 
             String renderedOutputHtml = templateRenderer.render(outputTemplate, answerDocument);
 
-            Path outputHtml = htmlWriter.write(renderedOutputHtml, outputPaths.htmlPath());
-
-            openHtmlInBrowser(outputHtml);
-
-        } catch (Exception e) {
-            showError("Antwort konnte nicht erzeugt werden", e);
+            outputHtml = htmlWriter.write(renderedOutputHtml, outputPaths.htmlPath());
+        } catch (Exception exception) {
+            ProblemDialog.show(
+                    Alert.AlertType.WARNING,
+                    "Antwort gespeichert – HTML-Ansicht fehlgeschlagen",
+                    "Die Antwort-XML wurde erfolgreich gespeichert. Die HTML-Ansicht konnte nicht erstellt werden.",
+                    exception,
+                    List.of(new ErrorDetail("Gespeicherte XML-Datei", outputPaths.xmlPath().toString()))
+            );
+            return;
         }
+
+        openHtmlInBrowser(
+                outputHtml,
+                "Antwort-XML und HTML-Ansicht wurden gespeichert. Öffnen Sie die HTML-Datei bei Bedarf manuell.",
+                List.of(
+                        new ErrorDetail("Gespeicherte XML-Datei", outputPaths.xmlPath().toString()),
+                        new ErrorDetail("HTML-Datei", outputHtml.toString())
+                )
+        );
     }
 
     private File chooseXmlFile() {
@@ -222,7 +282,7 @@ public class MainController {
         });
     }
 
-    private void createDecisionFields(List<Node> requests) throws XPathExpressionException {
+    private void createDecisionFields(List<Node> requests) throws AppException {
 
         clearDecisionUi();
 
@@ -266,12 +326,15 @@ public class MainController {
         }
     }
 
-    private Label createDecisionLabel(String requestCode, int row, boolean multipleRequests) {
+    private Label createDecisionLabel(String requestCode, int row, boolean multipleRequests) throws AppException {
 
         String requestLabel = requestLabelsByCode.get(requestCode);
 
         if (requestLabel == null) {
-            throw new IllegalArgumentException("Kein Label für Request-Code '" + requestCode + "' gefunden.");
+            throw new AppException(
+                    "Für das Ersuchen ist keine Bezeichnung konfiguriert.",
+                    List.of(new ErrorDetail("Request-Code", requestCode))
+            );
         }
 
         Label label = new Label(multipleRequests ? (row + 1) + ". " + requestLabel : "Entscheidung:");
@@ -297,14 +360,25 @@ public class MainController {
         return comboBox;
     }
 
-    private List<CodelistEntry> getAllowedDecisionEntries(String requestCode) {
+    private List<CodelistEntry> getAllowedDecisionEntries(String requestCode) throws AppException {
 
         List<String> allowedDecisionCodes = allowedDecisionsByRequestCode.get(requestCode);
 
-        return decisionEntries.stream().filter(entry -> allowedDecisionCodes.contains(entry.code())).toList();
+        List<CodelistEntry> allowedEntries = decisionEntries.stream()
+                .filter(entry -> allowedDecisionCodes.contains(entry.code()))
+                .toList();
+
+        if (allowedEntries.isEmpty()) {
+            throw new AppException(
+                    "Für das Ersuchen ist keine auswählbare Sachentscheidung konfiguriert.",
+                    List.of(new ErrorDetail("Request-Code", requestCode))
+            );
+        }
+
+        return allowedEntries;
     }
 
-    private List<String> readRequestCodes(List<Node> requests) throws XPathExpressionException {
+    private List<String> readRequestCodes(List<Node> requests) throws AppException {
 
         List<String> requestCodes = new ArrayList<>();
 
@@ -312,7 +386,10 @@ public class MainController {
             String requestCode = ersuchenSachentscheidungReader.readRequestCode(request);
 
             if (!allowedDecisionsByRequestCode.containsKey(requestCode)) {
-                throw new IllegalArgumentException("Kein Decision-Mapping für Request-Code '" + requestCode + "' gefunden.");
+                throw new AppException(
+                        "Für das Ersuchen ist keine Entscheidungszuordnung konfiguriert.",
+                        List.of(new ErrorDetail("Request-Code", requestCode))
+                );
             }
 
             requestCodes.add(requestCode);
@@ -409,77 +486,84 @@ public class MainController {
         });
     }
 
-    private void loadSenderName() {
-        try {
-            senderName = senderConfigLoader.loadSenderName();
-            senderNameLabel.setText(senderName);
-        } catch (IOException e) {
-            showError("Absender-Konfiguration konnte nicht geladen werden", e);
-        }
+    private void loadSenderName() throws AppException {
+        senderName = senderConfigLoader.loadSenderName();
+        senderNameLabel.setText(senderName);
     }
 
-    private void loadCaseworkers() {
-        try {
-            List<CaseworkerEntry> caseworkerEntries = caseworkerConfigLoader.load();
+    private void loadCaseworkers() throws AppException {
+        List<CaseworkerEntry> caseworkerEntries = caseworkerConfigLoader.load();
 
-            double maxTextWidth = 0;
+        double maxTextWidth = 0;
 
-            for (CaseworkerEntry caseworkerEntry : caseworkerEntries) {
-                Text text = new Text(caseworkerEntry.name());
-                double textWidth = text.getLayoutBounds().getWidth();
+        for (CaseworkerEntry caseworkerEntry : caseworkerEntries) {
+            Text text = new Text(caseworkerEntry.name());
+            double textWidth = text.getLayoutBounds().getWidth();
 
-                if (textWidth > maxTextWidth) {
-                    maxTextWidth = textWidth;
-                }
+            if (textWidth > maxTextWidth) {
+                maxTextWidth = textWidth;
             }
-
-            caseworkerComboBox.setPrefWidth(maxTextWidth + CASEWORKER_WIDTH_PADDING);
-            caseworkerComboBox.getItems().addAll(caseworkerEntries);
-
-        } catch (IOException e) {
-            showError("Sachbearbeiter*in-Konfiguration konnte nicht geladen werden", e);
         }
+
+        caseworkerComboBox.setPrefWidth(maxTextWidth + CASEWORKER_WIDTH_PADDING);
+        caseworkerComboBox.getItems().addAll(caseworkerEntries);
     }
 
-    private void loadDecisions() {
-        try {
-            List<CodelistEntry> entries = loadCodelistEntries("sachentscheidung");
-
-            decisionEntries.clear();
-            decisionEntries.addAll(entries);
-
-        } catch (Exception e) {
-            showError("Sachentscheidung-Codelist konnte nicht geladen werden", e);
-        }
-    }
-
-    private void loadRequestLabels() {
-        try {
-            requestLabelsByCode = loadCodelistEntries("ersuchenSachentscheidung").stream().collect(Collectors.toMap(CodelistEntry::code, CodelistEntry::value));
-
-        } catch (Exception e) {
-            showError("Ersuchen-Sachentscheidung-Codelist konnte nicht geladen werden", e);
-        }
-    }
-
-    private List<CodelistEntry> loadCodelistEntries(String configKey) throws Exception {
+    private void loadDecisions() throws AppException {
         CodelistConfig config = new CodelistConfig();
+        CodelistDefinition definition = config.get("sachentscheidung");
+        Path codelistFile = resolveCodelistFile(definition);
+        List<CodelistEntry> entries = new GenericodeReader().readAll(codelistFile, definition);
 
-        CodelistDefinition definition = config.get(configKey);
+        if (entries.isEmpty()) {
+            throw new AppException(
+                    "Die Sachentscheidung-Codelist enthält keine auswählbaren Einträge.",
+                    List.of(new ErrorDetail("Datei", codelistFile.toString()))
+            );
+        }
 
-        GenericodeReader genericodeReader = new GenericodeReader();
-
-        Path codelistFile = ApplicationPaths.getApplicationDirectory().resolve("codelists").resolve(definition.file());
-
-        return genericodeReader.readAll(codelistFile, definition);
+        decisionEntries.clear();
+        decisionEntries.addAll(entries);
     }
 
-    private void loadDecisionMappings() {
-        try {
-            allowedDecisionsByRequestCode = decisionConfigLoader.load();
-        } catch (IOException e) {
-            showError("Entscheidungskonfiguration konnte nicht geladen werden", e);
+    private void loadRequestLabels() throws AppException {
+        CodelistConfig config = new CodelistConfig();
+        CodelistDefinition definition = config.get("ersuchenSachentscheidung");
+        Path codelistFile = resolveCodelistFile(definition);
+        List<CodelistEntry> entries = new GenericodeReader().readAll(codelistFile, definition);
+
+        if (entries.isEmpty()) {
+            throw new AppException(
+                    "Die Ersuchen-Sachentscheidung-Codelist enthält keine Einträge.",
+                    List.of(new ErrorDetail("Datei", codelistFile.toString()))
+            );
         }
+
+        Map<String, String> labels = new LinkedHashMap<>();
+
+        for (CodelistEntry entry : entries) {
+            if (labels.putIfAbsent(entry.code(), entry.value()) != null) {
+                throw new AppException(
+                        "Die Ersuchen-Sachentscheidung-Codelist enthält einen Code mehrfach.",
+                        List.of(
+                                new ErrorDetail("Datei", codelistFile.toString()),
+                                new ErrorDetail("Code", entry.code())
+                        )
+                );
+            }
+        }
+
+        requestLabelsByCode = Map.copyOf(labels);
+    }
+
+    private Path resolveCodelistFile(CodelistDefinition definition) throws AppException {
+        return ApplicationPaths.getApplicationDirectory()
+                .resolve("codelists")
+                .resolve(definition.file());
+    }
+
+    private void loadDecisionMappings() throws AppException {
+        allowedDecisionsByRequestCode = decisionConfigLoader.load();
     }
 
     private void clearFormFields() {
@@ -520,79 +604,23 @@ public class MainController {
         caseworkerComboBox.disableProperty().bind(openedDocument.isNull());
     }
 
-    private void openHtmlInBrowser(Path htmlPath) {
+    private void openHtmlInBrowser(
+            Path htmlPath,
+            String workflowHint,
+            List<ErrorDetail> successfulResults
+    ) {
 
         try {
             browserOpener.open(htmlPath);
 
-        } catch (IOException e) {
-            showWarning(
+        } catch (Exception exception) {
+            ProblemDialog.show(
+                    Alert.AlertType.WARNING,
                     "Browser konnte nicht geöffnet werden",
-                    "Die HTML-Datei wurde erfolgreich erstellt, "
-                            + "konnte aber nicht automatisch im Browser geöffnet werden.\n\n"
-                            + "Grund: "
-                            + e.getMessage()
-                            + "\n\n"
-                            + "Datei: "
-                            + htmlPath
+                    workflowHint,
+                    exception,
+                    successfulResults
             );
         }
-    }
-
-    private void showError(String title, Throwable throwable) {
-
-        ErrorInfo errorInfo = ErrorInfoFactory.from(throwable);
-
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-
-        VBox content = new VBox(8);
-
-        Label messageLabel = new Label(errorInfo.message());
-        messageLabel.setWrapText(true);
-        content.getChildren().add(messageLabel);
-
-        for (ErrorDetail detail : errorInfo.details()) {
-            Label detailLabel = new Label(detail.label() + ": " + detail.value());
-
-            detailLabel.setWrapText(true);
-            content.getChildren().add(detailLabel);
-        }
-
-        alert.getDialogPane().setContent(content);
-
-        TextArea technicalDetails = new TextArea(errorInfo.technicalDetails());
-
-        technicalDetails.setEditable(false);
-        technicalDetails.setWrapText(false);
-        technicalDetails.setPrefColumnCount(80);
-        technicalDetails.setPrefRowCount(20);
-
-        alert.getDialogPane().setExpandableContent(technicalDetails);
-        alert.getDialogPane().setExpanded(false);
-
-        alert.setResizable(true);
-
-        alert.showAndWait();
-    }
-
-    private void showWarning(String title, String message) {
-
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-
-        Label messageLabel = new Label(message);
-        messageLabel.setWrapText(true);
-
-        alert.getDialogPane().setContent(messageLabel);
-        alert.getDialogPane().setPrefWidth(700);
-
-        alert.setResizable(true);
-
-        alert.showAndWait();
     }
 }

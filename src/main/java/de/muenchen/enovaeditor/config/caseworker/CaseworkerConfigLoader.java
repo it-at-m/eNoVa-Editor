@@ -1,15 +1,14 @@
 package de.muenchen.enovaeditor.config.caseworker;
 
+import de.muenchen.enovaeditor.error.AppException;
+import de.muenchen.enovaeditor.error.ErrorDetail;
 import de.muenchen.enovaeditor.util.ApplicationFileUtil;
 import de.muenchen.enovaeditor.xml.XmlLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,23 +21,24 @@ public class CaseworkerConfigLoader {
 
     private final XmlLoader xmlLoader = new XmlLoader();
 
-    public List<CaseworkerEntry> load() throws IOException {
+    public List<CaseworkerEntry> load() throws AppException {
 
         Path configPath = ApplicationFileUtil.resolveReadableFile(CONFIG_FILE);
-        Document document;
-
-        try {
-            document = xmlLoader.load(configPath.toFile());
-        } catch (SAXException e) {
-            throw new IOException("Die Datei \"" + CONFIG_FILE + "\" enthält ungültiges XML.", e);
-        } catch (ParserConfigurationException e) {
-            throw new IOException("Der XML-Parser konnte nicht initialisiert werden.", e);
-        }
+        Document document = xmlLoader.load(configPath.toFile());
 
         Element root = document.getDocumentElement();
 
         if (!root.getTagName().equals("caseworkers")) {
-            throw new IOException("Ungültige \"" + CONFIG_FILE + "\": Erwartetes Root-Element <caseworkers>, gefunden <" + root.getTagName() + ">.");
+            throw new AppException(
+                    "Ungültige \"" + CONFIG_FILE
+                            + "\": Erwartetes Root-Element <caseworkers>, gefunden <"
+                            + root.getTagName() + ">.",
+                    List.of(
+                            new ErrorDetail("Datei", configPath.toString()),
+                            new ErrorDetail("Erwartetes Element", "caseworkers"),
+                            new ErrorDetail("Gefundenes Element", root.getTagName())
+                    )
+            );
         }
 
         NodeList children = root.getChildNodes();
@@ -54,26 +54,64 @@ public class CaseworkerConfigLoader {
             }
 
             if (!child.getNodeName().equals("entry")) {
-                throw new IOException("Ungültige \"" + CONFIG_FILE + "\": Unerwartetes Element <" + child.getNodeName() + "> unter <caseworkers>. " + "Erwartet wird dort nur <entry>.");
+                throw new AppException(
+                        "Ungültige \"" + CONFIG_FILE + "\": Unerwartetes Element <"
+                                + child.getNodeName() + "> unter <caseworkers>. "
+                                + "Erwartet wird dort nur <entry>.",
+                        List.of(
+                                new ErrorDetail("Datei", configPath.toString()),
+                                new ErrorDetail("Unerwartetes Element", child.getNodeName())
+                        )
+                );
             }
 
             Element entry = (Element) child;
 
             if (!entry.hasAttribute("name")) {
-                throw new IOException("Ungültige \"" + CONFIG_FILE + "\": Jedes <entry>-Element muss ein " + "nicht-leeres Attribut 'name' besitzen.");
+                throw new AppException(
+                        "Ungültige \"" + CONFIG_FILE
+                                + "\": Jedes <entry>-Element muss ein nicht-leeres Attribut 'name' besitzen.",
+                        List.of(
+                                new ErrorDetail("Datei", configPath.toString()),
+                                new ErrorDetail("Element", "entry"),
+                                new ErrorDetail("Attribut", "name")
+                        )
+                );
             }
 
             String name = entry.getAttribute("name");
 
             if (name.isBlank()) {
-                throw new IOException("Ungültige \"" + CONFIG_FILE + "\": Das Attribut 'name' eines " + "<entry>-Elements darf nicht leer sein.");
+                throw new AppException(
+                        "Ungültige \"" + CONFIG_FILE
+                                + "\": Das Attribut 'name' eines <entry>-Elements darf nicht leer sein.",
+                        List.of(
+                                new ErrorDetail("Datei", configPath.toString()),
+                                new ErrorDetail("Element", "entry"),
+                                new ErrorDetail("Attribut", "name")
+                        )
+                );
             }
 
             if (!names.add(name)) {
-                throw new IOException("Ungültige \"" + CONFIG_FILE + "\": Der Sachbearbeitername '" + name + "' ist mehrfach vorhanden.");
+                throw new AppException(
+                        "Ungültige \"" + CONFIG_FILE + "\": Der Sachbearbeitername '"
+                                + name + "' ist mehrfach vorhanden.",
+                        List.of(
+                                new ErrorDetail("Datei", configPath.toString()),
+                                new ErrorDetail("Sachbearbeitername", name)
+                        )
+                );
             }
 
             caseworkers.add(new CaseworkerEntry(name));
+        }
+
+        if (caseworkers.isEmpty()) {
+            throw new AppException(
+                    "Ungültige \"" + CONFIG_FILE + "\": Es ist kein <entry>-Eintrag definiert.",
+                    List.of(new ErrorDetail("Datei", configPath.toString()))
+            );
         }
 
         return caseworkers;

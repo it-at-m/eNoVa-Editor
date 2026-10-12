@@ -1,14 +1,14 @@
 package de.muenchen.enovaeditor.config;
 
+import de.muenchen.enovaeditor.error.AppException;
+import de.muenchen.enovaeditor.error.ErrorDetail;
 import de.muenchen.enovaeditor.util.ApplicationFileUtil;
 import de.muenchen.enovaeditor.xml.XmlLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 
 public class SenderConfigLoader {
 
@@ -16,28 +16,34 @@ public class SenderConfigLoader {
 
     private final XmlLoader xmlLoader = new XmlLoader();
 
-    public String loadSenderName() throws IOException {
+    public String loadSenderName() throws AppException {
 
         Path configFile = ApplicationFileUtil.resolveReadableFile(CONFIG_FILE);
 
-        Document document;
-
-        try {
-            document = xmlLoader.load(configFile.toFile());
-        } catch (ParserConfigurationException | SAXException e) {
-            throw new IOException("Die Konfigurationsdatei \"" + CONFIG_FILE + "\" konnte nicht gelesen werden.", e);
-        }
+        Document document = xmlLoader.load(configFile.toFile());
 
         Node nameNode = document.getDocumentElement().getElementsByTagName("name").item(0);
 
         if (nameNode == null) {
-            throw new IOException("In \"" + CONFIG_FILE + "\" fehlt das Element <name>.");
+            throw new AppException(
+                    "In \"" + CONFIG_FILE + "\" fehlt das Element <name>.",
+                    List.of(
+                            new ErrorDetail("Datei", configFile.toString()),
+                            new ErrorDetail("Element", "name")
+                    )
+            );
         }
 
         String senderName = nameNode.getTextContent();
 
         if (senderName == null || senderName.isBlank()) {
-            throw new IOException("In \"" + CONFIG_FILE + "\" ist das Element <name> leer.");
+            throw new AppException(
+                    "In \"" + CONFIG_FILE + "\" ist das Element <name> leer.",
+                    List.of(
+                            new ErrorDetail("Datei", configFile.toString()),
+                            new ErrorDetail("Element", "name")
+                    )
+            );
         }
 
         return senderName.trim();

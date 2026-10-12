@@ -1,12 +1,16 @@
 package de.muenchen.enovaeditor;
 
+import de.muenchen.enovaeditor.error.ProblemDialog;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 public class EnovaEditorApplication extends Application {
@@ -15,31 +19,46 @@ public class EnovaEditorApplication extends Application {
     private static final double INITIAL_HEIGHT = 520;
 
     @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader =
-                new FXMLLoader(EnovaEditorApplication.class.getResource("main-view.fxml"));
+    public void start(Stage stage) {
+        try {
+            FXMLLoader fxmlLoader =
+                    new FXMLLoader(EnovaEditorApplication.class.getResource("main-view.fxml"));
 
-        Scene scene = new Scene(
-                fxmlLoader.load(),
-                INITIAL_WIDTH,
-                INITIAL_HEIGHT
-        );
+            Parent root = fxmlLoader.load();
+            MainController controller = fxmlLoader.getController();
+            controller.loadStartupConfiguration();
 
-        stage.setTitle("eNoVA Editor");
+            Scene scene = new Scene(
+                    root,
+                    INITIAL_WIDTH,
+                    INITIAL_HEIGHT
+            );
 
-        stage.getIcons().add(
-                new Image(
-                        Objects.requireNonNull(
-                                EnovaEditorApplication.class.getResourceAsStream("icon.png"),
-                                "icon.png not found"
-                        )
-                )
-        );
+            stage.setTitle("eNoVA Editor");
 
-        stage.setScene(scene);
-        stage.show();
+            stage.getIcons().add(
+                    new Image(
+                            Objects.requireNonNull(
+                                    EnovaEditorApplication.class.getResourceAsStream("icon.png"),
+                                    "icon.png not found"
+                            )
+                    )
+            );
 
-        stage.setMinWidth(stage.getWidth());
-        stage.setMinHeight(stage.getHeight());
+            stage.setScene(scene);
+            stage.show();
+
+            stage.setMinWidth(stage.getWidth());
+            stage.setMinHeight(stage.getHeight());
+        } catch (Exception exception) {
+            ProblemDialog.show(
+                    Alert.AlertType.ERROR,
+                    "Programm konnte nicht gestartet werden",
+                    "Der Programmstart wird beendet.",
+                    exception,
+                    List.of()
+            );
+            Platform.exit();
+        }
     }
 }
