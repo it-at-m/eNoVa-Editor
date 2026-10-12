@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.Priority?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.SVGPath?>
 
 <BorderPane
         xmlns:fx="http://javafx.com/fxml"
@@ -167,5 +168,17 @@
             </Button>
         </GridPane>
     </center>
+
+    <bottom>
+        <StackPane fx:id="resizeIndicator" alignment="BOTTOM_RIGHT" mouseTransparent="true">
+            <padding>
+                <Insets right="3.0" bottom="3.0"/>
+            </padding>
+            <SVGPath content="M 0 12 L 12 0 M 5 12 L 12 5 M 10 12 L 12 10"
+                     fill="TRANSPARENT"
+                     strokeWidth="1.0"
+                     style="-fx-stroke: -fx-mid-text-color;"/>
+        </StackPane>
+    </bottom>
 
 </BorderPane>

@@ -5,6 +5,7 @@ import de.muenchen.enovaeditor.error.ProblemDialog;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -28,6 +29,12 @@ public class EnovaEditorApplication extends Application {
             Parent root = fxmlLoader.load();
             MainController controller = fxmlLoader.getController();
             controller.loadStartupConfiguration();
+
+            Node resizeIndicator = (Node) fxmlLoader.getNamespace().get("resizeIndicator");
+            resizeIndicator.visibleProperty().bind(stage.resizableProperty()
+                    .and(stage.maximizedProperty().not())
+                    .and(stage.fullScreenProperty().not()));
+            resizeIndicator.managedProperty().bind(resizeIndicator.visibleProperty());
 
             Scene scene = new Scene(
                     root,
