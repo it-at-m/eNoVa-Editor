@@ -35,7 +35,7 @@ public class HtmlWriter {
             );
         } catch (AccessDeniedException e) {
             throw writeException(
-                    "Der Schreibzugriff auf die HTML-Zieldatei wurde verweigert.",
+                    "Die HTML-Datei konnte nicht gespeichert werden. Öffnen Sie die XML-Datei in einem Ordner, in dem Sie Schreibrechte haben (z. B. Dokumente).",
                     outputPath,
                     e
             );
