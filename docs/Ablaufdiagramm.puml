@@ -1,114 +1,145 @@
 @startuml
-title eNoVA-Editor – aktueller Ablauf
+title eNoVA-Editor – aktueller Programmablauf
 
 start
 
-partition "JavaFX-Anwendung" {
-    :EnovaEditorApplication startet;
-    :main-view.fxml wird geladen;
-    :MainController wird verwendet;
-}
 
-partition "MainController" {
-    :Benutzer klickt\n"XML öffnen";
-    :FileChooser öffnen;
-}
-
-if (XML-Datei ausgewählt?) then (ja)
-
-    partition "XmlLoader" {
-        :XML-Datei einlesen;
-        :DOM Document erzeugen;
-    }
+partition "EnovaEditorApplication – Programmstart" {
+    :FXML laden und MainController initialisieren;
+    :Startkonfigurationen laden;
 
     note right
-        Ergebnis:
-        org.w3c.dom.Document
+        Anwendungskonfigurationen und
+        benötigte Codelists laden.
     end note
 
-    partition "ErsuchenSachentscheidungChecker" {
-
-        :Prüfen, ob die XML ein\nErsuchen um Sachentscheidung\n(eNoVA 2900003) ist;
-
-        if (Nachricht gültig?) then (ja)
-        else (nein)
-            :Fehler werfen;
-            detach
-        endif
-    }
-
-    partition "TemplateLoader" {
-
-        partition "ApplicationPaths" {
-            :Programmverzeichnis ermitteln;
-        }
-
-        :Input.htm im\nProgrammverzeichnis suchen;
-
-        if (Input.htm vorhanden\nund lesbar?) then (ja)
-            :Input.htm als UTF-8 lesen;
-        else (nein)
-            :IOException werfen;
-            detach
-        endif
-    }
-
-    partition "XPathTemplateRenderer" {
-
-        :Input.htm und XML verarbeiten;
-
-        :Wiederholungen im\nTemplate verarbeiten;
-
-        :XML-Werte über\nXPath einsetzen;
-
-        :XML-Werte für HTML\nsicher kodieren;
-
-        note right
-            Ergebnis:
-            fertiger HTML-String
-        end note
-    }
-
-    partition "HtmlOutputWriter" {
-        :Verzeichnis der\nEingabe-XML bestimmen;
-        :Dateinamen und\nZeitstempel erzeugen;
-
-        :HTML speichern als\nName-JJJJMMDDHHmmSS.htm;
-
-        note right
-            Die HTML-Datei liegt
-            im selben Verzeichnis
-            wie die Eingabe-XML.
-        end note
-    }
-
-    partition "MainController" {
-        :Dateiname in JavaFX-UI anzeigen;
-    }
-
-    partition "BrowserOpener" {
-
-        if (Standardbrowser kann\ngeöffnet werden?) then (ja)
-            :HTML-Datei im\nStandardbrowser öffnen;
-        else (nein)
-            :IOException werfen;
-        endif
-    }
-
-    if (Browser konnte geöffnet werden?) then (ja)
-        partition "Standardbrowser" {
-            :Generierte HTML-Datei anzeigen;
-        }
+    if (Programmstart erfolgreich?) then (ja)
+        :Hauptfenster anzeigen;
     else (nein)
-        partition "MainController" {
-            :Warnung anzeigen:\nHTML wurde erstellt,\nBrowser konnte nicht geöffnet werden;
-            :Pfad der erzeugten\nHTML-Datei anzeigen;
-        }
+        :Fehlermeldung anzeigen;
+        :Anwendung beenden;
+        stop
     endif
+}
 
+
+
+partition "MainController – XML öffnen" {
+    :Benutzer klickt "XML öffnen";
+    :Dateiauswahl anzeigen;
+
+    if (XML-Datei ausgewählt?) then (ja)
+        :Bisherigen Formular- und Dateistatus zurücksetzen;
+        :XML-Datei laden und sicher parsen;
+        :Nachrichtentyp eNoVA 2900003 prüfen;
+        :Sachentscheidungsersuchen aus XML ermitteln;
+
+        :Input-HTML anhand von Template und XML erzeugen;
+        :Input-HTML neben der Eingabe-XML speichern;
+
+        note right
+            Dateiname:
+            Basisname-yyyyMMddHHmmssSSS.htm
+        end note
+
+        :Input-HTML im Browser öffnen;
+
+        if (Browseraufruf erfolgreich?) then (ja)
+        else (nein)
+            :Warnung mit HTML-Dateipfad anzeigen;
+        endif
+
+        :Entscheidungsfelder anhand der Ersuchen
+        und konfigurierten Zuordnungen vorbereiten;
+
+        note right
+            Entscheidungszuordnungen und verfügbare
+            Sachentscheidungen werden erst nach dem
+            Öffnungsversuch der Input-HTML geprüft.
+        end note
+
+        if (Entscheidungszuordnung gültig?) then (ja)
+            :Formularfelder aufbauen und initialisieren;
+            :Geöffnete XML und Dateipfad übernehmen;
+            :Antworterzeugung bei vollständigen
+            Pflichteingaben freigeben;
+        else (nein)
+            :Formular zurücksetzen;
+            :Fehlermeldung mit Request-Code
+            und Dateipfaden anzeigen;
+            :Antworterzeugung bleibt gesperrt;
+            detach
+        endif
+
+        note right
+            Fehler beim Laden, Prüfen oder Verarbeiten
+            führen zum Zurücksetzen des Formulars
+            und zur Anzeige eines Fehlerdialogs.
+            Bereits gespeicherte Input-HTML wird
+            gegebenenfalls als Detail angegeben.
+        end note
+    else (nein)
+        :Keine Aktion;
+        detach
+    endif
+}
+
+
+
+if (Antwort angefordert und Formular vollständig?) then (ja)
+    partition "MainController – Antwort erzeugen" {
+        :Herstellerinformationen laden;
+        :Antwortparameter aus Formular und Eingabe-XML bilden;
+        :Antwort-XML mittels XSLT transformieren;
+        :Zielpfade für Antwortdateien bestimmen;
+        :Antwort-XML speichern;
+
+        note right
+            Die XML-Transformation erfolgt
+            über answer-transform.xsl.
+            Die XML-Ausgabe berücksichtigt
+            die konfigurierte Serialisierung.
+        end note
+
+        if (Antwort-XML erfolgreich gespeichert?) then (ja)
+            :Output-HTML anhand von Template
+            und Antwort-XML erzeugen;
+            :Output-HTML neben der Eingabe-XML speichern;
+
+            if (Output-HTML erfolgreich gespeichert?) then (ja)
+                :Output-HTML im Browser öffnen;
+
+                if (Browseraufruf fehlgeschlagen?) then (ja)
+                    :Warnung mit XML- und HTML-Dateipfad anzeigen;
+                endif
+            else (nein)
+                :Warnung mit Antwort-XML-Pfad anzeigen;
+            endif
+        else (nein)
+            :Fehlermeldung anzeigen;
+            detach
+        endif
+
+        note right
+            Antwortdateien neben der Eingabe-XML:
+            Basisname-Output-Zeitstempel.xml
+            Basisname-Output-Zeitstempel.htm
+
+            Fehler nach erfolgreichem XML-Speichern
+            werden als Warnungen behandelt.
+            Die Antwort-XML bleibt erhalten.
+        end note
+    }
 else (nein)
-    :Keine Aktion;
+    :Antworterzeugung bleibt gesperrt;
+    detach
 endif
+
+note right
+    Fehlerdialoge enthalten verständliche Meldungen
+    und bei Bedarf technische Details.
+    Browserfehler brechen den Ablauf nicht ab.
+end note
 
 stop
 

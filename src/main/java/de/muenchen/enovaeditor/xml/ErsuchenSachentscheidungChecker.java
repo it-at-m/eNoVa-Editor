@@ -1,8 +1,11 @@
 package de.muenchen.enovaeditor.xml;
 
+import de.muenchen.enovaeditor.error.AppException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+
+import java.util.List;
 
 public class ErsuchenSachentscheidungChecker {
 
@@ -12,19 +15,21 @@ public class ErsuchenSachentscheidungChecker {
     private static final String EXPECTED_ROOT =
             "nachricht.enova.entscheidung.2900003";
 
-    public void check(Document document) {
+    public void check(Document document) throws AppException {
 
         Element root = document.getDocumentElement();
 
         if (!XJUSTIZ_NAMESPACE.equals(root.getNamespaceURI())) {
-            throw new IllegalArgumentException(
-                    "Die ausgewählte Datei ist keine XJustiz-Nachricht."
+            throw new AppException(
+                    "Die ausgewählte Datei ist keine XJustiz-Nachricht.",
+                    List.of()
             );
         }
 
         if (!EXPECTED_ROOT.equals(root.getLocalName())) {
-            throw new IllegalArgumentException(
-                    "Die ausgewählte Datei ist keine eNoVA-Nachricht 2900003."
+            throw new AppException(
+                    "Die ausgewählte Datei ist keine eNoVA-Nachricht 2900003.",
+                    List.of()
             );
         }
 
@@ -32,8 +37,9 @@ public class ErsuchenSachentscheidungChecker {
                 getDirectChild(root, "fachdaten");
 
         if (fachdaten == null) {
-            throw new IllegalArgumentException(
-                    "Die Nachricht enthält keine eNoVA-Fachdaten."
+            throw new AppException(
+                    "Die Nachricht enthält keine eNoVA-Fachdaten.",
+                    List.of()
             );
         }
 
@@ -44,8 +50,9 @@ public class ErsuchenSachentscheidungChecker {
                 );
 
         if (gegenstand == null) {
-            throw new IllegalArgumentException(
-                    "Die Nachricht enthält keinen Gegenstand der Nachricht."
+            throw new AppException(
+                    "Die Nachricht enthält keinen Gegenstand der Nachricht.",
+                    List.of()
             );
         }
 
@@ -56,8 +63,9 @@ public class ErsuchenSachentscheidungChecker {
                 );
 
         if (ersuchen == null) {
-            throw new IllegalArgumentException(
-                    "Die ausgewählte Nachricht ist kein Ersuchen um Sachentscheidung."
+            throw new AppException(
+                    "Die ausgewählte Nachricht ist kein Ersuchen um Sachentscheidung.",
+                    List.of()
             );
         }
     }

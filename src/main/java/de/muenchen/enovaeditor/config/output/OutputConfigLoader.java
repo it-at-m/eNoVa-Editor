@@ -1,14 +1,14 @@
 package de.muenchen.enovaeditor.config.output;
 
+import de.muenchen.enovaeditor.error.AppException;
+import de.muenchen.enovaeditor.error.ErrorDetail;
 import de.muenchen.enovaeditor.util.ApplicationFileUtil;
 import de.muenchen.enovaeditor.xml.XmlLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Locale;
 
 public class OutputConfigLoader {
@@ -17,29 +17,34 @@ public class OutputConfigLoader {
 
     private final XmlLoader xmlLoader = new XmlLoader();
 
-    public LineEnding loadLineEnding() throws IOException {
+    public LineEnding loadLineEnding() throws AppException {
 
         Path configFile = ApplicationFileUtil.resolveReadableFile(CONFIG_FILE);
 
-        Document document;
-
-        try {
-            document = xmlLoader.load(configFile.toFile());
-
-        } catch (ParserConfigurationException | SAXException e) {
-            throw new IOException("Die Konfigurationsdatei \"" + CONFIG_FILE + "\" konnte nicht gelesen werden.", e);
-        }
+        Document document = xmlLoader.load(configFile.toFile());
 
         Node lineEndingNode = document.getDocumentElement().getElementsByTagName("lineEnding").item(0);
 
         if (lineEndingNode == null) {
-            throw new IOException("In \"" + CONFIG_FILE + "\" fehlt das Element <lineEnding>.");
+            throw new AppException(
+                    "In \"" + CONFIG_FILE + "\" fehlt das Element <lineEnding>.",
+                    List.of(
+                            new ErrorDetail("Datei", configFile.toString()),
+                            new ErrorDetail("Element", "lineEnding")
+                    )
+            );
         }
 
         String value = lineEndingNode.getTextContent();
 
         if (value == null || value.isBlank()) {
-            throw new IOException("In \"" + CONFIG_FILE + "\" ist das Element <lineEnding> leer.");
+            throw new AppException(
+                    "In \"" + CONFIG_FILE + "\" ist das Element <lineEnding> leer.",
+                    List.of(
+                            new ErrorDetail("Datei", configFile.toString()),
+                            new ErrorDetail("Element", "lineEnding")
+                    )
+            );
         }
 
         String normalizedValue = value.trim();
@@ -47,7 +52,17 @@ public class OutputConfigLoader {
         try {
             return LineEnding.valueOf(normalizedValue.toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException e) {
-            throw new IOException("In \"" + CONFIG_FILE + "\" enthält <lineEnding> den ungültigen Wert \"" + normalizedValue + "\". Erlaubt sind: CRLF, LF, CR, NONE.", e);
+            throw new AppException(
+                    "In \"" + CONFIG_FILE + "\" enthält <lineEnding> den ungültigen Wert \""
+                            + normalizedValue + "\". Erlaubt sind: CRLF, LF, CR, NONE.",
+                    List.of(
+                            new ErrorDetail("Datei", configFile.toString()),
+                            new ErrorDetail("Element", "lineEnding"),
+                            new ErrorDetail("Wert", normalizedValue),
+                            new ErrorDetail("Erlaubte Werte", "CRLF, LF, CR, NONE")
+                    ),
+                    e
+            );
         }
     }
 }

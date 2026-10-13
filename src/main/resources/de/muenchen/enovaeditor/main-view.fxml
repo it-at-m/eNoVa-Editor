@@ -2,9 +2,11 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -12,7 +14,9 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.SVGPath?>
 
 <BorderPane
         xmlns:fx="http://javafx.com/fxml"
@@ -38,6 +42,20 @@
                 <Label
                         fx:id="fileStatusLabel"
                         text="Keine Datei ausgewählt"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Hyperlink
+                        fx:id="helpLink"
+                        text="Hilfe"
+                        minWidth="-Infinity"
+                        visible="false"
+                        managed="false"
+                        accessibleHelp="Öffnet die Online-Hilfe im Standardbrowser.">
+                    <tooltip>
+                        <Tooltip text="Online-Hilfe im Standardbrowser öffnen"/>
+                    </tooltip>
+                </Hyperlink>
 
             </HBox>
 
@@ -150,5 +168,17 @@
             </Button>
         </GridPane>
     </center>
+
+    <bottom>
+        <StackPane fx:id="resizeIndicator" alignment="BOTTOM_RIGHT" mouseTransparent="true">
+            <padding>
+                <Insets right="3.0" bottom="3.0"/>
+            </padding>
+            <SVGPath content="M 0 12 L 12 0 M 5 12 L 12 5 M 10 12 L 12 10"
+                     fill="TRANSPARENT"
+                     strokeWidth="1.0"
+                     style="-fx-stroke: -fx-mid-text-color;"/>
+        </StackPane>
+    </bottom>
 
 </BorderPane>

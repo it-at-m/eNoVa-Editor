@@ -1,5 +1,7 @@
 package de.muenchen.enovaeditor.xml;
 
+import de.muenchen.enovaeditor.error.AppException;
+import de.muenchen.enovaeditor.error.ErrorDetail;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -13,11 +15,30 @@ public class ErsuchenSachentscheidungReader {
 
     private final XPathReader xpathReader = new XPathReader();
 
-    public List<Node> read(Document document) throws XPathExpressionException {
-        return xpathReader.findNodes(document, XPATH);
+    public List<Node> read(Document document) throws AppException {
+        try {
+            return xpathReader.findNodes(document, XPATH);
+        } catch (XPathExpressionException exception) {
+            throw new AppException(
+                    "Die Ersuchen um Sachentscheidung konnten nicht aus der Nachricht gelesen werden.",
+                    List.of(new ErrorDetail("XPath-Ausdruck", XPATH)),
+                    exception
+            );
+        }
     }
 
-    public String readRequestCode(Node request) throws XPathExpressionException {
-        return xpathReader.readValue(request, REQUEST_CODE_XPATH).trim();
+    public String readRequestCode(Node request) throws AppException {
+        try {
+            return xpathReader.readValue(request, REQUEST_CODE_XPATH).trim();
+        } catch (XPathExpressionException exception) {
+            throw new AppException(
+                    "Der Code des Ersuchens um Sachentscheidung konnte nicht gelesen werden.",
+                    List.of(new ErrorDetail(
+                            "XPath-Ausdruck",
+                            REQUEST_CODE_XPATH
+                    )),
+                    exception
+            );
+        }
     }
 }

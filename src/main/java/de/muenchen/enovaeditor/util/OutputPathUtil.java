@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 public final class OutputPathUtil {
 
     private static final DateTimeFormatter TIMESTAMP_FORMAT =
-            DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+            DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
 
     private OutputPathUtil() {
     }
