@@ -59,8 +59,6 @@ public class EnovaEditorApplication extends Application {
             stage.setScene(scene);
             stage.show();
 
-            stage.setMinWidth(stage.getWidth());
-            stage.setMinHeight(stage.getHeight());
         } catch (Exception exception) {
             ProblemDialog.show(
                     Alert.AlertType.ERROR,
