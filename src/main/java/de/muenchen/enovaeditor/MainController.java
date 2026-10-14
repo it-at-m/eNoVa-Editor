@@ -171,7 +171,7 @@ public class MainController {
 
             createDecisionFields(requests);
 
-            fileStatusLabel.setText(selectedFile.getName());
+            updateFileStatus(selectedXmlPath);
             clearFormFields();
             openedDocument.set(document);
             openedXmlPath = selectedXmlPath;
@@ -179,7 +179,7 @@ public class MainController {
         } catch (Exception exception) {
             openedDocument.set(null);
             openedXmlPath = null;
-            fileStatusLabel.setText("");
+            updateFileStatus(null);
 
             clearFormFields();
             clearDecisionUi();
@@ -270,6 +270,19 @@ public class MainController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML-Dateien", "*.xml"));
 
         return fileChooser.showOpenDialog(fileStatusLabel.getScene().getWindow());
+    }
+
+    private void updateFileStatus(Path path) {
+        if (path == null) {
+            fileStatusLabel.setText("Keine Datei ausgewählt");
+            fileStatusLabel.setTooltip(null);
+            return;
+        }
+
+        String fullPath = path.toAbsolutePath().normalize().toString();
+
+        fileStatusLabel.setText(fullPath);
+        fileStatusLabel.setTooltip(new Tooltip(fullPath));
     }
 
     private void configureCaseworkerComboBox() {

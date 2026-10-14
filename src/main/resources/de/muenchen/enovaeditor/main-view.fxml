@@ -14,9 +14,9 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.Priority?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.control.ScrollPane?>
 
 <BorderPane
         xmlns:fx="http://javafx.com/fxml"
@@ -37,13 +37,20 @@
 
                 <Button
                         text="XML öffnen"
+                        minWidth="-Infinity"
                         onAction="#onXmlOpenClick"/>
 
                 <Label
                         fx:id="fileStatusLabel"
-                        text="Keine Datei ausgewählt"/>
-
-                <Region HBox.hgrow="ALWAYS"/>
+                        text="Keine Datei ausgewählt"
+                        minWidth="0"
+                        maxWidth="Infinity"
+                        HBox.hgrow="ALWAYS"
+                        textOverrun="LEADING_ELLIPSIS">
+                    <HBox.margin>
+                        <Insets right="10.0"/>
+                    </HBox.margin>
+                </Label>
 
                 <Hyperlink
                         fx:id="helpLink"
@@ -106,6 +113,8 @@
                     fx:id="multipleDecisionBox"
                     visible="false"
                     managed="false"
+                    minHeight="0"
+                    GridPane.vgrow="ALWAYS"
                     GridPane.columnIndex="0"
                     GridPane.columnSpan="2"
                     GridPane.rowIndex="3">
@@ -116,6 +125,7 @@
 
                 <VBox
                         spacing="10.0"
+                        minHeight="0"
                         style="-fx-border-color: #c8c8c8; -fx-border-radius: 4.0;">
 
                     <padding>
@@ -126,17 +136,30 @@
                                 left="12.0"/>
                     </padding>
 
-                    <GridPane
-                            fx:id="multipleDecisionGrid"
-                            hgap="15.0"
-                            vgap="15.0">
+                    <ScrollPane
+                            fitToWidth="true"
+                            minHeight="0"
+                            maxHeight="Infinity"
+                            VBox.vgrow="ALWAYS"
+                            hbarPolicy="NEVER"
+                            vbarPolicy="AS_NEEDED"
+                            style="-fx-background-color: transparent; -fx-background-insets: 0; -fx-padding: 0;">
 
-                        <columnConstraints>
-                            <ColumnConstraints percentWidth="50.0"/>
-                            <ColumnConstraints percentWidth="50.0"/>
-                        </columnConstraints>
+                        <content>
+                            <GridPane
+                                    fx:id="multipleDecisionGrid"
+                                    hgap="15.0"
+                                    vgap="15.0">
 
-                    </GridPane>
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="50.0"/>
+                                    <ColumnConstraints percentWidth="50.0"/>
+                                </columnConstraints>
+
+                            </GridPane>
+                        </content>
+
+                    </ScrollPane>
 
                 </VBox>
 
