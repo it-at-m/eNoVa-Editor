@@ -404,7 +404,7 @@
                 der gerichtlichen Genehmigungen von notariellen Rechtsgeschäften
                 und der steuerlichen Anzeigen der Notare
                 (<strong>eNoVA-Gesetz</strong>).
-                Verkündet im Bundesgesetzblatt (BGBl. I 2026, Nr. 192).
+                Verkündet im Bundesgesetzblatt <a href="https://www.recht.bund.de/bgbl/1/2026/192/VO.html" target="_blank" rel="noopener noreferrer">(BGBl. I 2026, Nr. 192)</a>.
             </p>
         </section>
 
@@ -438,7 +438,7 @@
                 <p>
                     Nein. Die XML-Datei selbst stellt den Bescheid dar.
                     Ein zusätzliches PDF ist bei eNoVA.2900003 nicht
-                    erforderlich. Die XML-Antwort muss entsprechend
+                    vrogesehen. Die XML-Antwort muss entsprechend
                     signiert werden.
                 </p>
             </details>
@@ -446,23 +446,24 @@
             <details>
                 <summary>Wie muss die Antwort der Behörde signiert werden?</summary>
                 <p>
-                    Die Antwort benötigt eine Signatur mit
-                    Organisationsvalidierung. Dadurch kann die empfangende
+                    Die Antwort benötigt eine Signatur <strong>mit
+                    Organisationsvalidierung</strong>. Dadurch kann die empfangende
                     Stelle überprüfen, ob der Bescheid tatsächlich von
                     der zuständigen Behörde stammt.
-                    Eine gewöhnliche persönliche Signatur reicht
+                    Eine gewöhnliche persönliche Signatur oder ein Sigel reicht
                     dafür nicht aus.
                 </p>
             </details>
 
             <details>
-                <summary>Warum kann eine Signatur beim Versand ungültig werden?</summary>
+                <summary>Kann es passieren, dass eine Signatur beim Versand ungültig wird?</summary>
                 <p>
+                    In einem Testszenrio konnte derartiges produziert werden. 
                     Bereits Änderungen an den Zeilenumbrüchen einer XML-Datei
                     können eine binäre Signatur ungültig machen.
                     Windows verwendet üblicherweise CR+LF, Linux dagegen LF.
-                    Solche Änderungen können bei der Übertragung über
-                    die beBPo-Infrastruktur auftreten.
+                    Eine solche Änderung konnte bei einem Test bei der Übertragung über
+                    die beBPo-Infrastruktur erzeugt werden. Deswegen hat der eNoVA-Editor eine Option, innerhalb der XML-Antwort keine Zeilenumbrüche zu verwenden.
                 </p>
             </details>
         </section>
