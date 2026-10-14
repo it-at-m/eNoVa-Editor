@@ -14,6 +14,9 @@
     <!-- Steuert, ob eNoVA-Kommentare in die erzeugte XML geschrieben werden -->
     <xsl:param name="includeEnovaComments" select="true()"/>
 
+    <!-- SchemaLocation der erzeugten Antwort -->
+    <xsl:param name="schemaLocation"
+               select="'http://www.xjustiz.de xjustiz_2900_dabag_3_3.xsd'"/>
 
     <!-- ========================================================= -->
     <!-- Eingabeparameter                                          -->
@@ -61,6 +64,42 @@
 
     <!-- Liest die Sachbearbeiter aus der externen caseworkers.xml -->
     <xsl:variable name="caseworkers" select="doc('caseworkers.xml')"/>
+
+
+    <!-- ========================================================= -->
+    <!-- Root-Element                                              -->
+    <!-- ========================================================= -->
+
+    <!--
+        Übernimmt das Root-Element der ursprünglichen XJustiz-Nachricht.
+        Ist xsi:schemaLocation bereits vorhanden, wird der Wert ersetzt.
+        Fehlt xsi:schemaLocation, wird das Attribut hinzugefügt.
+        In beiden Fällen wird der in der XSLT konfigurierte Wert verwendet.
+        Die benötigte xmlns:xsi-Deklaration wird bei Bedarf automatisch ergänzt.
+        Alle übrigen Attribute und XML-Inhalte werden wie bisher verarbeitet.
+    -->
+    <xsl:template match="/tns:nachricht.enova.entscheidung.2900003"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+        <xsl:copy>
+
+            <!-- Übernimmt alle Attribute außer der bisherigen schemaLocation -->
+            <xsl:apply-templates select="@* except @xsi:schemaLocation"/>
+
+            <!-- Setzt die in der XSLT konfigurierte schemaLocation -->
+            <xsl:attribute name="xsi:schemaLocation"
+                           select="$schemaLocation"/>
+
+            <xsl:if test="$includeEnovaComments">
+                <xsl:comment>eNoVA: xsi:schemaLocation wurde auf den in answer-transform.xsl konfigurierten Wert gesetzt</xsl:comment>
+            </xsl:if>
+
+            <!-- Verarbeitet alle weiteren XML-Inhalte wie bisher -->
+            <xsl:apply-templates select="node()"/>
+
+        </xsl:copy>
+
+    </xsl:template>
 
 
     <!-- ========================================================= -->
@@ -231,6 +270,22 @@
             </tns:beteiligung>
 
         </xsl:copy>
+    </xsl:template>
+
+
+    <!-- ========================================================= -->
+    <!-- Schriftgutobjekte                                         -->
+    <!-- ========================================================= -->
+
+    <!-- Ersetzt den gesamten Schriftgutobjekte-Bereich aus der Eingabe-XML durch den Inhalt der externen schriftgutobjekte.xml -->
+    <xsl:template match="tns:schriftgutobjekte">
+
+        <xsl:if test="$includeEnovaComments">
+            <xsl:comment>eNoVA: Schriftgutobjekte wurden durch den Inhalt aus schriftgutobjekte.xml ersetzt</xsl:comment>
+        </xsl:if>
+
+        <xsl:copy-of select="doc('schriftgutobjekte.xml')/tns:schriftgutobjekte"/>
+
     </xsl:template>
 
 

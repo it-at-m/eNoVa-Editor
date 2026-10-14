@@ -188,6 +188,9 @@
                                                 file="${project.basedir}/answer-transform.xsl"
                                                 todir="${project.build.directory}/distribution/eNoVA-editor"/>
                                         <copy
+                                                file="${project.basedir}/schriftgutobjekte.xml"
+                                                todir="${project.build.directory}/distribution/eNoVA-editor"/>
+                                        <copy
                                                 todir="${project.build.directory}/distribution/eNoVA-editor/codelists">
                                             <fileset dir="${project.basedir}/codelists"/>
                                         </copy>
