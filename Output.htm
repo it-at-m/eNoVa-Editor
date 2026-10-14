@@ -17,7 +17,8 @@
       .kontakt {
           margin-left: auto;
           padding-top: 20px;
-          padding-right: 10px
+          padding-right: 10px;
+          text-align: right;
       }
 
       .datum-zeile {
@@ -192,10 +193,15 @@
     </p>
 
     <p>
-      Bezüglich Ihrer Anfrage teilen wir Ihnen mit:
+      bezüglich Ihrer Anfrage teilen wir Ihnen mit:
     </p>
 
-    <h3>Verkäufer (in/innen):</h3>
+    <!-- Rollenbezeichnung für Verkäufer (Code 168) aus der Codeliste -->
+    <h3>
+      {{codelist:rollenbezeichnung xpath:'168'}}:
+      <br>
+      <span style="font-size: 16px; font-weight: normal;">(Dies können auch mehrere Personen sein.)</span>
+    </h3>
 
     {{#each xpath://tns:beteiligung[
     tns:rolle/tns:rollenbezeichnung/code='168'
@@ -231,7 +237,12 @@
 
     {{/each}}
 
-    <h3>Käufer (in/innen):</h3>
+    <!-- Rollenbezeichnung für Käufer (Code 072) aus der Codeliste -->
+    <h3>
+      {{codelist:rollenbezeichnung xpath:'072'}}:
+      <br>
+      <span style="font-size: 16px; font-weight: normal;">(Dies können auch mehrere Personen sein.)</span>
+    </h3>
 
     {{#each xpath://tns:beteiligung[
     tns:rolle/tns:rollenbezeichnung/code='072'
