@@ -416,12 +416,6 @@ technical code → human-readable description
     </p>
 
     <p>
-        The XSLT also sets the configured
-        <code>xsi:schemaLocation</code> in the generated XJustiz response.
-        An existing value is replaced; a missing attribute is added.
-    </p>
-
-    <p>
         Simplified process:
     </p>
 
@@ -459,6 +453,8 @@ XJustiz response XML
     <p class="notice">
         The file must be located in the installation directory
         alongside <code>answer-transform.xsl</code>.
+        If additional files are to be sent with the beBPo message,
+        they must also be listed in this XML file.
     </p>
 
     <h3><code>eNoVA-editor.cmd</code></h3>

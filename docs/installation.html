@@ -418,12 +418,6 @@ technischer Code → sichtbare Bezeichnung
     </p>
 
     <p>
-        Die XSLT setzt außerdem die konfigurierte
-        <code>xsi:schemaLocation</code> in der erzeugten XJustiz-Antwort.
-        Ein vorhandener Wert wird ersetzt, ein fehlendes Attribut ergänzt.
-    </p>
-
-    <p>
         Der Ablauf ist vereinfacht:
     </p>
 
@@ -461,6 +455,8 @@ XJustiz-Antwort-XML
     <p class="notice">
         Die Datei muss sich im Installationsverzeichnis neben
         <code>answer-transform.xsl</code> befinden.
+        Sollen weitere Dateien mit der beBPo-Nachricht übermittelt werden,
+        müssen diese ebenfalls in dieser XML-Datei eingetragen werden.
     </p>
 
     <h3><code>eNoVA-editor.cmd</code></h3>
