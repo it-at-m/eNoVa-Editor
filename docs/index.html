@@ -147,11 +147,15 @@
         }
 
         .notice {
-            margin: 10px 0 50px;
+            margin: 10px 0 20px;
             padding: 20px 24px;
             background: #f4f7fa;
             border-left: 4px solid #005a9c;
             border-radius: 4px;
+        }
+
+        code {
+            overflow-wrap: anywhere;
         }
 
         section {
@@ -215,6 +219,32 @@
                 height: 36px;
             }
         }
+
+        .external-link-icon {
+            width: 16px;
+            height: 16px;
+            margin-left: 6px;
+            vertical-align: -3px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .faq details {
+            padding: 14px 0;
+            border-bottom: 1px solid #dddddd;
+        }
+
+        .faq summary {
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .faq details p {
+            margin-bottom: 0;
+        }
     </style>
 </head>
 
@@ -247,6 +277,12 @@
     </div>
 </header>
 
+<svg width="0" height="0" aria-hidden="true">
+    <symbol id="external-link" viewBox="0 0 24 24">
+        <path d="M15 3h6v6M10 14 21 3M21 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6"/>
+    </symbol>
+</svg>
+
 <main class="container">
 
     <div id="content-de">
@@ -272,7 +308,7 @@
                             class="button button-primary"
                             href="https://github.com/it-at-m/eNoVa-Editor"
                     >
-                        GitHub
+                        Quellcode auf GitHub
                     </a>
 
                     <a
@@ -285,8 +321,13 @@
                     <a
                             class="button button-secondary"
                             href="https://xjustiz.justiz.de/Anwendungsfaelle/eNoVA/index.php"
+                            title="Externer Link zur XJustiz-Dokumentation"
+                            aria-label="Dokumentation des Formats (externer Link)"
                     >
-                        XJustiz eNoVA
+                        Dokumentation des Formats
+                        <svg class="external-link-icon" aria-hidden="true">
+                            <use href="#external-link"></use>
+                        </svg>
                     </a>
                 </div>
             </div>
@@ -299,31 +340,131 @@
         </div>
 
         <section>
-            <h2>Was macht der eNoVA-Editor?</h2>
+            <h2>Über das Projekt</h2>
 
             <p>
-                Der eNoVA-Editor kann Dateien im Format
-                <a href="https://xjustiz.justiz.de/Anwendungsfaelle/eNoVA/index.php">
-                    XJustiz.enova.2900003
-                </a>,
-                die über das
-                <a href="https://de.wikipedia.org/wiki/Besonderes_elektronisches_Beh%C3%B6rdenpostfach">
-                    beBPo
-                </a>
-                übermittelt wurden, in einer menschenlesbaren Form verkürzt
-                anzeigen.
+                Die Landeshauptstadt München entwickelt federführend den
+                <strong>eNoVA-Editor</strong> für alle Kommunen in Deutschland.
+                Sie stellt das Tool als Open-Source-Software kostenlos unter
+                der MIT-Lizenz zur Verfügung.
             </p>
 
             <p>
-                Sachbearbeiter*innen können anschließend ihre Entscheidung
-                eintragen und daraus eine XJustiz-Antwortdatei erstellen.
+                Das Projekt befindet sich derzeit in der Testphase.
+                Diese wird voraussichtlich am
+                <strong>1. Dezember 2026</strong> abgeschlossen.
+            </p>
+        </section>
+
+        <section>
+            <h2>Was macht der eNoVA-Editor?</h2>
+
+            <p>
+                Nach Eingang einer Nachricht über das
+                <a href="https://de.wikipedia.org/wiki/Besonderes_elektronisches_Beh%C3%B6rdenpostfach">
+                    beBPo
+                </a>
+                öffnen Sachbearbeiter*innen die XML-Datei im Editor.
+                Die für die Bearbeitung relevanten Inhalte werden
+                übersichtlich dargestellt.
+            </p>
+
+            <p>
+                Anschließend können sie Aktenzeichen, Sachbearbeiter*in
+                und Entscheidung erfassen und daraus eine
+                rechtskonforme XJustiz-Antwortdatei erstellen.
             </p>
 
             <img
                     class="screenshot"
                     src="assets/images/enova-editor-screenshot.png"
-                    alt="Screenshot der Benutzeroberfläche des eNoVA-Editors"
+                    alt="eNoVA-Editor mit XML-Öffnen-Schaltfläche und Eingabefeldern für Aktenzeichen, Sachbearbeiter*in und Entscheidung"
             >
+        </section>
+
+        <section>
+            <h2>Technische und rechtliche Grundlagen</h2>
+
+            <h3>Technische Grundlagen</h3>
+
+            <p>
+                Eingehende Nachricht:<br>
+                <code>eNoVA.2900003.ersuchenSachentscheidung</code>
+            </p>
+
+            <p>
+                Antwortnachricht:<br>
+                <code>eNoVA.2900003.sachentscheidung</code>
+            </p>
+
+            <h3>Rechtliche Grundlage</h3>
+
+            <p>
+                Gesetz zur Digitalisierung des Vollzugs von Immobilienverträgen,
+                der gerichtlichen Genehmigungen von notariellen Rechtsgeschäften
+                und der steuerlichen Anzeigen der Notare
+                (<strong>eNoVA-Gesetz</strong>).
+                Verkündet im Bundesgesetzblatt (BGBl. I 2026, Nr. 192).
+            </p>
+        </section>
+
+
+        <section class="faq">
+            <h2>Häufig gestellte Fragen (FAQ)</h2>
+
+            <details>
+                <summary>Welche XJustiz-Nachrichten unterstützt der eNoVA-Editor?</summary>
+                <p>
+                    Der eNoVA-Editor unterstützt ausschließlich das Format
+                    eNoVA.2900003. Er verarbeitet eingehende Nachrichten
+                    vom Typ <code>ersuchenSachentscheidung</code> und erstellt
+                    daraus Antwortnachrichten vom Typ
+                    <code>sachentscheidung</code>.
+                </p>
+            </details>
+
+            <details>
+                <summary>Kann eine Behörde selbst eine Anfrage an einen Notar erstellen?</summary>
+                <p>
+                    Nein. Beim Format eNoVA.2900003 wird die Kommunikation
+                    immer durch eine Anfrage des Notars eingeleitet.
+                    Die Behörde kann darauf mit einer Sachentscheidung
+                    antworten, aber keine eigene initiale Anfrage erstellen.
+                </p>
+            </details>
+
+            <details>
+                <summary>Muss die Antwort der Behörde als PDF erstellt werden?</summary>
+                <p>
+                    Nein. Die XML-Datei selbst stellt den Bescheid dar.
+                    Ein zusätzliches PDF ist bei eNoVA.2900003 nicht
+                    erforderlich. Die XML-Antwort muss entsprechend
+                    signiert werden.
+                </p>
+            </details>
+
+            <details>
+                <summary>Wie muss die Antwort der Behörde signiert werden?</summary>
+                <p>
+                    Die Antwort benötigt eine Signatur mit
+                    Organisationsvalidierung. Dadurch kann die empfangende
+                    Stelle überprüfen, ob der Bescheid tatsächlich von
+                    der zuständigen Behörde stammt.
+                    Eine gewöhnliche persönliche Signatur reicht
+                    dafür nicht aus.
+                </p>
+            </details>
+
+            <details>
+                <summary>Warum kann eine Signatur beim Versand ungültig werden?</summary>
+                <p>
+                    Bereits Änderungen an den Zeilenumbrüchen einer XML-Datei
+                    können eine binäre Signatur ungültig machen.
+                    Windows verwendet üblicherweise CR+LF, Linux dagegen LF.
+                    Solche Änderungen können bei der Übertragung über
+                    die beBPo-Infrastruktur auftreten.
+                </p>
+            </details>
         </section>
 
         <section>
@@ -333,7 +474,7 @@
                 <p>
                     Jeden Freitag ab <strong>14:00 Uhr</strong> findet ein offenes
                     Meeting statt, in dem Fragen zum eNoVA-Editor beantwortet werden.<br>
-                    Sollten mehr Personen teilnehmen wollen, als es Plätze gibt, wird das Meeting um 15:00 wiederholt. 
+                    Sollten mehr Personen teilnehmen wollen, als es Plätze gibt, wird das Meeting um 15:00 wiederholt.
                 </p>
 
                 <p>
@@ -377,7 +518,7 @@
                             class="button button-primary"
                             href="https://github.com/it-at-m/eNoVa-Editor"
                     >
-                        GitHub
+                        Source code on GitHub
                     </a>
 
                     <a
@@ -390,8 +531,13 @@
                     <a
                             class="button button-secondary"
                             href="https://xjustiz.justiz.de/Anwendungsfaelle/eNoVA/index.php"
+                            title="External link to XJustiz documentation"
+                            aria-label="Format documentation (external link)"
                     >
-                        XJustiz eNoVA
+                        Format documentation
+                        <svg class="external-link-icon" aria-hidden="true">
+                            <use href="#external-link"></use>
+                        </svg>
                     </a>
                 </div>
             </div>
@@ -404,30 +550,131 @@
         </div>
 
         <section>
-            <h2>What does the eNoVA Editor do?</h2>
+            <h2>About the project</h2>
 
             <p>
-                The eNoVA Editor can open files in the
-                <a href="https://xjustiz.justiz.de/Anwendungsfaelle/eNoVA/index.php">
-                    XJustiz.enova.2900003
-                </a>
-                format that were submitted via
-                <a href="https://de.wikipedia.org/wiki/Besonderes_elektronisches_Beh%C3%B6rdenpostfach">
-                    beBPo
-                </a>
-                and display them in a condensed, human-readable format.
+                The City of Munich is leading the development of the
+                <strong>eNoVA Editor</strong> for municipalities throughout
+                Germany. The tool is made available free of charge as
+                open-source software under the MIT License.
             </p>
 
             <p>
-                The case worker can enter their decision and create an XJustiz
-                response file.
+                The project is currently in the testing phase,
+                which is expected to be completed by
+                <strong>1 December 2026</strong>.
+            </p>
+        </section>
+
+        <section>
+            <h2>What does the eNoVA Editor do?</h2>
+
+            <p>
+                After receiving a message via the
+                <a href="https://de.wikipedia.org/wiki/Besonderes_elektronisches_Beh%C3%B6rdenpostfach">
+                    beBPo
+                </a>
+                secure government mailbox, caseworkers open the XML file in
+                the editor. The information relevant to processing the request
+                is displayed in a clear, structured format.
+            </p>
+
+            <p>
+                They can then enter the file reference, select the responsible
+                caseworker and record a decision to generate a legally compliant
+                XJustiz response file.
             </p>
 
             <img
                     class="screenshot"
                     src="assets/images/enova-editor-screenshot.png"
-                    alt="Screenshot of the eNoVA Editor user interface"
+                    alt="eNoVA Editor showing the Open XML button and fields for file reference, caseworker and decision"
             >
+        </section>
+
+        <section>
+            <h2>Technical and legal background</h2>
+
+            <h3>Technical details</h3>
+
+            <p>
+                Incoming message:<br>
+                <code>eNoVA.2900003.ersuchenSachentscheidung</code>
+            </p>
+
+            <p>
+                Response message:<br>
+                <code>eNoVA.2900003.sachentscheidung</code>
+            </p>
+
+            <h3>Legal basis</h3>
+
+            <p>
+                Act on the Digitalisation of the Execution of Real Estate
+                Contracts, Judicial Approvals of Notarial Legal Transactions,
+                and Tax Notifications by Notaries
+                (<strong>eNoVA Act</strong>).
+                Published in the Federal Law Gazette
+                (BGBl. I 2026, No. 192).
+            </p>
+        </section>
+
+
+        <section class="faq">
+            <h2>Frequently Asked Questions (FAQ)</h2>
+
+            <details>
+                <summary>Which XJustiz messages does the eNoVA Editor support?</summary>
+                <p>
+                    The eNoVA Editor exclusively supports the
+                    eNoVA.2900003 format. It processes incoming
+                    <code>ersuchenSachentscheidung</code> messages
+                    and generates corresponding
+                    <code>sachentscheidung</code> response messages.
+                </p>
+            </details>
+
+            <details>
+                <summary>Can an authority initiate a request to a notary?</summary>
+                <p>
+                    No. With eNoVA.2900003, communication is always
+                    initiated by a request from the notary.
+                    The authority can respond with a decision but
+                    cannot initiate its own request in this format.
+                </p>
+            </details>
+
+            <details>
+                <summary>Does the authority need to create a PDF response?</summary>
+                <p>
+                    No. The XML file itself constitutes the official
+                    decision. An additional PDF is not required
+                    for eNoVA.2900003. The XML response must be
+                    signed accordingly.
+                </p>
+            </details>
+
+            <details>
+                <summary>How must the authority's response be signed?</summary>
+                <p>
+                    The response requires a signature with
+                    organisational validation. This allows the
+                    receiving party to verify that the decision
+                    was issued by the responsible authority.
+                    An ordinary personal signature is not sufficient.
+                </p>
+            </details>
+
+            <details>
+                <summary>Why can a signature become invalid during transmission?</summary>
+                <p>
+                    Even changes to line endings in an XML file
+                    can invalidate a binary signature.
+                    Windows typically uses CR+LF, while Linux uses LF.
+                    Such changes may occur during transmission
+                    via the beBPo infrastructure.
+                </p>
+            </details>
         </section>
 
         <section>
@@ -437,7 +684,8 @@
                 <p>
                     Every Friday at <strong>2 p.m. German time</strong>, an open
                     meeting is held to answer questions about the eNoVA Editor.<br>
-                    If the meeting ist overcrouded, it will be repeatet at 3 p.m. 
+                    If more people wish to attend than there are places available,
+                    the meeting will be repeated at 3 p.m.
                 </p>
 
                 <p>
@@ -461,8 +709,13 @@
 
 <footer>
     <div class="container">
-        <a href="https://www.muenchen.de/meta">
-            Impressum, Datenschutz und weitere Informationen
+        <a href="https://muenchen.digital/impressum.html">
+            <span id="footer-de">
+                Impressum, Datenschutz und weitere Informationen
+            </span>
+            <span id="footer-en" hidden>
+                Legal notice, privacy policy and further information
+            </span>
         </a>
     </div>
 </footer>
@@ -473,6 +726,9 @@
 
         document.getElementById("content-de").hidden = !german;
         document.getElementById("content-en").hidden = german;
+
+        document.getElementById("footer-de").hidden = !german;
+        document.getElementById("footer-en").hidden = german;
 
         document.getElementById("lang-de").classList.toggle("active", german);
         document.getElementById("lang-en").classList.toggle("active", !german);
