@@ -134,6 +134,7 @@ eNoVA-editor/
 ├── codelists.properties
 ├── help-config.properties
 ├── answer-transform.xsl
+├── schriftgutobjekte.xml
 └── eNoVA-editor.cmd
     </pre>
 
@@ -417,6 +418,12 @@ technischer Code → sichtbare Bezeichnung
     </p>
 
     <p>
+        Die XSLT setzt außerdem die konfigurierte
+        <code>xsi:schemaLocation</code> in der erzeugten XJustiz-Antwort.
+        Ein vorhandener Wert wird ersetzt, ein fehlendes Attribut ergänzt.
+    </p>
+
+    <p>
         Der Ablauf ist vereinfacht:
     </p>
 
@@ -438,6 +445,23 @@ XJustiz-Antwort-XML
         XJustiz-Kenntnissen vorgenommen und anschließend getestet werden.
     </p>
 
+    <h3><code>schriftgutobjekte.xml</code></h3>
+
+    <p>
+        Diese Datei enthält den vorgegebenen Schriftgutobjekte-Bereich
+        für die erzeugte XJustiz-Antwort.
+    </p>
+
+    <p>
+        Die <code>answer-transform.xsl</code> ersetzt den vorhandenen
+        Schriftgutobjekte-Bereich aus der Eingabe-XML vollständig
+        durch den Inhalt dieser Datei.
+    </p>
+
+    <p class="notice">
+        Die Datei muss sich im Installationsverzeichnis neben
+        <code>answer-transform.xsl</code> befinden.
+    </p>
 
     <h3><code>eNoVA-editor.cmd</code></h3>
 

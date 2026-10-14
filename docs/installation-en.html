@@ -135,6 +135,7 @@ eNoVA-editor/
 ├── codelists.properties
 ├── help-config.properties
 ├── answer-transform.xsl
+├── schriftgutobjekte.xml
 └── eNoVA-editor.cmd
     </pre>
 
@@ -415,6 +416,12 @@ technical code → human-readable description
     </p>
 
     <p>
+        The XSLT also sets the configured
+        <code>xsi:schemaLocation</code> in the generated XJustiz response.
+        An existing value is replaced; a missing attribute is added.
+    </p>
+
+    <p>
         Simplified process:
     </p>
 
@@ -436,6 +443,23 @@ XJustiz response XML
         XSLT and XJustiz knowledge and should be tested afterwards.
     </p>
 
+    <h3><code>schriftgutobjekte.xml</code></h3>
+
+    <p>
+        This file contains the predefined Schriftgutobjekte section
+        for the generated XJustiz response.
+    </p>
+
+    <p>
+        The <code>answer-transform.xsl</code> completely replaces
+        the existing Schriftgutobjekte section from the input XML
+        with the contents of this file.
+    </p>
+
+    <p class="notice">
+        The file must be located in the installation directory
+        alongside <code>answer-transform.xsl</code>.
+    </p>
 
     <h3><code>eNoVA-editor.cmd</code></h3>
 
