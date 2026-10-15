@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>FAQ – eNoVA-Editor</title>
+
+    <style>
+        :root {
+            font-family: system-ui, -apple-system,
+                BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: #1d1d1f;
+            background: white;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        main {
+            width: min(900px, calc(100% - 40px));
+            margin: 0 auto;
+            padding: 32px 0;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+        }
+
+        a {
+            color: #005a9c;
+        }
+
+        details {
+            padding: 16px 0;
+            border-bottom: 1px solid #dddddd;
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        details p {
+            margin-bottom: 0;
+        }
+
+        code {
+            overflow-wrap: anywhere;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+<main>
+    <p id="back-link">
+        <a href="index.html#home">
+            ← Zurück zum eNoVA-Editor
+        </a>
+    </p>
+
+    <h1>Häufig gestellte Fragen (FAQ)</h1>
+
+    <details>
+        <summary>
+            Welche XJustiz-Nachrichten unterstützt der eNoVA-Editor?
+        </summary>
+        <p>
+            Der eNoVA-Editor unterstützt ausschließlich das Format
+            eNoVA.2900003. Er verarbeitet eingehende Nachrichten
+            vom Typ <code>ersuchenSachentscheidung</code> und erstellt
+            daraus Antwortnachrichten vom Typ
+            <code>sachentscheidung</code>.
+        </p>
+    </details>
+
+    <details>
+        <summary>
+            Kann eine Behörde selbst eine Anfrage an einen Notar erstellen?
+        </summary>
+        <p>
+            Nein. Beim Format eNoVA.2900003 wird die Kommunikation
+            immer durch eine Anfrage des Notars eingeleitet.
+            Die Behörde kann darauf mit einer Sachentscheidung
+            antworten, aber keine eigene initiale Anfrage erstellen.
+        </p>
+    </details>
+
+    <details>
+        <summary>
+            Muss die Antwort der Behörde als PDF erstellt werden?
+        </summary>
+        <p>
+            Nein. Die XML-Datei selbst stellt den Bescheid dar.
+            Ein zusätzliches PDF ist bei eNoVA.2900003 nicht
+            vorgesehen. Die XML-Antwort muss entsprechend
+            signiert werden.
+        </p>
+    </details>
+
+    <details>
+        <summary>
+            Wie muss die Antwort der Behörde signiert werden?
+        </summary>
+        <p>
+            Die Antwort benötigt eine Signatur
+            <strong>mit Organisationsvalidierung</strong>.
+            Dadurch kann die empfangende Stelle überprüfen,
+            ob der Bescheid tatsächlich von der zuständigen
+            Behörde stammt. Eine gewöhnliche persönliche
+            Signatur oder ein Siegel reicht dafür nicht aus.
+        </p>
+    </details>
+
+    <details>
+        <summary>
+            Kann es passieren, dass eine Signatur beim Versand ungültig wird?
+        </summary>
+        <p>
+            In einem Testszenario konnte derartiges produziert werden.
+            Bereits Änderungen an den Zeilenumbrüchen einer XML-Datei
+            können eine binäre Signatur ungültig machen.
+            Windows verwendet üblicherweise CR+LF, Linux dagegen LF.
+            Eine solche Änderung konnte bei einem Test bei der
+            Übertragung über die beBPo-Infrastruktur erzeugt werden.
+            Deswegen hat der eNoVA-Editor eine Option, innerhalb
+            der XML-Antwort keine Zeilenumbrüche zu verwenden.
+        </p>
+    </details>
+</main>
+
+</body>
+</html>

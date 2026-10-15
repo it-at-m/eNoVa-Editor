@@ -79,8 +79,10 @@
 <body>
 
 <main>
-    <p>
-        <a href="index.html">← Zurück zum eNoVA-Editor</a>
+    <p id="back-link">
+        <a href="index.html#home">
+            ← Zurück zum eNoVA-Editor
+        </a>
     </p>
 
     <h1>Installationsanleitung</h1>
@@ -110,6 +112,21 @@
         herunter.
     </p>
 
+
+    <h3>Windows-Sicherheitswarnung vermeiden</h3>
+
+    <p>
+        Windows kann heruntergeladene ZIP-Dateien als Dateien aus dem Internet
+        markieren. Um eine mögliche Sicherheitswarnung beim Start zu vermeiden,
+        entsperren Sie die ZIP-Datei vor dem Entpacken mit PowerShell:
+    </p>
+
+    <pre>Unblock-File -LiteralPath ".\eNoVA-editor-0.9.2.zip"</pre>
+
+    <p>
+        Passen Sie den Dateinamen an die heruntergeladene Version an.
+        Entpacken Sie die ZIP-Datei anschließend wie gewohnt.
+    </p>
 
     <h2>2. Installation</h2>
 

@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="de">
 <head>
@@ -56,7 +57,9 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 12px 0;
         }
 
         .brand {
@@ -73,6 +76,34 @@
             width: 42px;
             height: 42px;
         }
+
+        /* Navigation */
+
+        .page-navigation {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .page-navigation a {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 6px;
+            color: #005a9c;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .page-navigation a:hover {
+            background: #f4f7fa;
+        }
+
+        .page-navigation a.active {
+            background: #005a9c;
+            color: #ffffff;
+        }
+
+        /* Sprachauswahl */
 
         .language-switcher {
             display: flex;
@@ -93,6 +124,8 @@
             border-color: #005a9c;
             color: #ffffff;
         }
+
+        /* Startseite */
 
         .hero {
             display: grid;
@@ -144,14 +177,30 @@
         .button-secondary {
             background: #ffffff;
             color: #005a9c;
+            transition: background-color 0.2s ease,
+                        border-color 0.2s ease;
+        }
+
+        .button-secondary:hover {
+            background: #eef5fb;
+            border-color: #003f70;
+        }
+
+        .button-secondary:focus-visible {
+            outline: 2px solid #005a9c;
+            outline-offset: 3px;
         }
 
         .notice {
-            margin: 10px 0 50px;
+            margin: 10px 0 20px;
             padding: 20px 24px;
             background: #f4f7fa;
             border-left: 4px solid #005a9c;
             border-radius: 4px;
+        }
+
+        code {
+            overflow-wrap: anywhere;
         }
 
         section {
@@ -179,6 +228,19 @@
             border-radius: 8px;
         }
 
+        /* Eingebundene Seiten */
+
+        #embedded-page {
+            padding: 0;
+        }
+
+        #embedded-frame {
+            display: block;
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+
         footer {
             margin-top: 60px;
             padding: 28px 0;
@@ -191,9 +253,31 @@
             display: none !important;
         }
 
+        .external-link-icon {
+            width: 16px;
+            height: 16px;
+            margin-left: 6px;
+            vertical-align: -3px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
         @media (max-width: 700px) {
             .container {
                 width: min(100% - 28px, 1100px);
+            }
+
+            .header-content {
+                min-height: 68px;
+            }
+
+            .page-navigation {
+                order: 3;
+                width: 100%;
+                justify-content: center;
             }
 
             .hero {
@@ -204,10 +288,6 @@
 
             .hero-logo {
                 width: 110px;
-            }
-
-            .header-content {
-                min-height: 68px;
             }
 
             .brand img {
@@ -222,11 +302,43 @@
 
 <header>
     <div class="container header-content">
-        <a class="brand" href="/">
+        <a class="brand" href="#home">
             <span>eNoVA-Editor</span>
         </a>
 
-        <div class="language-switcher" aria-label="Sprache auswählen">
+        <nav
+                id="page-navigation"
+                class="page-navigation"
+                aria-label="Seitennavigation"
+        >
+            <a
+                    id="nav-home"
+                    href="#home"
+                    class="active"
+                    aria-current="page"
+            >
+                Startseite
+            </a>
+
+            <a
+                    id="nav-installation"
+                    href="#installation"
+            >
+                Installation
+            </a>
+
+            <a
+                    id="nav-faq"
+                    href="#faq"
+            >
+                FAQ
+            </a>
+        </nav>
+
+        <div
+                class="language-switcher"
+                aria-label="Sprache auswählen"
+        >
             <button
                     id="lang-de"
                     class="active"
@@ -247,7 +359,17 @@
     </div>
 </header>
 
+<svg width="0" height="0" aria-hidden="true">
+    <symbol id="external-link" viewBox="0 0 24 24">
+        <path d="M15 3h6v6"/>
+        <path d="M10 14 21 3"/>
+        <path d="M21 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6"/>
+    </symbol>
+</svg>
+
 <main class="container">
+
+    <!-- Deutsche Startseite -->
 
     <div id="content-de">
 
@@ -269,24 +391,22 @@
 
                 <div class="actions">
                     <a
-                            class="button button-primary"
+                            class="button button-secondary"
                             href="https://github.com/it-at-m/eNoVa-Editor"
                     >
-                        GitHub
-                    </a>
-
-                    <a
-                            class="button button-secondary"
-                            href="installation.html"
-                    >
-                        Installationsanleitung
+                        Quellcode auf GitHub
                     </a>
 
                     <a
                             class="button button-secondary"
                             href="https://xjustiz.justiz.de/Anwendungsfaelle/eNoVA/index.php"
+                            title="Externer Link zur XJustiz-Dokumentation"
+                            aria-label="Dokumentation des Formats (externer Link)"
                     >
-                        XJustiz eNoVA
+                        Dokumentation des Formats
+                        <svg class="external-link-icon" aria-hidden="true">
+                            <use href="#external-link"></use>
+                        </svg>
                     </a>
                 </div>
             </div>
@@ -299,31 +419,79 @@
         </div>
 
         <section>
-            <h2>Was macht der eNoVA-Editor?</h2>
+            <h2>Über das Projekt</h2>
 
             <p>
-                Der eNoVA-Editor kann Dateien im Format
-                <a href="https://xjustiz.justiz.de/Anwendungsfaelle/eNoVA/index.php">
-                    XJustiz.enova.2900003
-                </a>,
-                die über das
-                <a href="https://de.wikipedia.org/wiki/Besonderes_elektronisches_Beh%C3%B6rdenpostfach">
-                    beBPo
-                </a>
-                übermittelt wurden, in einer menschenlesbaren Form verkürzt
-                anzeigen.
+                Die Landeshauptstadt München entwickelt federführend den
+                <strong>eNoVA-Editor</strong> für alle Kommunen in Deutschland.
+                Sie stellt das Tool als Open-Source-Software kostenlos unter
+                der MIT-Lizenz zur Verfügung.
             </p>
 
             <p>
-                Sachbearbeiter*innen können anschließend ihre Entscheidung
-                eintragen und daraus eine XJustiz-Antwortdatei erstellen.
+                Das Projekt befindet sich derzeit in der Testphase.
+                Diese wird voraussichtlich am
+                <strong>1. Dezember 2026</strong> abgeschlossen.
+            </p>
+        </section>
+
+        <section>
+            <h2>Was macht der eNoVA-Editor?</h2>
+
+            <p>
+                Nach Eingang einer Nachricht über das
+                <a href="https://de.wikipedia.org/wiki/Besonderes_elektronisches_Beh%C3%B6rdenpostfach">
+                    beBPo
+                </a>
+                öffnen Sachbearbeiter*innen die XML-Datei im eNoVA-Editor.
+                Die für die Bearbeitung relevanten Inhalte werden in Briefform
+                übersichtlich dargestellt.
+            </p>
+
+            <p>
+                Anschließend können sie Aktenzeichen, Sachbearbeiter*in
+                und Entscheidung erfassen und daraus eine
+                rechtskonforme XJustiz-Antwortdatei erstellen.
             </p>
 
             <img
                     class="screenshot"
                     src="assets/images/enova-editor-screenshot.png"
-                    alt="Screenshot der Benutzeroberfläche des eNoVA-Editors"
+                    alt="eNoVA-Editor mit XML-Öffnen-Schaltfläche und Eingabefeldern für Aktenzeichen, Sachbearbeiter*in und Entscheidung"
             >
+        </section>
+
+        <section>
+            <h2>Technische und rechtliche Grundlagen</h2>
+
+            <h3>Technische Grundlagen</h3>
+
+            <p>
+                Eingehende Nachricht:<br>
+                <code>eNoVA.2900003.ersuchenSachentscheidung</code>
+            </p>
+
+            <p>
+                Antwortnachricht:<br>
+                <code>eNoVA.2900003.sachentscheidung</code>
+            </p>
+
+            <h3>Rechtliche Grundlage</h3>
+
+            <p>
+                Gesetz zur Digitalisierung des Vollzugs von Immobilienverträgen,
+                der gerichtlichen Genehmigungen von notariellen Rechtsgeschäften
+                und der steuerlichen Anzeigen der Notare
+                (<strong>eNoVA-Gesetz</strong>).
+                Verkündet im Bundesgesetzblatt
+                <a
+                        href="https://www.recht.bund.de/bgbl/1/2026/192/VO.html"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                >
+                    (BGBl. I 2026, Nr. 192)
+                </a>.
+            </p>
         </section>
 
         <section>
@@ -331,9 +499,11 @@
 
             <div class="meeting">
                 <p>
-                    Jeden Freitag ab <strong>14:00 Uhr</strong> findet ein offenes
-                    Meeting statt, in dem Fragen zum eNoVA-Editor beantwortet werden.<br>
-                    Sollten mehr Personen teilnehmen wollen, als es Plätze gibt, wird das Meeting um 15:00 wiederholt. 
+                    Jeden Freitag ab <strong>14:00 Uhr</strong>
+                    findet ein offenes Meeting statt, in dem Fragen zum
+                    eNoVA-Editor beantwortet werden.<br>
+                    Sollten mehr Personen teilnehmen wollen, als es Plätze gibt,
+                    wird das Meeting um 15:00 wiederholt.
                 </p>
 
                 <p>
@@ -353,6 +523,8 @@
 
     </div>
 
+
+    <!-- Englische Startseite -->
 
     <div id="content-en" hidden>
 
@@ -374,24 +546,22 @@
 
                 <div class="actions">
                     <a
-                            class="button button-primary"
+                            class="button button-secondary"
                             href="https://github.com/it-at-m/eNoVa-Editor"
                     >
-                        GitHub
-                    </a>
-
-                    <a
-                            class="button button-secondary"
-                            href="installation-en.html"
-                    >
-                        Installation
+                        Source code on GitHub
                     </a>
 
                     <a
                             class="button button-secondary"
                             href="https://xjustiz.justiz.de/Anwendungsfaelle/eNoVA/index.php"
+                            title="External link to XJustiz documentation"
+                            aria-label="Format documentation (external link)"
                     >
-                        XJustiz eNoVA
+                        Format documentation
+                        <svg class="external-link-icon" aria-hidden="true">
+                            <use href="#external-link"></use>
+                        </svg>
                     </a>
                 </div>
             </div>
@@ -404,30 +574,80 @@
         </div>
 
         <section>
-            <h2>What does the eNoVA Editor do?</h2>
+            <h2>About the project</h2>
 
             <p>
-                The eNoVA Editor can open files in the
-                <a href="https://xjustiz.justiz.de/Anwendungsfaelle/eNoVA/index.php">
-                    XJustiz.enova.2900003
-                </a>
-                format that were submitted via
-                <a href="https://de.wikipedia.org/wiki/Besonderes_elektronisches_Beh%C3%B6rdenpostfach">
-                    beBPo
-                </a>
-                and display them in a condensed, human-readable format.
+                The City of Munich is leading the development of the
+                <strong>eNoVA Editor</strong> for municipalities throughout
+                Germany. The tool is made available free of charge as
+                open-source software under the MIT License.
             </p>
 
             <p>
-                The case worker can enter their decision and create an XJustiz
-                response file.
+                The project is currently in the testing phase,
+                which is expected to be completed by
+                <strong>1 December 2026</strong>.
+            </p>
+        </section>
+
+        <section>
+            <h2>What does the eNoVA Editor do?</h2>
+
+            <p>
+                After receiving a message via the
+                <a href="https://de.wikipedia.org/wiki/Besonderes_elektronisches_Beh%C3%B6rdenpostfach">
+                    beBPo
+                </a>
+                secure government mailbox, caseworkers open the XML file in
+                the editor. The information relevant to processing the request
+                is displayed in a clear, structured format.
+            </p>
+
+            <p>
+                They can then enter the file reference, select the responsible
+                caseworker and record a decision to generate a legally compliant
+                XJustiz response file.
             </p>
 
             <img
                     class="screenshot"
                     src="assets/images/enova-editor-screenshot.png"
-                    alt="Screenshot of the eNoVA Editor user interface"
+                    alt="eNoVA Editor showing the Open XML button and fields for file reference, caseworker and decision"
             >
+        </section>
+
+        <section>
+            <h2>Technical and legal background</h2>
+
+            <h3>Technical details</h3>
+
+            <p>
+                Incoming message:<br>
+                <code>eNoVA.2900003.ersuchenSachentscheidung</code>
+            </p>
+
+            <p>
+                Response message:<br>
+                <code>eNoVA.2900003.sachentscheidung</code>
+            </p>
+
+            <h3>Legal basis</h3>
+
+
+            <p>
+                Act on the Digitalisation of the Execution of Real Estate
+                Contracts, Judicial Approvals of Notarial Legal Transactions,
+                and Tax Notifications by Notaries
+                (<strong>eNoVA Act</strong>).
+                Published in the Federal Law Gazette
+                <a
+                        href="https://www.recht.bund.de/bgbl/1/2026/192/VO.html"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                >
+                    (BGBl. I 2026, No. 192)
+                </a>.
+            </p>
         </section>
 
         <section>
@@ -435,9 +655,12 @@
 
             <div class="meeting">
                 <p>
-                    Every Friday at <strong>2 p.m. German time</strong>, an open
-                    meeting is held to answer questions about the eNoVA Editor.<br>
-                    If the meeting ist overcrouded, it will be repeatet at 3 p.m. 
+                    Every Friday at
+                    <strong>2 p.m. German time</strong>,
+                    an open meeting is held to answer questions about
+                    the eNoVA Editor.<br>
+                    If more people wish to attend than there are places
+                    available, the meeting will be repeated at 3 p.m.
                 </p>
 
                 <p>
@@ -457,35 +680,244 @@
 
     </div>
 
+
+    <!-- Eingebundene Installationsanleitung / FAQ -->
+
+    <section id="embedded-page" hidden>
+        <iframe
+                id="embedded-frame"
+                title="eNoVA-Editor Informationen"
+        ></iframe>
+    </section>
+
 </main>
 
 <footer>
     <div class="container">
-        <a href="https://www.muenchen.de/meta">
-            Impressum, Datenschutz und weitere Informationen
+        <a href="https://muenchen.digital/impressum.html">
+            <span id="footer-de">
+                Impressum, Datenschutz und weitere Informationen
+            </span>
+
+            <span id="footer-en" hidden>
+                Legal notice, privacy policy and further information
+            </span>
         </a>
     </div>
 </footer>
 
+
 <script>
-    function setLanguage(language) {
-        const german = language === "de";
+    let currentPage = "home";
+    let currentLanguage = "de";
+    let frameResizeObserver = null;
 
-        document.getElementById("content-de").hidden = !german;
-        document.getElementById("content-en").hidden = german;
+    const iframe = document.getElementById("embedded-frame");
 
-        document.getElementById("lang-de").classList.toggle("active", german);
-        document.getElementById("lang-en").classList.toggle("active", !german);
+    /**
+     * Zeigt die ausgewählte Seite an.
+     *
+     * home         -> Landingpage
+     * installation -> Installationsanleitung
+     * faq          -> Deutsche FAQ
+     */
+    function showPage(page) {
+        const allowedPages = ["home", "installation", "faq"];
 
-        document.documentElement.lang = language;
-        localStorage.setItem("language", language);
+        currentPage = allowedPages.includes(page) ? page : "home";
+
+        const isHome = currentPage === "home";
+        const german = currentLanguage === "de";
+
+        // Startseite ein-/ausblenden
+        document.getElementById("content-de").hidden =
+            !isHome || !german;
+
+        document.getElementById("content-en").hidden =
+            !isHome || german;
+
+        // Eingebetteten Bereich ein-/ausblenden
+        document.getElementById("embedded-page").hidden = isHome;
+
+        // Richtige Datei einbetten
+        if (!isHome) {
+            let source;
+
+            if (currentPage === "faq") {
+                // FAQ existiert ausschließlich auf Deutsch
+                source = "faq.html";
+                iframe.title = "FAQ (Deutsch)";
+            } else {
+                source = german
+                    ? "installation.html"
+                    : "installation-en.html";
+
+                iframe.title = german
+                    ? "Installationsanleitung"
+                    : "Installation guide";
+            }
+
+            // Nur neu laden, wenn die Datei gewechselt wurde
+            if (iframe.getAttribute("src") !== source) {
+                iframe.setAttribute("src", source);
+            }
+        }
+
+        // Aktive Navigation markieren
+        allowedPages.forEach(pageName => {
+            const link = document.getElementById(
+                "nav-" + pageName
+            );
+
+            const active = pageName === currentPage;
+
+            link.classList.toggle("active", active);
+
+            if (active) {
+                link.setAttribute("aria-current", "page");
+            } else {
+                link.removeAttribute("aria-current");
+            }
+        });
     }
+
+    /**
+     * Stellt die Sprache um.
+     * Die FAQ bleibt unabhängig davon deutsch.
+     */
+    function setLanguage(language) {
+        currentLanguage = language === "en" ? "en" : "de";
+
+        const german = currentLanguage === "de";
+
+        // Footer
+        document.getElementById("footer-de").hidden = !german;
+        document.getElementById("footer-en").hidden = german;
+
+        // Sprachbuttons
+        document.getElementById("lang-de")
+            .classList.toggle("active", german);
+
+        document.getElementById("lang-en")
+            .classList.toggle("active", !german);
+
+        // Navigation
+        document.getElementById("nav-home").textContent =
+            german ? "Startseite" : "Home";
+
+        document.getElementById("nav-installation").textContent =
+            "Installation";
+
+        document.getElementById("nav-faq").textContent =
+            german ? "FAQ" : "FAQ (DE)";
+
+        document.getElementById("page-navigation").setAttribute(
+            "aria-label",
+            german ? "Seitennavigation" : "Page navigation"
+        );
+
+        // Dokumentensprache
+        document.documentElement.lang = currentLanguage;
+
+        // Auswahl speichern
+        localStorage.setItem("language", currentLanguage);
+
+        // Aktuelle Ansicht aktualisieren
+        showPage(currentPage);
+    }
+
+    /**
+     * Passt die Höhe des iframe automatisch
+     * an den eingebundenen Inhalt an.
+     */
+    function resizeEmbeddedFrame() {
+        const doc = iframe.contentDocument;
+
+        if (!doc) {
+            return;
+        }
+
+        const content = doc.querySelector("main") || doc.body;
+
+        if (!content) {
+            return;
+        }
+
+        const height = Math.ceil(
+            content.getBoundingClientRect().height
+        );
+
+        iframe.style.height = (height + 2) + "px";
+    }
+
+    /**
+     * Wird aufgerufen, sobald die eingebundene
+     * HTML-Datei vollständig geladen wurde.
+     */
+    iframe.addEventListener("load", () => {
+        if (frameResizeObserver) {
+            frameResizeObserver.disconnect();
+            frameResizeObserver = null;
+        }
+
+        const doc = iframe.contentDocument;
+
+        if (!doc) {
+            return;
+        }
+
+        // Zurück-Link der eigenständigen Seiten ausblenden
+        const backLink = doc.getElementById("back-link")
+            || doc.querySelector(
+                'main > p:first-child > a[href^="index.html"]'
+            );
+
+        if (backLink) {
+            if (backLink.tagName === "A") {
+                backLink.parentElement.hidden = true;
+            } else {
+                backLink.hidden = true;
+            }
+        }
+
+        // Externe Links außerhalb des iframe öffnen
+        doc.querySelectorAll(
+            'a[href^="http://"], a[href^="https://"]'
+        ).forEach(link => {
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+        });
+
+        // Höhe initial berechnen
+        resizeEmbeddedFrame();
+
+        // Höhe bei Inhaltsänderungen aktualisieren
+        const content = doc.querySelector("main") || doc.body;
+
+        if (typeof ResizeObserver !== "undefined" && content) {
+            frameResizeObserver = new ResizeObserver(() => {
+                resizeEmbeddedFrame();
+            });
+
+            frameResizeObserver.observe(content);
+        }
+    });
+
+    // Bei Änderung der Fenstergröße Höhe aktualisieren
+    window.addEventListener("resize", resizeEmbeddedFrame);
+
+    // Browser-Zurück und Browser-Vorwärts unterstützen
+    window.addEventListener("hashchange", () => {
+        const page = window.location.hash.substring(1);
+        showPage(page);
+    });
+
+    // Initialisierung
+    currentPage = window.location.hash.substring(1) || "home";
 
     const savedLanguage = localStorage.getItem("language");
 
-    if (savedLanguage === "en") {
-        setLanguage("en");
-    }
+    setLanguage(savedLanguage === "en" ? "en" : "de");
 </script>
 
 </body>
