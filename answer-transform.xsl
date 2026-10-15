@@ -303,7 +303,7 @@
         </xsl:if>
 
         <tns:sachentscheidung>
-            <tns:sachentscheidung listVersionID="1.0">
+            <tns:sachentscheidung listVersionID="1.1">
                 <code>
                     <xsl:value-of select="$decisionCodes[$decisionIndex]"/>
                 </code>
