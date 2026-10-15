@@ -55,6 +55,15 @@
     <xsl:variable name="nextParticipantNumber" select="max((//tns:verfahrensdaten/tns:beteiligung/tns:beteiligter/tns:beteiligtennummer, 0)) + 1"/>
 
 
+    <!-- Ermittelt alle Rollennummern der Käufer (072) und Verkäufer (168) aus den Grunddaten -->
+    <xsl:variable name="addresseeRoleNumbers"
+                  select="/tns:nachricht.enova.entscheidung.2900003
+                      /tns:grunddaten/tns:verfahrensdaten
+                      /tns:beteiligung/tns:rolle
+                      [tns:rollenbezeichnung/code = ('072', '168')]
+                      /tns:rollennummer"/>
+
+
     <!-- ========================================================= -->
     <!-- externe Konfiguration                                     -->
     <!-- ========================================================= -->
@@ -293,7 +302,7 @@
     <!-- Fachdaten                                                 -->
     <!-- ========================================================= -->
 
-    <!-- Sachentscheidung: Ersetzt das Ersuchen um Sachentscheidung durch die ausgewählte Sachentscheidung -->
+    <!-- Sachentscheidung: Ersetzt das Ersuchen durch die ausgewählte Sachentscheidung und ergänzt alle Käufer und Verkäufer als Adressaten -->
     <xsl:template match="tns:fachdaten/tns:auswahl_GegenstandDerNachricht/tns:ersuchenSachentscheidung">
 
         <xsl:variable name="decisionIndex" select="count(preceding-sibling::tns:ersuchenSachentscheidung) + 1"/>
@@ -303,11 +312,26 @@
         </xsl:if>
 
         <tns:sachentscheidung>
+
             <tns:sachentscheidung listVersionID="1.1">
                 <code>
                     <xsl:value-of select="$decisionCodes[$decisionIndex]"/>
                 </code>
             </tns:sachentscheidung>
+
+            <xsl:if test="$includeEnovaComments and exists($addresseeRoleNumbers)">
+                <xsl:comment>eNoVA: Alle Käufer und Verkäufer wurden anhand ihrer Rollennummern als Adressaten der Sachentscheidung referenziert</xsl:comment>
+            </xsl:if>
+
+            <!-- Referenziert alle Käufer und Verkäufer -->
+            <xsl:for-each select="$addresseeRoleNumbers">
+                <tns:adressatDerSachentscheidung>
+                    <tns:ref.rollennummer>
+                        <xsl:value-of select="."/>
+                    </tns:ref.rollennummer>
+                </tns:adressatDerSachentscheidung>
+            </xsl:for-each>
+
         </tns:sachentscheidung>
 
     </xsl:template>
