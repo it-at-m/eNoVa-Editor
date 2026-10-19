@@ -44,13 +44,7 @@ public class XmlWriter {
         String formattedXml = serialize(document, transformer, lineEnding, targetPath);
 
         try {
-            Files.writeString(
-                    targetPath,
-                    formattedXml,
-                    StandardCharsets.UTF_8,
-                    StandardOpenOption.CREATE_NEW,
-                    StandardOpenOption.WRITE
-            );
+            writeSafely(targetPath, formattedXml);
 
         } catch (FileAlreadyExistsException e) {
             throw writeException(
@@ -195,5 +189,35 @@ public class XmlWriter {
         String normalized = xml.replace("\r\n", "\n").replace("\r", "\n");
 
         return normalized.replace("\n", lineEnding.value());
+    }
+
+    private void writeSafely(Path targetPath, String xml) throws IOException {
+        Path directory = targetPath.toAbsolutePath().getParent();
+        Path tempFile = Files.createTempFile(directory, ".enova-", ".tmp");
+
+        try {
+            Files.writeString(
+                    tempFile,
+                    xml,
+                    StandardCharsets.UTF_8,
+                    StandardOpenOption.WRITE,
+                    StandardOpenOption.TRUNCATE_EXISTING
+            );
+
+            if (Files.exists(targetPath)) {
+                throw new FileAlreadyExistsException(targetPath.toString());
+            }
+
+            Files.move(tempFile, targetPath);
+
+        } catch (IOException | RuntimeException exception) {
+            try {
+                Files.deleteIfExists(tempFile);
+            } catch (IOException cleanupException) {
+                exception.addSuppressed(cleanupException);
+            }
+
+            throw exception;
+        }
     }
 }

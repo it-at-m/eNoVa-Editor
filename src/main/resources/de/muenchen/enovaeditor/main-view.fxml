@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.control.ScrollPane?>
@@ -177,18 +177,38 @@
                 </Label>
 
             </StackPane>
-            <Button
-                    fx:id="generateAnswer"
-                    text="Antwort generieren"
-                    onAction="#onGenerateAnswer"
-                    GridPane.columnIndex="1"
-                    GridPane.rowIndex="4"
-                    GridPane.halignment="RIGHT">
+            <HBox
+                    spacing="10"
+                    alignment="CENTER_LEFT"
+                    GridPane.columnIndex="0"
+                    GridPane.columnSpan="2"
+                    GridPane.rowIndex="4">
 
                 <GridPane.margin>
                     <Insets top="20"/>
                 </GridPane.margin>
-            </Button>
+
+                <Label
+                        fx:id="splitFlurstueckeHint"
+                        text="Es existieren mehrere Flurstücke. Soll die Datei aufgeteilt werden?"
+                        visible="false"
+                        managed="false"/>
+
+                <Button
+                        fx:id="splitFlurstueckeButton"
+                        onAction="#onSplitFlurstuecke"
+                        visible="false"
+                        managed="false"
+                        text="Aufteilen"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button
+                        fx:id="generateAnswer"
+                        text="Antwort generieren"
+                        onAction="#onGenerateAnswer"/>
+
+            </HBox>
         </GridPane>
     </center>
 

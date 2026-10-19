@@ -4,6 +4,7 @@ import de.muenchen.enovaeditor.config.manufacturer.ManufacturerInfoLoader;
 import de.muenchen.enovaeditor.error.ProblemDialog;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -11,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.util.List;
 import java.util.Objects;
@@ -28,7 +30,6 @@ public class EnovaEditorApplication extends Application {
 
             Parent root = fxmlLoader.load();
             MainController controller = fxmlLoader.getController();
-            controller.loadStartupConfiguration();
 
             Node resizeIndicator = (Node) fxmlLoader.getNamespace().get("resizeIndicator");
             resizeIndicator.visibleProperty().bind(stage.resizableProperty()
@@ -55,6 +56,18 @@ public class EnovaEditorApplication extends Application {
                             )
                     )
             );
+
+            Window.getWindows().addListener((ListChangeListener<Window>) change -> {
+                while (change.next()) {
+                    for (Window window : change.getAddedSubList()) {
+                        if (window instanceof Stage dialogStage && dialogStage != stage) {
+                            dialogStage.getIcons().setAll(stage.getIcons());
+                        }
+                    }
+                }
+            });
+
+            controller.loadStartupConfiguration();
 
             stage.setScene(scene);
             stage.show();

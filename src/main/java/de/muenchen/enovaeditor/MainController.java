@@ -31,7 +31,9 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
@@ -65,6 +67,7 @@ public class MainController {
     private final ManufacturerInfoLoader manufacturerInfoLoader = new ManufacturerInfoLoader();
     private final ErsuchenSachentscheidungReader ersuchenSachentscheidungReader = new ErsuchenSachentscheidungReader();
     private final DecisionConfigLoader decisionConfigLoader = new DecisionConfigLoader();
+    private final FlurstueckSplitter flurstueckSplitter = new FlurstueckSplitter();
 
     private final ObjectProperty<Document> openedDocument = new SimpleObjectProperty<>(null);
 
@@ -102,6 +105,12 @@ public class MainController {
 
     @FXML
     private Hyperlink helpLink;
+
+    @FXML
+    private Button splitFlurstueckeButton;
+
+    @FXML
+    private Label splitFlurstueckeHint;
 
     @FXML
     private void initialize() {
@@ -143,6 +152,8 @@ public class MainController {
 
         Path selectedXmlPath = selectedFile.toPath();
 
+        setSplitControlsVisible(false);
+
         openedDocument.set(null);
         openedXmlPath = null;
 
@@ -152,6 +163,8 @@ public class MainController {
             Document document = xmlLoader.load(selectedFile);
 
             checker.check(document);
+
+            int anzahlFlurstuecke = flurstueckSplitter.countFlurstuecke(document);
 
             List<Node> requests = ersuchenSachentscheidungReader.read(document);
 
@@ -175,6 +188,8 @@ public class MainController {
             clearFormFields();
             openedDocument.set(document);
             openedXmlPath = selectedXmlPath;
+
+            setSplitControlsVisible(anzahlFlurstuecke > 1);
 
         } catch (Exception exception) {
             openedDocument.set(null);
@@ -259,6 +274,163 @@ public class MainController {
                         new ErrorDetail("HTML-Datei", outputHtml.toString())
                 )
         );
+    }
+
+    @FXML
+    protected void onSplitFlurstuecke() {
+        List<Path> savedFiles = new ArrayList<>();
+
+        try {
+            Document inputDocument = openedDocument.get();
+
+            if (inputDocument == null || openedXmlPath == null) {
+                throw new AppException(
+                        "Es ist keine XML-Datei zum Aufteilen geöffnet.",
+                        List.of()
+                );
+            }
+
+            int anzahlFlurstuecke = flurstueckSplitter.countFlurstuecke(inputDocument);
+
+            if (anzahlFlurstuecke < 2) {
+                throw new AppException(
+                        "Die XML-Datei enthält nicht mehrere Flurstücke.",
+                        List.of()
+                );
+            }
+
+            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmation.initOwner(fileStatusLabel.getScene().getWindow());
+            confirmation.setTitle("Flurstücke aufteilen");
+            confirmation.setHeaderText(null);
+            confirmation.setGraphic(null);
+
+            confirmation.setContentText("""
+                    Die XML-Datei enthält %d Flurstücke.
+                    Es werden %d Einzeldateien erstellt.
+                    
+                    Die Originaldatei bleibt unverändert.
+                    
+                    Möchten Sie fortfahren?
+                    """.formatted(anzahlFlurstuecke, anzahlFlurstuecke));
+
+            ButtonType confirmButton = new ButtonType(
+                    "Aufteilen", ButtonBar.ButtonData.OK_DONE
+            );
+            ButtonType cancelButton = new ButtonType(
+                    "Abbrechen", ButtonBar.ButtonData.CANCEL_CLOSE
+            );
+
+            confirmation.getButtonTypes().setAll(confirmButton, cancelButton);
+
+            if (confirmation.showAndWait().orElse(cancelButton) != confirmButton) {
+                return;
+            }
+
+            List<Document> documents = flurstueckSplitter.split(inputDocument);
+
+            if (documents.size() != anzahlFlurstuecke) {
+                throw new AppException(
+                        "Die Anzahl der erzeugten XML-Dokumente stimmt nicht mit der Anzahl der Flurstücke überein.",
+                        List.of(
+                                new ErrorDetail("Erwartet", String.valueOf(anzahlFlurstuecke)),
+                                new ErrorDetail("Erzeugt", String.valueOf(documents.size()))
+                        )
+                );
+            }
+
+            for (int i = 0; i < documents.size(); i++) {
+                Document document = documents.get(i);
+
+                checker.check(document);
+
+                int count = flurstueckSplitter.countFlurstuecke(document);
+
+                if (count != 1) {
+                    throw new AppException(
+                            "Das erzeugte XML-Dokument enthält nicht genau ein Flurstück.",
+                            List.of(
+                                    new ErrorDetail("Teildokument", String.valueOf(i + 1)),
+                                    new ErrorDetail("Anzahl Flurstücke", String.valueOf(count))
+                            )
+                    );
+                }
+            }
+
+            Path outputBase = OutputPathUtil.createOutputPath(
+                    openedXmlPath,
+                    "Split",
+                    ""
+            );
+
+            for (int i = 0; i < documents.size(); i++) {
+                Path outputPath = outputBase.resolveSibling(
+                        outputBase.getFileName() + "-%02d.xml".formatted(i + 1)
+                );
+
+                xmlWriter.write(documents.get(i), outputPath.toFile());
+
+                savedFiles.add(outputPath);
+            }
+
+        } catch (Exception exception) {
+            List<ErrorDetail> details = new ArrayList<>();
+
+            if (openedXmlPath != null) {
+                details.add(new ErrorDetail(
+                        "Ausgangsdatei",
+                        openedXmlPath.toString()
+                ));
+            }
+
+            for (Path savedFile : savedFiles) {
+                details.add(new ErrorDetail(
+                        "Bereits gespeicherte Datei",
+                        savedFile.toString()
+                ));
+            }
+
+            ProblemDialog.show(
+                    Alert.AlertType.ERROR,
+                    "Flurstücke konnten nicht aufgeteilt werden",
+                    savedFiles.isEmpty()
+                            ? "Es wurden keine neuen XML-Dateien gespeichert."
+                            : "Die Aufteilung wurde nur teilweise gespeichert. "
+                            + "Bereits erzeugte Dateien bleiben erhalten.",
+                    exception,
+                    details
+            );
+
+            return;
+        }
+
+        resetEditorAfterSplit();
+
+        Alert successDialog = new Alert(Alert.AlertType.INFORMATION);
+        successDialog.initOwner(fileStatusLabel.getScene().getWindow());
+        successDialog.setTitle("Flurstücke erfolgreich aufgeteilt");
+        successDialog.setHeaderText(null);
+
+        Label message = new Label("""
+                Die XML-Datei wurde erfolgreich in %d Einzeldateien aufgeteilt.
+                
+                Sie können nun jede Einzeldatei über „XML öffnen“
+                laden, bearbeiten und die jeweilige Antwort generieren.
+                """.formatted(savedFiles.size()));
+        message.setWrapText(true);
+
+        String directory = savedFiles.getFirst().getParent().toString();
+
+        Label location = new Label("Speicherort: " + directory);
+        location.setMinWidth(0);
+        location.setPrefWidth(0);
+        location.setMaxWidth(Double.MAX_VALUE);
+        location.setTextOverrun(OverrunStyle.CENTER_ELLIPSIS);
+        location.setTooltip(new Tooltip(directory));
+
+        successDialog.getDialogPane().setContent(new VBox(10, message, location));
+        successDialog.setResizable(true);
+        successDialog.showAndWait();
     }
 
     private File chooseXmlFile() {
@@ -602,6 +774,25 @@ public class MainController {
         multipleDecisionBox.setManaged(false);
 
         decisionComboBoxes.clear();
+    }
+
+    private void setSplitControlsVisible(boolean visible) {
+        splitFlurstueckeButton.setVisible(visible);
+        splitFlurstueckeButton.setManaged(visible);
+
+        splitFlurstueckeHint.setVisible(visible);
+        splitFlurstueckeHint.setManaged(visible);
+    }
+
+    private void resetEditorAfterSplit() {
+        clearFormFields();
+        clearDecisionUi();
+
+        openedDocument.set(null);
+        openedXmlPath = null;
+
+        updateFileStatus(null);
+        setSplitControlsVisible(false);
     }
 
     private void setupBindings() {
