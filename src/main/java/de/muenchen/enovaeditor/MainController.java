@@ -602,9 +602,13 @@ public class MainController {
     private void configureDecisionOptions(ComboBox<CodelistEntry> comboBox) {
         comboBox.setCellFactory(listView -> {
 
-            listView.minWidthProperty().bind(comboBox.widthProperty());
-            listView.prefWidthProperty().bind(comboBox.widthProperty());
-            listView.maxWidthProperty().bind(comboBox.widthProperty());
+            listView.setPrefWidth(comboBox.getWidth());
+
+            comboBox.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+                if (newWidth.doubleValue() > 0) {
+                    listView.setPrefWidth(newWidth.doubleValue());
+                }
+            });
 
             return new ListCell<CodelistEntry>() {
 
