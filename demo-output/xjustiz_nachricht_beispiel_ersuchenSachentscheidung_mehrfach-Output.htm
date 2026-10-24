@@ -10,14 +10,15 @@
           margin-top: 40px;
       }
 
-      .behoerde {
+      .empfaenger {
           flex: 1;
       }
 
       .kontakt {
           margin-left: auto;
           padding-top: 20px;
-          padding-right: 10px
+          padding-right: 10px;
+          text-align: right;
       }
 
       .datum-zeile {
@@ -41,10 +42,16 @@
       .flurstueck-block {
           margin-bottom: 8px;
       }
+
+      .hinweis {
+          color: red;
+          text-align: center;
+      }
     </style>
   </head>
 
   <body>
+    <div class="hinweis">Internes Ausgangsdokument generiert aus der XJustiz-Nachricht</div>
 
     <!--
         Absender suchen:
@@ -69,38 +76,56 @@
           Informationen der Person/Absender aus der zuvor gefundenen Beteiligung ausgeben.
       -->
       
-      Hubert
-      Bewiesen
+      Antonia
+      Allenthaler
 
       <br>
 
-      Nebenweg
-      7b
+      Hauptstrasse
+      2
 
       <br>
 
-      12345
-      Haltenau
+      98776
+      Hinterhugeldapfing
 
     </p>
 
     <div class="kopf-zeile">
 
-      <div class="behoerde">
-        LH München
+
+      <div class="empfaenger">
+        <!-- Fall 1: Empfänger über ref.rollennummer -->
+        <div>
+          Dr.
+
+          Martin
+
+          Müller
+        </div>
+
+        <div>
+          Anton-Wilhelm-Amo-Straße
+
+          34
+        </div>
+
+        <div>
+          10117
+
+          Berlin
+        </div>
+
+        <!-- Fall 2: Keine ref.rollennummer -->
+        
       </div>
+
 
       <div class="kontakt">
         
 
-          Mobiltelefon:
-          +49 170 8877665
-
-          <br>
-        
-
-          Fax:
-          +49 89 76521
+          E-Mail:
+          vorkaufsrecht@hinterhugeldapfing.de
 
           <br>
         
@@ -108,17 +133,17 @@
         <br>
 
         Aktenzeichen:
-        Test123
+        LH 2026-1234
       </div>
 
     </div>
 
     <div class="datum-zeile">
       <!-- Ort des aktuellen Beteiligten -->
-      Haltenau,
+      Hinterhugeldapfing,
 
       <!-- Erstellungsdatum der Nachricht im Format TT.MM.JJJJ -->
-      05.10.2026
+      24.10.2026
     </div>
 
     
@@ -126,47 +151,22 @@
     <!-- Betreff / Verfahrensgegenstand -->
     <p>
       Ersuchen Genehmigung GrdstVG; 100000019136
-
-      <!-- Genau eine Sachentscheidung -->
-      
-    </p>
-
-    <!-- Mehrere Sachentscheidungen -->
-    
-
-    <ol>
-      
-
-      <li>
-        Erteilung der Genehmigung gemäß § 2 GrdstVG
-      </li>
-
-      
-
-      <li>
-        Es bedarf keiner Genehmigung gemäß § 2 GVO
-      </li>
-
-      
-
-      <li>
-        Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte
-      </li>
-
-      
-    </ol>
-
-    
-
-    <p>
-      Sehr geehrte Damen und Herren,
     </p>
 
     <p>
-      hiermit zeigen wir die Beurkundung nachfolgenden Grundstücksverkauf an:
+        Guten Tag,
     </p>
 
-    <h3>Verkäufer:</h3>
+    <p>
+      bezüglich Ihrer Anfrage teilen wir Ihnen mit:
+    </p>
+
+    <!-- Rollenbezeichnung für Verkäufer (Code 168) aus der Codeliste -->
+    <h3>
+      Veräußerer (Veräußerin):
+      <br>
+      <span style="font-size: 16px; font-weight: normal;">(Dies können auch mehrere Personen sein.)</span>
+    </h3>
 
     
 
@@ -193,7 +193,12 @@
 
     
 
-    <h3>Käufer:</h3>
+    <!-- Rollenbezeichnung für Käufer (Code 072) aus der Codeliste -->
+    <h3>
+      Erwerber(in):
+      <br>
+      <span style="font-size: 16px; font-weight: normal;">(Dies können auch mehrere Personen sein.)</span>
+    </h3>
 
     
 
@@ -220,8 +225,9 @@
 
     
 
+    <h3>Urkundendaten:</h3>
     <p>
-      Urkunde:
+      Urkundenverzeichnisnummer (UVZ):
       4697
 
       <br>
@@ -230,7 +236,7 @@
       13.08.2026
     </p>
 
-    <h3>Grundstück:</h3>
+    <h3>Grundstück(e):</h3>
 
     
 
@@ -330,12 +336,61 @@
 
     
 
+    <!-- Genau eine Sachentscheidung -->
+    
+
+    <!-- Mehrere Sachentscheidungen -->
+    
+
+    <p style="margin-bottom: 0;"><strong>Unsere Entscheidungen:</strong></p>
+
+    <ol style="margin-top: 0;">
+      
+
+      <li>
+        Erteilung der Genehmigung gemäß § 2 GrdstVG
+      </li>
+
+      
+
+      <li>
+        Erteilung der Genehmigung gemäß § 2 GVO
+      </li>
+
+      
+
+      <li>
+        Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte
+      </li>
+
+      
+    </ol>
+
+    
+
     <p>
       Mit freundlichen Grüßen
     </p>
 
-    <p>
+    <!--
+        Sachbearbeiter:
+        Fall 1: Absender verweist über ref.rollennummer auf eine Beteiligung.
+        Dann werden Vorname und Nachname dieser Person ausgegeben.
+
+        Fall 2: Keine ref.rollennummer vorhanden.
+        Dann wird auswahl_kommunikationspartner/sonstige verwendet.
+    -->
+    <div>
+      Antonia
+
+      Allenthaler
+
+      
+    </div>
+
+    <!-- Instanzbehörde -->
+    <div>
       LH München
-    </p>
+    </div>
   </body>
 </html>

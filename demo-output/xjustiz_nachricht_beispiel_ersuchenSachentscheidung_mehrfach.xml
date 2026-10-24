@@ -10,11 +10,14 @@
 					<tns:sonstige>Notar Dr. Müller</tns:sonstige>
 				</tns:auswahl_kommunikationspartner>
 				<tns:auswahl_verweisGrunddaten><!--optional-->
-					<tns:ref.rollennummer>1</tns:ref.rollennummer><!--Verweis auf grunddaten.verfahrensdaten.beteiliung.beteiligter.beteiligtennummer, nicht auf rolle.rollennummer!-->
+					<tns:ref.rollennummer>
+						<tns:ref.rollennummer>1</tns:ref.rollennummer>
+					</tns:ref.rollennummer>
+					<!--Verweis auf grunddaten.verfahrensdaten.beteiliung.beteiligter.beteiligtennummer, nicht auf rolle.rollennummer!-->
 				</tns:auswahl_verweisGrunddaten>
 			</tns:informationen>
 			<tns:aktenzeichen>UVZ-4697</tns:aktenzeichen>
-			<tns:eigeneNachrichtenID>f8f9e173-58ac-4db1-b709-845e8306bd65</tns:eigeneNachrichtenID><!--TODO: Es ist zu klären, wie wir die eigene Nachrichten-ID bekommen. -->
+			<tns:eigeneNachrichtenID>f8f9e173-58ac-4db1-b709-845e8306bd65</tns:eigeneNachrichtenID>
 		</tns:absender>
 		<tns:empfaenger>
 			<tns:informationen><!--Type.GDS.Kommunikationspartner-->
@@ -209,7 +212,10 @@
 			<tns:urNr>4697</tns:urNr>
 			<tns:urkundsdatum>2026-08-13</tns:urkundsdatum>
 			<tns:urkundsperson>
-				<tns:ref.rollennummer>1</tns:ref.rollennummer><!--Verweis auf grunddaten.verfahrensdaten.beteiliung.beteiligter.beteiligtennummer, nicht auf rolle.rollennummer!-->
+				<tns:ref.rollennummer>
+					<tns:ref.rollennummer>1</tns:ref.rollennummer>
+				</tns:ref.rollennummer>
+				<!--Verweis auf grunddaten.verfahrensdaten.beteiliung.beteiligter.beteiligtennummer, nicht auf rolle.rollennummer!-->
 			</tns:urkundsperson>
 		</tns:datenDerUrkunde>
 		<tns:beschreibungDesBetroffenenRechts><!--Wenn mehrere Grundstücke in einer Urkunde übertragen werden, dann kommt dieses Element mehrmals vor. Es ist sogar zulässig, dass dieses Element 0 mal vorkommt. Der fachliche Hintergrund, eine Nachricht ohne Nennung eines Grundstücks zu verschicken, ist mir aber nicht ersichtlich. --> 

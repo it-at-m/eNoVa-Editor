@@ -8,8 +8,15 @@
             <tns:dokumentklasse listVersionID="1.3"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.dokumentklasse_1.3#version -->
                 <code>017</code> <!-- 017='Bescheid' -->
             </tns:dokumentklasse>
-            <tns:dokumententyp listVersionID="3.9"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.dokumenttyp_3.7#version -->
-                <code>102</code><!-- 102='Öffentlich-rechtliche Genehmigung oder Bescheinigung', denkbar wäre auch: Genehmigungserklärung(073), Mitteilung Behörde (150), Auskunft (50) -->
+            <tns:dokumententyp listVersionID="4.1"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.dokumenttyp_4.1#version -->
+                <code>105</code><!-- 105='Öffentlich-rechtliche Genehmigung oder Bescheinigung', 
+									denkbar wäre auch: 
+									Genehmigungserklärung(073), 
+									Mitteilung Behörde (150), 
+									Auskunft (60),
+									Rechtskraftzeugnis (254 - eNoVA),
+									Unbedenktlichkeitsbescheinigung (255 - eNoVA)
+									-->
             </tns:dokumententyp>
             <tns:datei>
                 <tns:dateiname>xjustiz_nachricht.xml</tns:dateiname>
