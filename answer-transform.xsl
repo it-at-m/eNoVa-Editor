@@ -158,9 +158,11 @@
         <xsl:if test="$includeEnovaComments">
             <xsl:comment>eNoVA: Rollennummer wurde durch die nächste freie Rollennummer aus den vorhandenen Verfahrensdaten ersetzt</xsl:comment>
         </xsl:if>
-        <xsl:copy>
-            <xsl:value-of select="$nextRoleNumber"/>
-        </xsl:copy>
+		<tns:ref.rollennummer>
+			<xsl:copy>
+				<xsl:value-of select="$nextRoleNumber"/>
+			</xsl:copy>
+		</tns:ref.rollennummer>
     </xsl:template>
 
     <!-- Aktenzeichen: Ersetzt das vorhandene Aktenzeichen durch den Wert aus dem Eingabefeld -->
@@ -191,7 +193,7 @@
         </xsl:if>
         <xsl:copy>
             <!-- Übernimmt alle Kindelemente des ursprünglichen Absenders außer dem Aktenzeichen -->
-            <xsl:copy-of select="../tns:absender/node()[not(self::tns:aktenzeichen)]"/>
+            <xsl:copy-of select="../tns:absender/node()[not(self::tns:aktenzeichen or self::tns:eigeneNachrichtenID)]"/>
 
             <!-- Übernimmt das Aktenzeichen des ursprünglichen Absenders in die Empfängerstruktur -->
             <xsl:if test="$includeEnovaComments">
@@ -202,6 +204,14 @@
                     <xsl:value-of select="../tns:absender/tns:aktenzeichen"/>
                 </tns:aktenzeichen.freitext>
             </tns:auswahl_aktenzeichen>
+			
+			<!-- Übernimmt die Nachrichten-ID des ursprünglichen Absenders in die Empfängerstruktur -->
+            <xsl:if test="$includeEnovaComments">
+                <xsl:comment>eNoVA: Nachrichten-ID wurde aus dem Aktenzeichen des ursprünglichen Absenders übernommen</xsl:comment>
+            </xsl:if>
+            <tns:fremdeNachrichtenID>
+                    <xsl:value-of select="../tns:absender/tns:eigeneNachrichtenID"/>
+            </tns:fremdeNachrichtenID>
         </xsl:copy>
     </xsl:template>
 
@@ -327,7 +337,9 @@
             <xsl:for-each select="$addresseeRoleNumbers">
                 <tns:adressatDerSachentscheidung>
                     <tns:ref.rollennummer>
-                        <xsl:value-of select="."/>
+						<tns:ref.rollennummer>
+							<xsl:value-of select="."/>
+						</tns:ref.rollennummer>
                     </tns:ref.rollennummer>
                 </tns:adressatDerSachentscheidung>
             </xsl:for-each>
