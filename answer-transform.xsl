@@ -207,7 +207,7 @@
 			
 			<!-- Übernimmt die Nachrichten-ID des ursprünglichen Absenders in die Empfängerstruktur -->
             <xsl:if test="$includeEnovaComments">
-                <xsl:comment>eNoVA: Nachrichten-ID wurde aus dem Aktenzeichen des ursprünglichen Absenders übernommen</xsl:comment>
+                <xsl:comment>eNoVA: Nachrichten-ID wurde aus der eigenenNachrichtenID des ursprünglichen Absenders übernommen</xsl:comment>
             </xsl:if>
             <tns:fremdeNachrichtenID>
                     <xsl:value-of select="../tns:absender/tns:eigeneNachrichtenID"/>
