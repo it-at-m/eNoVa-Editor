@@ -1,335 +1,293 @@
 <!doctype html>
 <html lang="de">
-  <head>
-    <meta charset="UTF-8"/>
-    <title>eNoVA - Input</title>
-    <style>
-      .kopf-zeile {
-          display: flex;
-          width: 100%;
-          margin-top: 40px;
-      }
+<head>
+  <meta charset="UTF-8"/>
+  <title>eNoVA - Input</title>
+  <style>
+    .kopf-zeile {
+        display: flex;
+        width: 100%;
+        margin-top: 40px;
+    }
 
-      .behoerde {
-          flex: 1;
-      }
+    .empfaenger {
+        flex: 1;
+    }
 
-      .kontakt {
-          margin-left: auto;
-          padding-top: 20px;
-          padding-right: 10px
-      }
+    .kontakt {
+        margin-left: auto;
+        padding-top: 20px;
+        padding-right: 10px;
+        text-align: right;
+    }
 
-      .datum-zeile {
-          text-align: right;
-          margin-top: 20px;
-          padding-right: 10px
-      }
+    .datum-zeile {
+        text-align: right;
+        margin-top: 20px;
+        padding-right: 10px
+    }
 
-      .person-block {
-          margin-bottom: 15px;
-      }
+    .person-block {
+        margin-bottom: 15px;
+    }
 
-      .grundstueck-block {
-          margin-bottom: 20px;
-      }
+    .grundstueck-block {
+        margin-bottom: 20px;
+    }
 
-      .flurstuecke {
-          margin-top: 5px;
-      }
+    .flurstuecke {
+        margin-top: 5px;
+    }
 
-      .flurstueck-block {
-          margin-bottom: 8px;
-      }
-    </style>
-  </head>
+    .flurstueck-block {
+        margin-bottom: 8px;
+    }
 
-  <body>
+    .hinweis {
+        color: red;
+        text-align: center;
+    }
+  </style>
+</head>
 
-    <!--
-        Absender suchen:
-        In der XML-Datei steht beim Absender eine Rollennummer.
-        Mit dieser Nummer suchen wir die passende Beteiligung.
-        Dort stehen die Rolle und die Person, die zu diesem Absender gehören.
-        Die gefundenen Daten können danach innerhalb dieses Bereichs verwendet werden.
-    -->
+<body>
+<div class="hinweis">Internes Eingangsdokument generiert aus der XJustiz-Nachricht</div>
+
+<!--
+    Absender suchen:
+    In der XML-Datei steht beim Absender eine Rollennummer.
+    Mit dieser Nummer suchen wir die passende Beteiligung.
+    Dort stehen die Rolle und die Person, die zu diesem Absender gehören.
+    Die gefundenen Daten können danach innerhalb dieses Bereichs verwendet werden.
+-->
+
+
+<!-- Betreff / Verfahrensgegenstand -->
+<p>
+  Ersuchen Genehmigung GrdstVG; 100000019136
+</p>
+
+<p>
+  Guten Tag,
+</p>
+
+<p>
+  hiermit zeigen wir die Beurkundung nachfolgenden Grundstücksverkauf an:
+</p>
+
+<!-- Rollenbezeichnung für Verkäufer (Code 168) aus der Codeliste -->
+<h3>
+  Veräußerer (Veräußerin):
+  <br>
+  <span style="font-size: 16px; font-weight: normal;">(Dies können auch mehrere Personen sein.)</span>
+</h3>
+
+
+
+<div class="person-block">
+  
+  Max
+  Verkäufer
+
+  <br>
+
+  Zenettistraße
+  24
+
+  <br>
+
+  80337
+  München
+
+  <br>
+
+  Geboren am
+  13.08.1965
+</div>
+
+
+
+<!-- Rollenbezeichnung für Käufer (Code 072) aus der Codeliste -->
+<h3>
+  Erwerber(in):
+  <br>
+  <span style="font-size: 16px; font-weight: normal;">(Dies können auch mehrere Personen sein.)</span>
+</h3>
+
+
+
+<div class="person-block">
+  
+  Martina
+  Käuferin
+
+  <br>
+
+  Oberländerstraße
+  36
+
+  <br>
+
+  1136
+  Wien
+
+  <br>
+
+  Geboren am
+  28.09.1978
+</div>
+
+
+
+<h3>Urkundendaten:</h3>
+<p>
+  Urkundenverzeichnisnummer (UVZ):
+  4697
+
+  <br>
+
+  Beurkundungsdatum:
+  13.08.2026
+</p>
+
+<h3>Grundstück(e):</h3>
+
+
+
+<div class="grundstueck-block">
+
+  <div>
+    Amtsgericht:
+    München
+  </div>
+
+  <div>
+    Grundbuchbezirk:
+    Obermenzing
+  </div>
+
+  <div>
+    Grundbuchblatt:
+    1714
+  </div>
+
+  <div class="flurstuecke">
+
     
 
-    <p>
-      <!--
-          Rollenbezeichnung ausgeben:
-          Der Name "rollenbezeichnung" gehört zur Konfiguration
-          in codelists.properties.
-          Der XPath liefert den Rollen-Code, zum Beispiel 208.
-          Über die Codelist wird daraus dann die Bezeichnung.
-      -->
-      Notar(in)
-
-      <!--
-          Informationen der Person/Absender aus der zuvor gefundenen Beteiligung ausgeben.
-      -->
-      Dr.
-      Martin
-      Müller
-
-      <br>
-
-      Anton-Wilhelm-Amo-Straße
-      34
-
-      <br>
-
-      10117
-      Berlin
-
-    </p>
-
-    <div class="kopf-zeile">
-
-      <div class="behoerde">
-        LH München
+    <div class="flurstueck-block">
+      <div>
+        Gemarkung:
+        8694
       </div>
 
-      <div class="kontakt">
-        
-
-          Telefon:
-          030 - 1231239321
-
-          <br>
-        
-
-        <br>
-
-        Aktenzeichen:
-        UVZ-4697
+      <div>
+        Flurstück:
+        306/46
       </div>
-
-    </div>
-
-    <div class="datum-zeile">
-      <!-- Ort des aktuellen Beteiligten -->
-      Berlin,
-
-      <!-- Erstellungsdatum der Nachricht im Format TT.MM.JJJJ -->
-      13.08.2026
-    </div>
-
-    
-
-    <!-- Betreff / Verfahrensgegenstand -->
-    <p>
-      Ersuchen Genehmigung GrdstVG; 100000019136
-
-      <!-- Genau ein Ersuchen -->
-      
-    </p>
-
-    <!-- Mehrere Ersuchen -->
-    
-
-    <ol>
-      
-
-      <li>
-        Erteilung der Genehmigung nach § 2 GrdstVG
-      </li>
-
-      
-
-      <li>
-        Erteilung der Genehmigung nach § 2 GVO
-      </li>
-
-      
-
-      <li>
-        Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte und hilfsweise um Erteilung eines Negativattests
-      </li>
-
-      
-    </ol>
-
-    
-
-    <p>
-      Sehr geehrte Damen und Herren,
-    </p>
-
-    <p>
-      hiermit zeigen wir die Beurkundung nachfolgenden Grundstücksverkauf an:
-    </p>
-
-    <h3>Verkäufer:</h3>
-
-    
-
-    <div class="person-block">
-      
-      Max
-      Verkäufer
-
-      <br>
-
-      Zenettistraße
-      24
-
-      <br>
-
-      80337
-      München
-
-      <br>
-
-      Geboren am
-      13.08.1965
-    </div>
-
-    
-
-    <h3>Käufer:</h3>
-
-    
-
-    <div class="person-block">
-      
-      Martina
-      Käuferin
-
-      <br>
-
-      Oberländerstraße
-      36
-
-      <br>
-
-      1136
-      Wien
-
-      <br>
-
-      Geboren am
-      28.09.1978
     </div>
 
     
 
-    <p>
-      Urkunde:
-      4697
+  </div>
 
-      <br>
+</div>
 
-      Beurkundungsdatum:
-      13.08.2026
-    </p>
 
-    <h3>Grundstück:</h3>
+
+<div class="grundstueck-block">
+
+  <div>
+    Amtsgericht:
+    München
+  </div>
+
+  <div>
+    Grundbuchbezirk:
+    Langwied
+  </div>
+
+  <div>
+    Grundbuchblatt:
+    1715
+  </div>
+
+  <div class="flurstuecke">
 
     
 
-    <div class="grundstueck-block">
-
+    <div class="flurstueck-block">
       <div>
-        Amtsgericht:
-        München
-      </div>
-
-      <div>
-        Grundbuchbezirk:
-        Obermenzing
+        Gemarkung:
+        8685
       </div>
 
       <div>
-        Grundbuchblatt:
-        1714
+        Flurstück:
+        306/46
       </div>
-
-      <div class="flurstuecke">
-
-        
-
-        <div class="flurstueck-block">
-          <div>
-            Gemarkung:
-            8694
-          </div>
-
-          <div>
-            Flurstück:
-            306/46
-          </div>
-        </div>
-
-        
-
-      </div>
-
     </div>
 
     
 
-    <div class="grundstueck-block">
-
+    <div class="flurstueck-block">
       <div>
-        Amtsgericht:
-        München
-      </div>
-
-      <div>
-        Grundbuchbezirk:
-        Langwied
+        Gemarkung:
+        8685
       </div>
 
       <div>
-        Grundbuchblatt:
-        1715
+        Flurstück:
+        307
       </div>
-
-      <div class="flurstuecke">
-
-        
-
-        <div class="flurstueck-block">
-          <div>
-            Gemarkung:
-            8685
-          </div>
-
-          <div>
-            Flurstück:
-            306/46
-          </div>
-        </div>
-
-        
-
-        <div class="flurstueck-block">
-          <div>
-            Gemarkung:
-            8685
-          </div>
-
-          <div>
-            Flurstück:
-            307
-          </div>
-        </div>
-
-        
-
-      </div>
-
     </div>
 
     
 
-    <p>
-      Mit freundlichen Grüßen
-    </p>
+  </div>
 
-    <p>
-      Notar Dr. Müller
-    </p>
-  </body>
+</div>
+
+
+
+<!-- Genau ein Ersuchen -->
+
+
+<!-- Mehrere Ersuchen -->
+
+
+<p>Wir bitten um</p>
+
+<ol>
+  
+
+  <li>
+    Erteilung der Genehmigung nach § 2 GrdstVG
+  </li>
+
+  
+
+  <li>
+    Erteilung der Genehmigung nach § 2 GVO
+  </li>
+
+  
+
+  <li>
+    Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte und hilfsweise um Erteilung eines Negativattests
+  </li>
+
+  
+</ol>
+
+
+
+<p>
+  Mit freundlichen Grüßen
+</p>
+
+<p>
+  Notar Dr. Müller
+</p>
+</body>
 </html>

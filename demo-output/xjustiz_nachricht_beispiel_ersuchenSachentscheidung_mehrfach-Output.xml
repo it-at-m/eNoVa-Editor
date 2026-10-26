@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Kommentierte Version von Dr. Rupert Späth, it@M, LH München. Stand: 19.08.2026-->
 <tns:nachricht.enova.entscheidung.2900003 xmlns:tns="http://www.xjustiz.de"
-                                          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                          xsi:schemaLocation="http://www.xjustiz.de xjustiz_2900_dabag_3_3.xsd"><!--eNoVA: xsi:schemaLocation wurde auf den in answer-transform.xsl konfigurierten Wert gesetzt-->
    <tns:nachrichtenkopf xjustizVersion="3.6.2"><!--In der Antwort muss der Nachrichtenkopf praktisch komplett neu geschrieben werden. 
 			Lediglich die Absenderdaten können für den Notar-Empfänger verwendet werden. 
 			Derzeit gehe ich davon aus, dass das Grundbuchamt eine eigene Nachricht bekommt, das bedeutet, dass dieses separat als Empfänger in einer eigenene XML-Datei zu benennen ist.--><!--eNoVA: Erstellungszeitpunkt wurde durch den aktuellen Systemzeitpunkt ersetzt-->
-      <tns:erstellungszeitpunkt>2026-10-05T15:04:08.6185479+02:00</tns:erstellungszeitpunkt>
+      <tns:erstellungszeitpunkt>2026-10-24T10:49:51.3285491+02:00</tns:erstellungszeitpunkt>
       <tns:absender>
          <tns:informationen><!--Type.GDS.Kommunikationspartner-->
             <tns:auswahl_kommunikationspartner><!--eNoVA: Kommunikationspartner wurde durch den Wert aus sender-config.xml ersetzt-->
                <tns:sonstige>LH München</tns:sonstige>
             </tns:auswahl_kommunikationspartner>
             <tns:auswahl_verweisGrunddaten><!--optional--><!--eNoVA: Rollennummer wurde durch die nächste freie Rollennummer aus den vorhandenen Verfahrensdaten ersetzt-->
-               <tns:ref.rollennummer>5</tns:ref.rollennummer>
+               <tns:ref.rollennummer>
+                  <tns:ref.rollennummer>5</tns:ref.rollennummer>
+               </tns:ref.rollennummer>
                <!--Verweis auf grunddaten.verfahrensdaten.beteiliung.beteiligter.beteiligtennummer, nicht auf rolle.rollennummer!-->
             </tns:auswahl_verweisGrunddaten>
          </tns:informationen>
          <!--eNoVA: Aktenzeichen wurde durch den Wert aus dem Eingabefeld ersetzt-->
-         <tns:aktenzeichen>Test123</tns:aktenzeichen>
+         <tns:aktenzeichen>LH 2026-1234</tns:aktenzeichen>
          <!--eNoVA: Nachrichten-ID wurde durch eine von der Anwendung neu erzeugte eindeutige Nachrichten-ID ersetzt-->
-         <tns:eigeneNachrichtenID>34cf11c5-37d2-432f-b9cb-c2c0d1b9d0cf</tns:eigeneNachrichtenID>
-         <!--TODO: Es ist zu klären, wie wir die eigene Nachrichten-ID bekommen. -->
+         <tns:eigeneNachrichtenID>b6bd0fbd-2ee4-426e-9ebf-26f0a718dd98</tns:eigeneNachrichtenID>
       </tns:absender>
       <!--eNoVA: Empfängerdaten wurden aus den Daten des ursprünglichen Absenders übernommen-->
       <tns:empfaenger>
@@ -29,22 +31,24 @@
                <tns:sonstige>Notar Dr. Müller</tns:sonstige>
             </tns:auswahl_kommunikationspartner>
             <tns:auswahl_verweisGrunddaten><!--optional-->
-               <tns:ref.rollennummer>1</tns:ref.rollennummer>
+               <tns:ref.rollennummer>
+                  <tns:ref.rollennummer>1</tns:ref.rollennummer>
+               </tns:ref.rollennummer>
                <!--Verweis auf grunddaten.verfahrensdaten.beteiliung.beteiligter.beteiligtennummer, nicht auf rolle.rollennummer!-->
             </tns:auswahl_verweisGrunddaten>
          </tns:informationen>
-         <tns:eigeneNachrichtenID>f8f9e173-58ac-4db1-b709-845e8306bd65</tns:eigeneNachrichtenID>
-         <!--TODO: Es ist zu klären, wie wir die eigene Nachrichten-ID bekommen. -->
          <!--eNoVA: Empfänger-Aktenzeichen wurde aus dem Aktenzeichen des ursprünglichen Absenders übernommen-->
          <tns:auswahl_aktenzeichen>
             <tns:aktenzeichen.freitext>UVZ-4697</tns:aktenzeichen.freitext>
          </tns:auswahl_aktenzeichen>
+         <!--eNoVA: Nachrichten-ID wurde aus dem Aktenzeichen des ursprünglichen Absenders übernommen-->
+         <tns:fremdeNachrichtenID>f8f9e173-58ac-4db1-b709-845e8306bd65</tns:fremdeNachrichtenID>
       </tns:empfaenger>
       <!--eNoVA: Herstellerinformationen wurden aus den internen Herstellerinformationen der Anwendung übernommen-->
       <tns:herstellerinformation>
          <tns:nameDesProdukts>LHM-eNoVA-Generator</tns:nameDesProdukts>
          <tns:herstellerDesProdukts>Landeshauptstadt München it@M</tns:herstellerDesProdukts>
-         <tns:version>0.9.0</tns:version>
+         <tns:version>0.9.3</tns:version>
       </tns:herstellerinformation>
    </tns:nachrichtenkopf>
    <tns:grunddaten>
@@ -189,30 +193,24 @@
                <tns:auswahl_beteiligter>
                   <tns:natuerlichePerson>
                      <tns:vollerName><!-- Type.GDS.NameNatuerlichePerson -->
-                        <tns:vorname>Hubert</tns:vorname>
-                        <tns:nachname>Bewiesen</tns:nachname>
+                        <tns:vorname>Antonia</tns:vorname>
+                        <tns:nachname>Allenthaler</tns:nachname>
                      </tns:vollerName>
                      <tns:anschrift><!-- 003='Dienst-/Geschäftsadresse' -->
                         <tns:anschriftstyp listVersionID="3.0"><!--https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.anschriftstyp -->
                            <code>003</code>
                         </tns:anschriftstyp>
-                        <tns:anschriftenzusatz>Gemeinde Schattendorf, Vorkaufsrechtsstelle</tns:anschriftenzusatz>
-                        <tns:strasse>Nebenweg</tns:strasse>
-                        <tns:hausnummer>7b</tns:hausnummer>
-                        <tns:postleitzahl>12345</tns:postleitzahl>
-                        <tns:ort>Haltenau</tns:ort>
+                        <tns:anschriftenzusatz>Gemeinde Hinterhugeldapfing, Abteilung 3</tns:anschriftenzusatz>
+                        <tns:strasse>Hauptstrasse</tns:strasse>
+                        <tns:hausnummer>2</tns:hausnummer>
+                        <tns:postleitzahl>98776</tns:postleitzahl>
+                        <tns:ort>Hinterhugeldapfing</tns:ort>
                      </tns:anschrift>
-                     <tns:telekommunikation><!-- 004='Mobiltelefon' -->
+                     <tns:telekommunikation><!-- 001='E-Mail' -->
                         <tns:telekommunikationsart listVersionID="2.3"><!--https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.telekommunikationsart -->
-                           <code>004</code>
+                           <code>001</code>
                         </tns:telekommunikationsart>
-                        <tns:verbindung>+49 170 8877665</tns:verbindung>
-                     </tns:telekommunikation>
-                     <tns:telekommunikation><!-- 002='Fax' -->
-                        <tns:telekommunikationsart listVersionID="2.3"><!--https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.telekommunikationsart -->
-                           <code>002</code>
-                        </tns:telekommunikationsart>
-                        <tns:verbindung>+49 89 76521</tns:verbindung>
+                        <tns:verbindung>vorkaufsrecht@hinterhugeldapfing.de</tns:verbindung>
                      </tns:telekommunikation>
                   </tns:natuerlichePerson>
                </tns:auswahl_beteiligter>
@@ -220,35 +218,43 @@
          </tns:beteiligung>
       </tns:verfahrensdaten>
    </tns:grunddaten>
+   <!--eNoVA: Schriftgutobjekte wurden durch den Inhalt aus schriftgutobjekte.xml ersetzt-->
    <tns:schriftgutobjekte>
       <tns:dokument>
          <tns:identifikation>
-            <tns:id>5e2e5487-93f2-41aa-b760-2fccc975b888</tns:id>
+            <tns:id>b4e0f7a2-9d3b-4f8a-8c2e-7d9f4a2b1c3d</tns:id>
             <tns:nummerImUebergeordnetenContainer>1</tns:nummerImUebergeordnetenContainer>
          </tns:identifikation>
          <tns:xjustiz.fachspezifischeDaten>
             <tns:dokumentklasse listVersionID="1.3"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.dokumentklasse_1.3#version -->
-               <code>015</code>
-               <!-- 015='Schreiben' -->
+               <code>017</code>
+               <!-- 017='Bescheid' -->
             </tns:dokumentklasse>
-            <tns:dokumententyp listVersionID="4.1"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.dokumenttyp_3.7#version -->
-               <code>102</code>
-               <!-- 102='Erwerbsurkunde' -->
+            <tns:dokumententyp listVersionID="4.1"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.dokumenttyp_4.1#version -->
+               <code>105</code>
+               <!-- 105='Öffentlich-rechtliche Genehmigung oder Bescheinigung', 
+									denkbar wäre auch: 
+									Genehmigungserklärung(073), 
+									Mitteilung Behörde (150), 
+									Auskunft (60),
+									Rechtskraftzeugnis (254 - eNoVA),
+									Unbedenktlichkeitsbescheinigung (255 - eNoVA)
+									-->
             </tns:dokumententyp>
             <tns:datei>
-               <tns:dateiname>4_e_USL_Urkunde_5e2e5487-93f2-41aa-b760-2fccc975b888.pdf</tns:dateiname>
+               <tns:dateiname>xjustiz_nachricht.xml</tns:dateiname>
                <tns:bestandteil listVersionID="2.5"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.bestandteiltyp -->
                   <code>001</code>
                   <!-- 001='Original'-->
                </tns:bestandteil>
             </tns:datei>
             <tns:datei>
-               <tns:dateiname>4_e_USL_Urkunde_5e2e5487-93f2-41aa-b760-2fccc975b888.pdf.pkcs7</tns:dateiname>
+               <tns:dateiname>xjustiz_nachricht.xml.pkcs7</tns:dateiname>
                <tns:bestandteil listVersionID="2.5">
                   <code>003</code>
                   <!-- 003='Signaturdatei'-->
                </tns:bestandteil>
-               <tns:dateiname.bezugsdatei>4_e_USL_Urkunde_5e2e5487-93f2-41aa-b760-2fccc975b888.pdf</tns:dateiname.bezugsdatei>
+               <tns:dateiname.bezugsdatei>xjustiz_nachricht.xml</tns:dateiname.bezugsdatei>
             </tns:datei>
          </tns:xjustiz.fachspezifischeDaten>
       </tns:dokument>
@@ -256,28 +262,63 @@
    <tns:fachdaten><!--Derzeit gehe ich davon aus, dass bei der Antwort in den Fachdaten lediglich der Bereich 'ersuchenSachentscheidung' durch 'sachentscheidung' zu tauschen ist.-->
       <tns:auswahl_GegenstandDerNachricht><!-- 011='Erteilung der Genehmigung nach § 2 GrdstVG'--><!--eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt-->
          <tns:sachentscheidung>
-            <tns:sachentscheidung listVersionID="1.0">
+            <tns:sachentscheidung listVersionID="1.1">
                <code>019</code>
             </tns:sachentscheidung>
+            <!--eNoVA: Alle Käufer und Verkäufer wurden anhand ihrer Rollennummern als Adressaten der Sachentscheidung referenziert-->
+            <tns:adressatDerSachentscheidung>
+               <tns:ref.rollennummer>
+                  <tns:ref.rollennummer>3</tns:ref.rollennummer>
+               </tns:ref.rollennummer>
+            </tns:adressatDerSachentscheidung>
+            <tns:adressatDerSachentscheidung>
+               <tns:ref.rollennummer>
+                  <tns:ref.rollennummer>4</tns:ref.rollennummer>
+               </tns:ref.rollennummer>
+            </tns:adressatDerSachentscheidung>
          </tns:sachentscheidung>
          <!--eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt-->
          <tns:sachentscheidung>
-            <tns:sachentscheidung listVersionID="1.0">
-               <code>022</code>
+            <tns:sachentscheidung listVersionID="1.1">
+               <code>021</code>
             </tns:sachentscheidung>
+            <!--eNoVA: Alle Käufer und Verkäufer wurden anhand ihrer Rollennummern als Adressaten der Sachentscheidung referenziert-->
+            <tns:adressatDerSachentscheidung>
+               <tns:ref.rollennummer>
+                  <tns:ref.rollennummer>3</tns:ref.rollennummer>
+               </tns:ref.rollennummer>
+            </tns:adressatDerSachentscheidung>
+            <tns:adressatDerSachentscheidung>
+               <tns:ref.rollennummer>
+                  <tns:ref.rollennummer>4</tns:ref.rollennummer>
+               </tns:ref.rollennummer>
+            </tns:adressatDerSachentscheidung>
          </tns:sachentscheidung>
          <!--eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt-->
          <tns:sachentscheidung>
-            <tns:sachentscheidung listVersionID="1.0">
+            <tns:sachentscheidung listVersionID="1.1">
                <code>023</code>
             </tns:sachentscheidung>
+            <!--eNoVA: Alle Käufer und Verkäufer wurden anhand ihrer Rollennummern als Adressaten der Sachentscheidung referenziert-->
+            <tns:adressatDerSachentscheidung>
+               <tns:ref.rollennummer>
+                  <tns:ref.rollennummer>3</tns:ref.rollennummer>
+               </tns:ref.rollennummer>
+            </tns:adressatDerSachentscheidung>
+            <tns:adressatDerSachentscheidung>
+               <tns:ref.rollennummer>
+                  <tns:ref.rollennummer>4</tns:ref.rollennummer>
+               </tns:ref.rollennummer>
+            </tns:adressatDerSachentscheidung>
          </tns:sachentscheidung>
       </tns:auswahl_GegenstandDerNachricht>
       <tns:datenDerUrkunde>
          <tns:urNr>4697</tns:urNr>
          <tns:urkundsdatum>2026-08-13</tns:urkundsdatum>
          <tns:urkundsperson>
-            <tns:ref.rollennummer>1</tns:ref.rollennummer>
+            <tns:ref.rollennummer>
+               <tns:ref.rollennummer>1</tns:ref.rollennummer>
+            </tns:ref.rollennummer>
             <!--Verweis auf grunddaten.verfahrensdaten.beteiliung.beteiligter.beteiligtennummer, nicht auf rolle.rollennummer!-->
          </tns:urkundsperson>
       </tns:datenDerUrkunde>
