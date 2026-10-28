@@ -84,6 +84,30 @@
             <code>sachentscheidung</code>.
         </p>
     </details>
+	
+	  <details>
+        <summary>
+            Welche Bescheide können mit dem eNoVA-Editor erstellt werden?
+        </summary>
+        <p>
+            Der eNoVA-Editor deckt eNoVA.2900003 vollständig ab. 
+			Die möglichen Fragen sind auf der Seite:<br>
+			<a href="https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:enova.ersuchensachentscheidung" target="_blank">
+			https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:enova.ersuchensachentscheidung
+			</a><br> aufgelistet.
+		</p>
+		<p>
+			Die Behörde kann auf diese mit folgenden Antworten reagieren:<br> 
+			<a href="https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:enova.sachentscheidung" target="_blank">
+			https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:enova.sachentscheidung
+			</a>
+        </p>
+		<p>
+			Welche Antworten auf welche Fragen möglich sind, steht in der Datei:<br>
+			<a href="https://github.com/it-at-m/eNoVa-Editor/blob/main/decision-config.xml">https://github.com/it-at-m/eNoVa-Editor/blob/main/decision-config.xml</a><br>
+			Diese Liste ist mit der Bundesnotarkammer abgestimmt.
+		</p>
+    </details>
 
     <details>
         <summary>
@@ -138,9 +162,37 @@
             der XML-Antwort keine Zeilenumbrüche zu verwenden.
         </p>
     </details>
-
-
-    <details>
+	
+	<details>
+        <summary>
+            Was braucht man alles, um 'eNoVA-ready' zu sein?
+        </summary>
+        <p>
+            <ul>
+				<li>Ein besonderes elektronisches Behördenpostfach (beBPo).</li>
+				<li>Ein Tool oder eine Fachanwendung, die eNoVA.2900003 lesen, anzeigen und schreiben kann, beispielsweise den eNoVA-Editor.</li>
+				<li>Eine Signatur mit Organistaionsvalidierung. Die meisten Signaturen, 
+				die vor Mitte 2026 ausgestellt wurden, haben keine Angabe, zu welcher Gemeinde die ausstellende Person gehört. 
+				Diese müssen entsprechend ersetzt werden.</li>
+				<li>Eine Signatursoftware, die CAdES (detached) erstellen kann. Der Hersteller der Signatursoftware kann Auskunft geben, 
+				ob die Software den Anforderungen des eNoVA-Gesetzes gerecht wird.
+				Die Signatur-Software stellt möglicherweise weitere Anforderungen.</li> 
+			</ul>
+        </p>
+    </details>
+	
+	<details>
+        <summary>
+            Welche Hardware- und Software-Anforderungen stellt der eNoVA-Editor?
+        </summary>
+        <p>
+            Der eNoVA-Editor ist eine Java-Desktopanwendung. Prinzipiell ist er damit auf jedem Betriebssystem lauffähig. 
+			Derzeit wird nur MS Windows unterszützt. Weitere Betriebssysteme auf Anfrage.<br>
+			Weiteres siehe <a href="https://github.com/it-at-m/eNoVa-Editor/issues/38">https://github.com/it-at-m/eNoVa-Editor/issues/38</a>.
+        </p>
+    </details>
+	
+	<details>
         <summary>
             Wie kann ich die Anzeige des eNoVA-Editors unter Windows vergrößern?
         </summary>
@@ -151,6 +203,22 @@
             und fahren Sie mit der Bearbeitung fort.
         </p>
     </details>
+	
+	<details>
+        <summary>
+            Welche Alternativen gibt es zum eNoVA-Editor?
+        </summary>
+        <p>
+            Als kostenlose Option stehen die XJustiz-Werkzeuge zur Verfügung:<br>
+			<a href="https://xjustiz-werkzeuge-3b2324.usercontent.opencode.de/anwendungsfaelle/enova/" target="_blank">
+			https://xjustiz-werkzeuge-3b2324.usercontent.opencode.de/anwendungsfaelle/enova/
+			</a>
+		</p>
+		<p>
+			Darüberhinaus gibt es mehrere kostenpflichtige Alternativen von kommerziellen Anbietern.
+        </p>
+    </details>
+
 </main>
 
 </body>
