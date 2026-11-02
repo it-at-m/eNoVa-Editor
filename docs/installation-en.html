@@ -210,17 +210,39 @@ eNoVA-editor/
 
     <p>
         The caseworkers available for selection in the eNoVA Editor
-        are configured in the file <code>caseworkers.xml</code>.
+        are stored in a file <code>caseworkers.xml</code>.
+        They can be created, edited and deleted directly in the eNoVA Editor
+        with the "Kontaktdaten" button next to the selection field.
     </p>
 
     <p>
-        The example data included with the application must be replaced
-        with the data of your own organization.
+        Changes are saved in the user directory only:
+        <code>%APPDATA%\eNoVA-Editor\caseworkers.xml</code>.
+        They are available immediately, without a restart.
     </p>
 
     <p>
-        The configured entries are loaded when the application starts
-        and are then available in the caseworker selection field.
+        At startup, the following order applies:
+    </p>
+
+    <ol>
+        <li>the <code>caseworkers.xml</code> in the user directory,</li>
+        <li>if there is no file there, the <code>caseworkers.xml</code>
+            in the installation directory,</li>
+        <li>if there is no file in either place, the selection stays empty
+            and no response can be generated.</li>
+    </ol>
+
+    <p>
+        The <code>caseworkers.xml</code> shipped in the installation directory
+        contains example data and serves as a template. It can be removed
+        after rollout.
+    </p>
+
+    <p>
+        If the file in the user directory is invalid, it is renamed to
+        <code>caseworkers.xml.ungueltig</code> and the contact data from the
+        installation directory is used.
     </p>
 
 
@@ -500,6 +522,8 @@ XJustiz response XML
 
     <div class="notice">
         Write access to the installation directory is not required for normal use.
+        The contact data requires write access to the user directory
+        <code>%APPDATA%\eNoVA-Editor</code>.
         When configuration files such as
         <code>sender-config.xml</code>,
         <code>caseworkers.xml</code>,

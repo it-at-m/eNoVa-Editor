@@ -46,6 +46,7 @@ public class AnswerTransformer {
         transformer.setParameter("fileNumber", parameters.fileNumber());
         transformer.setParameter("messageId", parameters.messageId());
         transformer.setParameter("caseworkerName", parameters.caseworkerName());
+        transformer.setParameter("caseworkersFile", parameters.caseworkersFile());
         transformer.setParameter("decisionCodes", parameters.decisionCodes());
 
         transformer.setParameter("productName", parameters.manufacturerInfo().productName());

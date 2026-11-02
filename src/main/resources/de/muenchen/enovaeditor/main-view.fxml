@@ -104,10 +104,35 @@
             <Label text="Sachbearbeiter*in:"
                    GridPane.columnIndex="0"
                    GridPane.rowIndex="2"/>
-            <ComboBox
-                    fx:id="caseworkerComboBox"
+            <HBox
+                    spacing="10"
+                    alignment="CENTER_LEFT"
                     GridPane.columnIndex="1"
-                    GridPane.rowIndex="2"/>
+                    GridPane.rowIndex="2">
+
+                <ComboBox
+                        fx:id="caseworkerComboBox"
+                        minWidth="-Infinity"/>
+
+                <Button
+                        text="Kontaktdaten"
+                        minWidth="-Infinity"
+                        onAction="#onKontaktdatenClick"
+                        accessibleHelp="Öffnet die Verwaltung der Kontaktdaten.">
+                    <tooltip>
+                        <Tooltip text="Kontaktdaten anlegen, bearbeiten oder löschen"/>
+                    </tooltip>
+                </Button>
+
+                <Label
+                        fx:id="caseworkerHint"
+                        text="Keine Kontaktdaten vorhanden. Legen Sie über „Kontaktdaten“ einen Eintrag an."
+                        wrapText="true"
+                        minWidth="0"
+                        visible="false"
+                        managed="false"/>
+
+            </HBox>
 
             <StackPane
                     fx:id="multipleDecisionBox"
