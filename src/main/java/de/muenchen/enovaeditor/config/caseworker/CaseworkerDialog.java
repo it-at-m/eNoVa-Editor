@@ -135,7 +135,7 @@ public final class CaseworkerDialog {
         dialog.getDialogPane().getButtonTypes().setAll(saveButtonType, cancelButtonType);
 
         dialog.getDialogPane().setContent(createContent(fromInstallationDirectory));
-        dialog.getDialogPane().setPrefSize(900, 650);
+        dialog.getDialogPane().setPrefSize(900, 750);
 
         Button saveButton = (Button) dialog.getDialogPane().lookupButton(saveButtonType);
         saveButton.addEventFilter(ActionEvent.ACTION, event -> {
@@ -220,9 +220,9 @@ public final class CaseworkerDialog {
 
         addRow(grid, 0, "Anzeigename*:", nameField);
         addRow(grid, 1, "Vorname*:", vornameField);
-        addRow(grid, 2, "Titel:", titelField);
-        addRow(grid, 3, "Namensvorsatz:", namensvorsatzField);
-        addRow(grid, 4, "Nachname*:", nachnameField);
+        addRow(grid, 2, "Nachname*:", nachnameField);
+        addRow(grid, 3, "Titel:", titelField);
+        addRow(grid, 4, "Namensvorsatz:", namensvorsatzField);
         addRow(grid, 5, "Namenszusatz:", namenszusatzField);
 
         nameField.textProperty().addListener((observable, oldValue, newValue) -> {
