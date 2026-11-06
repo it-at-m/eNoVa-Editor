@@ -72,16 +72,12 @@ public class MainController {
     private final ObjectProperty<Document> openedDocument = new SimpleObjectProperty<>(null);
 
     private final BooleanProperty decisionMissing = new SimpleBooleanProperty(true);
-    private final List<ComboBox<CodelistEntry>> decisionComboBoxes = new ArrayList<>();
+    private final List<DecisionRow> decisionRows = new ArrayList<>();
     private final List<CodelistEntry> decisionEntries = new ArrayList<>();
-    private final List<javafx.scene.Node> singleDecisionNodes = new ArrayList<>();
     private Path openedXmlPath;
     private String senderName;
     private Map<String, List<String>> allowedDecisionsByRequestCode = Map.of();
     private Map<String, String> requestLabelsByCode = Map.of();
-    @FXML
-    private GridPane formGrid;
-
     @FXML
     private StackPane multipleDecisionBox;
 
@@ -229,7 +225,9 @@ public class MainController {
 
             CaseworkerEntry selectedCaseworker = caseworkerComboBox.getValue();
 
-            List<String> decisionCodes = decisionComboBoxes.stream().map(ComboBox::getValue).map(CodelistEntry::code).toList();
+            List<String> decisionCodes = decisionRows.stream()
+                    .map(row -> row.decisionComboBox().getValue().code())
+                    .toList();
 
             AnswerParameters parameters = new AnswerParameters(fileNumber.getText(), UUID.randomUUID().toString(), manufacturerInfo, selectedCaseworker.name(), decisionCodes);
 
@@ -478,62 +476,41 @@ public class MainController {
 
         List<String> requestCodes = readRequestCodes(requests);
 
-        boolean multipleRequests = requestCodes.size() > 1;
+        for (String requestCode : requestCodes) {
+            addDecisionRow(requestCode);
+        }
 
-        multipleDecisionBox.setVisible(multipleRequests);
-        multipleDecisionBox.setManaged(multipleRequests);
+        multipleDecisionBox.setVisible(true);
+        multipleDecisionBox.setManaged(true);
+    }
 
-        for (int row = 0; row < requestCodes.size(); row++) {
-            String requestCode = requestCodes.get(row);
+    private void addDecisionRow(String requestCode) throws AppException {
+        List<CodelistEntry> allowedDecisionEntries = getAllowedDecisionEntries(requestCode);
+        ComboBox<CodelistEntry> comboBox = createDecisionComboBox(allowedDecisionEntries);
+        decisionRows.add(new DecisionRow(requestCode, comboBox));
+        refreshDecisionRows();
+    }
 
-            Label label = createDecisionLabel(requestCode, row, multipleRequests);
+    private void refreshDecisionRows() {
+        multipleDecisionGrid.getChildren().clear();
 
-            List<CodelistEntry> allowedDecisionEntries = getAllowedDecisionEntries(requestCode);
+        for (int row = 0; row < decisionRows.size(); row++) {
+            DecisionRow decisionRow = decisionRows.get(row);
+            Label label = new Label((row + 1) + ". " + requestLabelsByCode.get(decisionRow.requestCode()));
+            label.setWrapText(true);
 
-            ComboBox<CodelistEntry> comboBox = createDecisionComboBox(allowedDecisionEntries);
+            Button removeButton = new Button("Entfernen");
+            removeButton.setOnAction(event -> {
+                decisionRows.remove(decisionRow);
+                refreshDecisionRows();
+            });
 
-            addDecisionField(label, comboBox, row, multipleRequests);
-
-            decisionComboBoxes.add(comboBox);
+            multipleDecisionGrid.add(label, 0, row);
+            multipleDecisionGrid.add(decisionRow.decisionComboBox(), 1, row);
+            multipleDecisionGrid.add(removeButton, 2, row);
         }
 
         updateDecisionMissing();
-    }
-
-    private void addDecisionField(Label label, ComboBox<CodelistEntry> comboBox, int row, boolean multipleRequests) {
-
-        if (multipleRequests) {
-            multipleDecisionGrid.add(label, 0, row);
-            multipleDecisionGrid.add(comboBox, 1, row);
-        } else {
-            int decisionRow = GridPane.getRowIndex(multipleDecisionBox);
-
-            formGrid.add(label, 0, decisionRow);
-            formGrid.add(comboBox, 1, decisionRow);
-
-            singleDecisionNodes.add(label);
-            singleDecisionNodes.add(comboBox);
-        }
-    }
-
-    private Label createDecisionLabel(String requestCode, int row, boolean multipleRequests) throws AppException {
-
-        String requestLabel = requestLabelsByCode.get(requestCode);
-
-        if (requestLabel == null) {
-            throw new AppException(
-                    "Für das Ersuchen ist keine Bezeichnung konfiguriert.",
-                    List.of(new ErrorDetail("Request-Code", requestCode))
-            );
-        }
-
-        Label label = new Label(multipleRequests ? (row + 1) + ". " + requestLabel : "Entscheidung:");
-
-        if (multipleRequests) {
-            label.setWrapText(true);
-        }
-
-        return label;
     }
 
     private ComboBox<CodelistEntry> createDecisionComboBox(List<CodelistEntry> allowedDecisionEntries) {
@@ -589,7 +566,8 @@ public class MainController {
     }
 
     private void updateDecisionMissing() {
-        boolean missing = decisionComboBoxes.stream().anyMatch(comboBox -> comboBox.getValue() == null);
+        boolean missing = decisionRows.isEmpty()
+                || decisionRows.stream().anyMatch(row -> row.decisionComboBox().getValue() == null);
 
         decisionMissing.set(missing);
     }
@@ -626,6 +604,13 @@ public class MainController {
                         valueText.setText("");
                         setText(null);
                         setGraphic(null);
+            if (!requestLabelsByCode.containsKey(requestCode)) {
+                throw new AppException(
+                        "Für das Ersuchen ist keine Bezeichnung konfiguriert.",
+                        List.of(new ErrorDetail("Request-Code", requestCode))
+                );
+            }
+
                         setStyle(null);
                     } else {
                         valueText.setText(item.value());
@@ -763,21 +748,19 @@ public class MainController {
     private void clearFormFields() {
         fileNumber.clear();
         caseworkerComboBox.setValue(null);
-        for (ComboBox<CodelistEntry> comboBox : decisionComboBoxes) {
-            comboBox.setValue(null);
+        for (DecisionRow row : decisionRows) {
+            row.decisionComboBox().setValue(null);
         }
     }
 
     private void clearDecisionUi() {
-        formGrid.getChildren().removeAll(singleDecisionNodes);
-        singleDecisionNodes.clear();
-
         multipleDecisionGrid.getChildren().clear();
 
         multipleDecisionBox.setVisible(false);
         multipleDecisionBox.setManaged(false);
 
-        decisionComboBoxes.clear();
+        decisionRows.clear();
+        decisionMissing.set(true);
     }
 
     private void setSplitControlsVisible(boolean visible) {
@@ -815,6 +798,9 @@ public class MainController {
     private void setupDecisionFieldsDisabledBinding() {
         fileNumber.disableProperty().bind(openedDocument.isNull());
         caseworkerComboBox.disableProperty().bind(openedDocument.isNull());
+    }
+
+    private record DecisionRow(String requestCode, ComboBox<CodelistEntry> decisionComboBox) {
     }
 
     private void openHtmlInBrowser(

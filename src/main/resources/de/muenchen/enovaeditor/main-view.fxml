@@ -71,7 +71,7 @@
     </top>
 
     <center>
-        <GridPane fx:id="formGrid" hgap="15.0" vgap="15.0">
+        <GridPane hgap="15.0" vgap="15.0">
             <padding>
                 <Insets
                         top="20.0"
@@ -152,8 +152,9 @@
                                     vgap="15.0">
 
                                 <columnConstraints>
-                                    <ColumnConstraints percentWidth="50.0"/>
-                                    <ColumnConstraints percentWidth="50.0"/>
+                                    <ColumnConstraints percentWidth="45.0"/>
+                                    <ColumnConstraints percentWidth="40.0"/>
+                                    <ColumnConstraints percentWidth="15.0"/>
                                 </columnConstraints>
 
                             </GridPane>
