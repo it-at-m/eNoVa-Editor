@@ -9,6 +9,6 @@ public record AnswerParameters(
         String messageId,
         ManufacturerInfo manufacturerInfo,
         String caseworkerName,
-        List<String> decisionCodes
+        List<DecisionAnswer> decisions
 ) {
 }

@@ -342,38 +342,21 @@
 
     {{/each}}
 
-    <!-- Genau eine Sachentscheidung -->
-    {{#each xpath://tns:fachdaten/tns:auswahl_GegenstandDerNachricht[
-    count(tns:sachentscheidung) = 1
-    ]}}
-
-    <p>
-      <strong>Unsere Entscheidung:</strong>
-      {{codelist:sachentscheidung
-      xpath:tns:sachentscheidung/tns:sachentscheidung/code}}
-    </p>
-
-    {{/each}}
-
-    <!-- Mehrere Sachentscheidungen -->
-    {{#each xpath://tns:fachdaten/tns:auswahl_GegenstandDerNachricht[
-    count(tns:sachentscheidung) > 1
-    ]}}
-
-    <p style="margin-bottom: 0;"><strong>Unsere Entscheidungen:</strong></p>
+    <p style="margin-bottom: 0;"><strong>Frage – Antwort:</strong></p>
 
     <ol style="margin-top: 0;">
-      {{#each xpath:tns:sachentscheidung}}
+      {{#each xpath://tns:fachdaten/tns:auswahl_GegenstandDerNachricht/tns:sachentscheidung}}
 
       <li>
+        <div>{{xpath:tns:hinweise_sonstige}}</div>
+        <div>Unsere Entscheidung:
         {{codelist:sachentscheidung
         xpath:tns:sachentscheidung/code}}
+        ({{xpath:tns:sachentscheidung/code}})</div>
       </li>
 
       {{/each}}
     </ol>
-
-    {{/each}}
 
     <p>
       Mit freundlichen Grüßen

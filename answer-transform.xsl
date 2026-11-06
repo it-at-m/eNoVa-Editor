@@ -34,6 +34,9 @@
     <!-- Codes der ausgewählten Sachentscheidungen, die von der Anwendung übergeben wird -->
     <xsl:param name="decisionCodes"/>
 
+    <!-- Hinweistexte zu den jeweils zugehörigen Fragen in der Reihenfolge der Sachentscheidungen -->
+    <xsl:param name="requestHints"/>
+
     <!-- Produktname der Anwendung, der aus den internen Herstellerinformationen übergeben wird -->
     <xsl:param name="productName"/>
 
@@ -312,40 +315,43 @@
     <!-- Fachdaten                                                 -->
     <!-- ========================================================= -->
 
-    <!-- Sachentscheidung: Ersetzt das Ersuchen durch die ausgewählte Sachentscheidung und ergänzt alle Käufer und Verkäufer als Adressaten -->
-    <xsl:template match="tns:fachdaten/tns:auswahl_GegenstandDerNachricht/tns:ersuchenSachentscheidung">
-
-        <xsl:variable name="decisionIndex" select="count(preceding-sibling::tns:ersuchenSachentscheidung) + 1"/>
-
-        <xsl:if test="$includeEnovaComments">
-            <xsl:comment>eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt</xsl:comment>
-        </xsl:if>
-
-        <tns:sachentscheidung>
-
-            <tns:sachentscheidung listVersionID="1.1">
-                <code>
-                    <xsl:value-of select="$decisionCodes[$decisionIndex]"/>
-                </code>
-            </tns:sachentscheidung>
-
-            <xsl:if test="$includeEnovaComments and exists($addresseeRoleNumbers)">
-                <xsl:comment>eNoVA: Alle Käufer und Verkäufer wurden anhand ihrer Rollennummern als Adressaten der Sachentscheidung referenziert</xsl:comment>
+    <!-- Sachentscheidung: Ersetzt das Ersuchen durch die ausgewählten Sachentscheidungen und ergänzt alle Käufer und Verkäufer als Adressaten -->
+    <xsl:template match="tns:fachdaten/tns:auswahl_GegenstandDerNachricht/tns:ersuchenSachentscheidung[1]">
+        <xsl:for-each select="$decisionCodes">
+            <xsl:variable name="decisionPosition" select="position()"/>
+            <xsl:if test="$includeEnovaComments">
+                <xsl:comment>eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt</xsl:comment>
             </xsl:if>
 
-            <!-- Referenziert alle Käufer und Verkäufer -->
-            <xsl:for-each select="$addresseeRoleNumbers">
-                <tns:adressatDerSachentscheidung>
-                    <tns:ref.rollennummer>
-						<tns:ref.rollennummer>
-							<xsl:value-of select="."/>
-						</tns:ref.rollennummer>
-                    </tns:ref.rollennummer>
-                </tns:adressatDerSachentscheidung>
-            </xsl:for-each>
+            <tns:sachentscheidung>
+                <tns:sachentscheidung listVersionID="1.1">
+                    <code>
+                        <xsl:value-of select="."/>
+                    </code>
+                </tns:sachentscheidung>
 
-        </tns:sachentscheidung>
+                <xsl:if test="$includeEnovaComments and exists($addresseeRoleNumbers)">
+                    <xsl:comment>eNoVA: Alle Käufer und Verkäufer wurden anhand ihrer Rollennummern als Adressaten der Sachentscheidung referenziert</xsl:comment>
+                </xsl:if>
 
+                <!-- Referenziert alle Käufer und Verkäufer -->
+                <xsl:for-each select="$addresseeRoleNumbers">
+                    <tns:adressatDerSachentscheidung>
+                        <tns:ref.rollennummer>
+							<tns:ref.rollennummer>
+								<xsl:value-of select="."/>
+							</tns:ref.rollennummer>
+                        </tns:ref.rollennummer>
+                    </tns:adressatDerSachentscheidung>
+                </xsl:for-each>
+                <tns:hinweise_sonstige>
+                    <xsl:value-of select="$requestHints[$decisionPosition]"/>
+                </tns:hinweise_sonstige>
+            </tns:sachentscheidung>
+        </xsl:for-each>
     </xsl:template>
+
+    <!-- Weitere Ersuchen werden nicht übernommen; ihre Fragen können im Formular entfernt worden sein. -->
+    <xsl:template match="tns:fachdaten/tns:auswahl_GegenstandDerNachricht/tns:ersuchenSachentscheidung[position() > 1]"/>
 
 </xsl:stylesheet>

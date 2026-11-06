@@ -342,38 +342,19 @@ tns:rolle/tns:rollenbezeichnung/code='072'
 
 {{/each}}
 
-<!-- Genau ein Ersuchen -->
-{{#each xpath://tns:fachdaten/tns:auswahl_GegenstandDerNachricht[
-count(tns:ersuchenSachentscheidung) = 1
-]}}
-
-<p>
-  Wir bitten um
-  {{codelist:ersuchenSachentscheidung
-  xpath:tns:ersuchenSachentscheidung/tns:ersuchenSachentscheidung/code}}
-</p>
-
-{{/each}}
-
-<!-- Mehrere Ersuchen -->
-{{#each xpath://tns:fachdaten/tns:auswahl_GegenstandDerNachricht[
-count(tns:ersuchenSachentscheidung) > 1
-]}}
-
 <p>Wir bitten um</p>
 
 <ol>
-  {{#each xpath:tns:ersuchenSachentscheidung}}
+  {{#each xpath://tns:fachdaten/tns:auswahl_GegenstandDerNachricht/tns:ersuchenSachentscheidung}}
 
   <li>
     {{codelist:ersuchenSachentscheidung
     xpath:tns:ersuchenSachentscheidung/code}}
+    ({{xpath:tns:ersuchenSachentscheidung/code}})
   </li>
 
   {{/each}}
 </ol>
-
-{{/each}}
 
 <p>
   Mit freundlichen Grüßen
