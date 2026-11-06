@@ -243,11 +243,14 @@ public class MainController {
 
             CaseworkerEntry selectedCaseworker = caseworkerComboBox.getValue();
 
-            List<String> decisionCodes = decisionRows.stream()
-                    .map(row -> row.decisionComboBox().getValue().code())
+            List<DecisionAnswer> decisions = decisionRows.stream()
+                    .map(row -> new DecisionAnswer(
+                            row.requestCode(),
+                            requestLabelsByCode.get(row.requestCode()),
+                            row.decisionComboBox().getValue().code()))
                     .toList();
 
-            AnswerParameters parameters = new AnswerParameters(fileNumber.getText(), UUID.randomUUID().toString(), manufacturerInfo, selectedCaseworker.name(), caseworkersFile.toUri().toString(), decisionCodes);
+            AnswerParameters parameters = new AnswerParameters(fileNumber.getText(), UUID.randomUUID().toString(), manufacturerInfo, selectedCaseworker.name(), caseworkersFile.toUri().toString(), decisions);
 
             answerDocument = answerTransformer.transform(inputDocument, parameters);
             outputPaths = OutputPathUtil.createOutputPaths(openedXmlPath, "Output");
