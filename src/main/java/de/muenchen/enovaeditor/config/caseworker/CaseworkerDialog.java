@@ -18,8 +18,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
@@ -77,7 +75,6 @@ public final class CaseworkerDialog {
     private final List<CodelistEntry> telekommunikationsarten;
 
     private final Dialog<ButtonType> dialog = new Dialog<>();
-    private final ListView<Element> entryList = new ListView<>();
     private final VBox telekommunikationRows = new VBox(10);
 
     private final TextField nameField = new TextField();
@@ -92,6 +89,7 @@ public final class CaseworkerDialog {
     private final TextField postleitzahlField = new TextField();
     private final TextField ortField = new TextField();
 
+    private Element entry;
     private boolean dirty;
     private boolean fillingForm;
 
@@ -109,22 +107,20 @@ public final class CaseworkerDialog {
 
     public static boolean show(
             Window owner,
-            Path sourceFile,
-            boolean fromUserDirectory,
             Path userFile,
             List<CodelistEntry> telekommunikationsarten
     ) throws AppException {
 
-        Document document = sourceFile == null
-                ? createEmptyDocument()
-                : new XmlLoader().load(sourceFile.toFile());
+        Document document = userFile != null && Files.exists(userFile)
+                ? new XmlLoader().load(userFile.toFile())
+                : createEmptyDocument();
 
         CaseworkerDialog caseworkerDialog = new CaseworkerDialog(document, userFile, telekommunikationsarten);
 
-        return caseworkerDialog.showAndWait(owner, sourceFile != null && !fromUserDirectory);
+        return caseworkerDialog.showAndWait(owner);
     }
 
-    private boolean showAndWait(Window owner, boolean fromInstallationDirectory) {
+    private boolean showAndWait(Window owner) {
         dialog.initOwner(owner);
         dialog.setTitle("Kontaktdaten");
         dialog.setHeaderText(null);
@@ -134,8 +130,8 @@ public final class CaseworkerDialog {
         ButtonType cancelButtonType = new ButtonType("Abbrechen", ButtonBar.ButtonData.CANCEL_CLOSE);
         dialog.getDialogPane().getButtonTypes().setAll(saveButtonType, cancelButtonType);
 
-        dialog.getDialogPane().setContent(createContent(fromInstallationDirectory));
-        dialog.getDialogPane().setPrefSize(900, 750);
+        dialog.getDialogPane().setContent(createContent());
+        dialog.getDialogPane().setPrefSize(650, 780);
 
         Button saveButton = (Button) dialog.getDialogPane().lookupButton(saveButtonType);
         saveButton.addEventFilter(ActionEvent.ACTION, event -> {
@@ -150,69 +146,32 @@ public final class CaseworkerDialog {
             }
         });
 
-        entryList.getItems().setAll(entries());
+        entry = firstEntry();
 
-        if (!entryList.getItems().isEmpty()) {
-            entryList.getSelectionModel().selectFirst();
+        if (entry == null) {
+            entry = createEntry();
         }
+
+        fillForm();
 
         return dialog.showAndWait().orElse(cancelButtonType) == saveButtonType;
     }
 
-    private Node createContent(boolean fromInstallationDirectory) {
-        entryList.setCellFactory(listView -> new ListCell<>() {
-            @Override
-            protected void updateItem(Element entry, boolean empty) {
-                super.updateItem(entry, empty);
-                setText(empty || entry == null ? null : displayName(entry));
-            }
-        });
-        entryList.getSelectionModel().selectedItemProperty()
-                .addListener((observable, oldEntry, newEntry) -> fillForm(newEntry));
-
-        Button newButton = new Button("Neu");
-        newButton.setOnAction(event -> addEntry());
-
-        Button deleteButton = new Button("Löschen");
-        deleteButton.setOnAction(event -> deleteSelectedEntry());
-        deleteButton.disableProperty().bind(entryList.getSelectionModel().selectedItemProperty().isNull());
-
-        VBox listBox = new VBox(10, entryList, new HBox(10, newButton, deleteButton));
-        VBox.setVgrow(entryList, Priority.ALWAYS);
-        listBox.setPrefWidth(220);
-        listBox.setMinWidth(180);
-
+    private Node createContent() {
         VBox form = new VBox(15, createNameGrid(), createGroup("Anschrift", createAnschriftGrid()),
                 createGroup("Telekommunikation", createTelekommunikationBox()));
-        form.disableProperty().bind(entryList.getSelectionModel().selectedItemProperty().isNull());
 
         ScrollPane formScrollPane = new ScrollPane(form);
         formScrollPane.setFitToWidth(true);
         formScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         formScrollPane.setStyle("-fx-background-color: transparent; -fx-background-insets: 0; -fx-padding: 0;");
-
-        HBox main = new HBox(15, listBox, formScrollPane);
-        HBox.setHgrow(formScrollPane, Priority.ALWAYS);
-        VBox.setVgrow(main, Priority.ALWAYS);
+        VBox.setVgrow(formScrollPane, Priority.ALWAYS);
 
         Label requiredHint = new Label("* Pflichtfeld");
         HBox requiredHintBox = new HBox(requiredHint);
         requiredHintBox.setAlignment(Pos.CENTER_RIGHT);
 
-        VBox content = new VBox(15);
-
-        if (fromInstallationDirectory) {
-            Label sourceHint = new Label(
-                    "Die Einträge stammen aus dem Installationsverzeichnis. "
-                            + "Beim Speichern wird eine persönliche Kopie angelegt."
-            );
-            sourceHint.setWrapText(true);
-            content.getChildren().add(sourceHint);
-        }
-
-        content.getChildren().addAll(main, requiredHintBox);
-
-        return content;
+        return new VBox(15, formScrollPane, requiredHintBox);
     }
 
     private GridPane createNameGrid() {
@@ -227,8 +186,7 @@ public final class CaseworkerDialog {
 
         nameField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (isEditing()) {
-                selectedEntry().setAttribute("name", newValue.trim());
-                entryList.refresh();
+                entry.setAttribute("name", newValue.trim());
                 dirty = true;
             }
         });
@@ -305,7 +263,7 @@ public final class CaseworkerDialog {
     private void bindNameField(TextField field, String localName) {
         field.textProperty().addListener((observable, oldValue, newValue) -> {
             if (isEditing()) {
-                setText(vollerName(selectedEntry()), localName, newValue, VOLLER_NAME_ORDER);
+                setText(vollerName(entry), localName, newValue, VOLLER_NAME_ORDER);
                 dirty = true;
             }
         });
@@ -321,27 +279,13 @@ public final class CaseworkerDialog {
     }
 
     private boolean isEditing() {
-        return !fillingForm && selectedEntry() != null;
+        return !fillingForm;
     }
 
-    private Element selectedEntry() {
-        return entryList.getSelectionModel().getSelectedItem();
-    }
-
-    private void fillForm(Element entry) {
+    private void fillForm() {
         fillingForm = true;
 
         try {
-            if (entry == null) {
-                for (TextField field : List.of(nameField, vornameField, titelField, namensvorsatzField,
-                        nachnameField, namenszusatzField, anschriftenzusatzField, strasseField,
-                        hausnummerField, postleitzahlField, ortField)) {
-                    field.clear();
-                }
-                telekommunikationRows.getChildren().clear();
-                return;
-            }
-
             Element vollerName = vollerName(entry);
             Element anschrift = child(natuerlichePerson(entry), "anschrift");
 
@@ -357,13 +301,13 @@ public final class CaseworkerDialog {
             postleitzahlField.setText(text(anschrift, "postleitzahl"));
             ortField.setText(text(anschrift, "ort"));
 
-            fillTelekommunikationRows(entry);
+            fillTelekommunikationRows();
         } finally {
             fillingForm = false;
         }
     }
 
-    private void fillTelekommunikationRows(Element entry) {
+    private void fillTelekommunikationRows() {
         telekommunikationRows.getChildren().clear();
 
         for (Element telekommunikation : children(natuerlichePerson(entry), "telekommunikation")) {
@@ -430,12 +374,6 @@ public final class CaseworkerDialog {
     }
 
     private void addTelekommunikation() {
-        Element entry = selectedEntry();
-
-        if (entry == null) {
-            return;
-        }
-
         Element telekommunikation = createXJustizElement("telekommunikation");
         Element art = createXJustizElement("telekommunikationsart");
         art.setAttribute("listVersionID", "2.3");
@@ -449,7 +387,7 @@ public final class CaseworkerDialog {
     }
 
     private void updateAnschrift(String localName, String value) {
-        Element natuerlichePerson = natuerlichePerson(selectedEntry());
+        Element natuerlichePerson = natuerlichePerson(entry);
         Element anschrift = child(natuerlichePerson, "anschrift");
 
         if (anschrift == null) {
@@ -480,66 +418,35 @@ public final class CaseworkerDialog {
         natuerlichePerson.removeChild(anschrift);
     }
 
-    private void addEntry() {
-        Element entry = document.createElement("entry");
-        entry.setAttribute("name", "");
+    private Element createEntry() {
+        Element newEntry = document.createElement("entry");
+        newEntry.setAttribute("name", "");
 
         Element auswahlBeteiligter = createXJustizElement("auswahl_beteiligter");
         Element natuerlichePerson = createXJustizElement("natuerlichePerson");
         natuerlichePerson.appendChild(createXJustizElement("vollerName"));
         auswahlBeteiligter.appendChild(natuerlichePerson);
-        entry.appendChild(auswahlBeteiligter);
+        newEntry.appendChild(auswahlBeteiligter);
 
-        document.getDocumentElement().appendChild(entry);
+        document.getDocumentElement().appendChild(newEntry);
 
-        entryList.getItems().add(entry);
-        entryList.getSelectionModel().select(entry);
-        nameField.requestFocus();
-        dirty = true;
-    }
-
-    private void deleteSelectedEntry() {
-        Element entry = selectedEntry();
-
-        if (entry == null) {
-            return;
-        }
-
-        entry.getParentNode().removeChild(entry);
-        entryList.getItems().remove(entry);
-        dirty = true;
+        return newEntry;
     }
 
     private boolean save() {
-        for (Element entry : entryList.getItems()) {
-            String problem = validate(entry);
+        String problem = validate();
 
-            if (problem != null) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.initOwner(dialog.getDialogPane().getScene().getWindow());
-                alert.setTitle("Kontaktdaten unvollständig");
-                alert.setHeaderText(null);
-                alert.setContentText(problem);
-                alert.showAndWait();
-
-                entryList.getSelectionModel().select(entry);
-                return false;
-            }
+        if (problem != null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initOwner(dialog.getDialogPane().getScene().getWindow());
+            alert.setTitle("Kontaktdaten unvollständig");
+            alert.setHeaderText(null);
+            alert.setContentText(problem);
+            alert.showAndWait();
+            return false;
         }
 
         try {
-            if (entryList.getItems().isEmpty()) {
-                if (!confirmDeleteAll()) {
-                    return false;
-                }
-
-                if (userFile != null) {
-                    deleteUserFile();
-                }
-
-                return true;
-            }
-
             writeUserFile();
             return true;
 
@@ -555,40 +462,30 @@ public final class CaseworkerDialog {
         }
     }
 
-    private String validate(Element entry) {
-        String name = entry.getAttribute("name").trim();
-
-        if (name.isBlank()) {
-            return "Bei einem Eintrag fehlt der Anzeigename.";
-        }
-
-        String label = "Beim Eintrag „" + name + "“";
-
-        for (Element other : entryList.getItems()) {
-            if (other != entry && other.getAttribute("name").trim().equals(name)) {
-                return "Der Anzeigename „" + name + "“ ist mehrfach vorhanden.";
-            }
+    private String validate() {
+        if (entry.getAttribute("name").isBlank()) {
+            return "Der Anzeigename fehlt.";
         }
 
         Element vollerName = vollerName(entry);
 
         if (text(vollerName, "vorname").isBlank()) {
-            return label + " fehlt der Vorname.";
+            return "Der Vorname fehlt.";
         }
 
         if (text(vollerName, "nachname").isBlank()) {
-            return label + " fehlt der Nachname.";
+            return "Der Nachname fehlt.";
         }
 
         for (Element telekommunikation : children(natuerlichePerson(entry), "telekommunikation")) {
             String code = text(child(telekommunikation, "telekommunikationsart"), "code");
 
             if (!ALLOWED_TELEKOMMUNIKATIONSARTEN.contains(code)) {
-                return label + " ist bei einer Telekommunikation keine Art ausgewählt.";
+                return "Bei einer Telekommunikation ist keine Art ausgewählt.";
             }
 
             if (text(telekommunikation, "verbindung").isBlank()) {
-                return label + " fehlt bei einer Telekommunikation die Verbindung.";
+                return "Bei einer Telekommunikation fehlt die Verbindung.";
             }
         }
 
@@ -619,18 +516,6 @@ public final class CaseworkerDialog {
         new XmlWriter().write(document, userFile.toFile(), true);
     }
 
-    private void deleteUserFile() throws AppException {
-        try {
-            Files.deleteIfExists(userFile);
-        } catch (IOException e) {
-            throw new AppException(
-                    "Die persönlichen Kontaktdaten konnten nicht gelöscht werden.",
-                    List.of(new ErrorDetail("Datei", userFile.toString())),
-                    e
-            );
-        }
-    }
-
     // XmlWriter rückt ein und behält vorhandene Leerzeichen; sonst wächst die Datei bei jedem Speichern.
     private void removeWhitespaceTextNodes() throws AppException {
         document.normalize();
@@ -656,15 +541,6 @@ public final class CaseworkerDialog {
         );
     }
 
-    private boolean confirmDeleteAll() {
-        return confirm(
-                "Alle persönlichen Kontaktdaten werden gelöscht. "
-                        + "Danach gelten die Kontaktdaten aus dem Installationsverzeichnis.",
-                "Löschen",
-                "Zurück"
-        );
-    }
-
     private boolean confirm(String message, String confirmText, String cancelText) {
         Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
         confirmation.initOwner(dialog.getDialogPane().getScene().getWindow());
@@ -680,21 +556,14 @@ public final class CaseworkerDialog {
         return confirmation.showAndWait().orElse(cancelButton) == confirmButton;
     }
 
-    private List<Element> entries() {
-        List<Element> entries = new ArrayList<>();
-
+    private Element firstEntry() {
         for (Element child : childElements(document.getDocumentElement())) {
             if (child.getTagName().equals("entry")) {
-                entries.add(child);
+                return child;
             }
         }
 
-        return entries;
-    }
-
-    private static String displayName(Element entry) {
-        String name = entry.getAttribute("name").trim();
-        return name.isBlank() ? "(ohne Anzeigename)" : name;
+        return null;
     }
 
     private Element natuerlichePerson(Element entry) {

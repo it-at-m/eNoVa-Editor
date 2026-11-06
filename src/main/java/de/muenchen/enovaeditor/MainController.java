@@ -81,7 +81,6 @@ public class MainController {
     private final List<javafx.scene.Node> singleDecisionNodes = new ArrayList<>();
     private Path openedXmlPath;
     private Path caseworkersFile;
-    private boolean caseworkersFromUserDirectory;
     private String senderName;
     private Map<String, List<String>> allowedDecisionsByRequestCode = Map.of();
     private Map<String, String> requestLabelsByCode = Map.of();
@@ -120,6 +119,9 @@ public class MainController {
 
     @FXML
     private Label caseworkerHint;
+
+    @FXML
+    private Button kontaktdatenButton;
 
     @FXML
     private void initialize() {
@@ -701,8 +703,6 @@ public class MainController {
         try {
             saved = CaseworkerDialog.show(
                     fileStatusLabel.getScene().getWindow(),
-                    caseworkersFile,
-                    caseworkersFromUserDirectory,
                     userCaseworkersFile(),
                     loadTelekommunikationsarten()
             );
@@ -725,7 +725,6 @@ public class MainController {
             loadCaseworkers();
         } catch (Exception exception) {
             caseworkersFile = null;
-            caseworkersFromUserDirectory = false;
             showCaseworkers(List.of());
 
             ProblemDialog.show(
@@ -743,25 +742,34 @@ public class MainController {
         Path installationFile = ApplicationPaths.getApplicationDirectory()
                 .resolve(CaseworkerConfigLoader.CONFIG_FILE);
 
+        boolean installationFileExists = Files.exists(installationFile);
+
+        kontaktdatenButton.setVisible(!installationFileExists);
+        kontaktdatenButton.setManaged(!installationFileExists);
+
         List<CaseworkerEntry> caseworkerEntries = List.of();
         Path loadedFile = null;
 
-        if (userFile != null && Files.exists(userFile)) {
+        if (installationFileExists) {
+            caseworkerEntries = caseworkerConfigLoader.load(installationFile);
+            loadedFile = installationFile;
+
+        } else if (userFile != null && Files.exists(userFile)) {
             try {
                 caseworkerEntries = caseworkerConfigLoader.load(userFile);
                 loadedFile = userFile;
             } catch (AppException exception) {
-                backUpInvalidUserFile(userFile, Files.exists(installationFile), exception);
+                backUpInvalidUserFile(userFile, exception);
+            }
+
+            if (caseworkerEntries.size() > 1) {
+                caseworkerEntries = List.of();
+                loadedFile = null;
+                backUpUserFileWithSeveralEntries(userFile);
             }
         }
 
-        if (loadedFile == null && Files.exists(installationFile)) {
-            caseworkerEntries = caseworkerConfigLoader.load(installationFile);
-            loadedFile = installationFile;
-        }
-
         caseworkersFile = loadedFile;
-        caseworkersFromUserDirectory = loadedFile != null && loadedFile.equals(userFile);
 
         showCaseworkers(caseworkerEntries);
     }
@@ -774,15 +782,13 @@ public class MainController {
                 : userDirectory.resolve(CaseworkerConfigLoader.CONFIG_FILE);
     }
 
-    private void backUpInvalidUserFile(Path userFile, boolean installationFileExists, AppException problem) {
-        Path backupFile = userFile.resolveSibling(CaseworkerConfigLoader.CONFIG_FILE + ".ungueltig");
-
+    private void backUpInvalidUserFile(Path userFile, AppException problem) {
         List<ErrorDetail> details = new ArrayList<>();
+        Path backupFile = renameToInvalid(userFile);
 
-        try {
-            Files.move(userFile, backupFile, StandardCopyOption.REPLACE_EXISTING);
+        if (backupFile != null) {
             details.add(new ErrorDetail("Gesicherte Datei", backupFile.toString()));
-        } catch (IOException e) {
+        } else {
             details.add(new ErrorDetail(
                     "Sicherung fehlgeschlagen",
                     "Die Datei wurde nicht umbenannt und wird beim nächsten Speichern der Kontaktdaten überschrieben."
@@ -792,12 +798,42 @@ public class MainController {
         ProblemDialog.show(
                 Alert.AlertType.WARNING,
                 "Persönliche Kontaktdaten konnten nicht geladen werden",
-                installationFileExists
-                        ? "Es werden die Kontaktdaten aus dem Installationsverzeichnis verwendet."
-                        : "Es sind keine Kontaktdaten vorhanden.",
+                "Es sind keine Kontaktdaten vorhanden.",
                 problem,
                 details
         );
+    }
+
+    private void backUpUserFileWithSeveralEntries(Path userFile) {
+        Path backupFile = renameToInvalid(userFile);
+
+        Alert warning = new Alert(Alert.AlertType.WARNING);
+        warning.setTitle("Persönliche Kontaktdaten ungültig");
+        warning.setHeaderText(null);
+
+        Label message = new Label(backupFile != null
+                ? "Die persönlichen Kontaktdaten enthalten mehr als einen Eintrag. "
+                + "Die Datei wurde in „" + backupFile.getFileName() + "“ umbenannt. "
+                + "Legen Sie Ihre Kontaktdaten über „Kontaktdaten“ neu an."
+                : "Die persönlichen Kontaktdaten enthalten mehr als einen Eintrag. "
+                + "Die Datei konnte nicht umbenannt werden und wird beim nächsten Speichern "
+                + "der Kontaktdaten überschrieben. Legen Sie Ihre Kontaktdaten über „Kontaktdaten“ neu an.");
+        message.setWrapText(true);
+
+        warning.getDialogPane().setContent(message);
+        warning.getDialogPane().setPrefWidth(600);
+        warning.showAndWait();
+    }
+
+    private Path renameToInvalid(Path userFile) {
+        Path backupFile = userFile.resolveSibling(CaseworkerConfigLoader.CONFIG_FILE + ".ungueltig");
+
+        try {
+            Files.move(userFile, backupFile, StandardCopyOption.REPLACE_EXISTING);
+            return backupFile;
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     private void showCaseworkers(List<CaseworkerEntry> caseworkerEntries) {

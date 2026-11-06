@@ -115,22 +115,28 @@
                         minWidth="-Infinity"/>
 
                 <Button
+                        fx:id="kontaktdatenButton"
                         text="Kontaktdaten"
                         minWidth="-Infinity"
+                        visible="false"
+                        managed="false"
                         onAction="#onKontaktdatenClick"
                         accessibleHelp="Öffnet die Verwaltung der Kontaktdaten.">
                     <tooltip>
-                        <Tooltip text="Kontaktdaten anlegen, bearbeiten oder löschen"/>
+                        <Tooltip text="Kontaktdaten anlegen oder bearbeiten"/>
                     </tooltip>
                 </Button>
 
                 <Label
                         fx:id="caseworkerHint"
-                        text="Keine Kontaktdaten vorhanden. Legen Sie über „Kontaktdaten“ einen Eintrag an."
-                        wrapText="true"
+                        text="Keine Kontaktdaten vorhanden"
                         minWidth="0"
                         visible="false"
-                        managed="false"/>
+                        managed="false">
+                    <tooltip>
+                        <Tooltip text="Legen Sie über „Kontaktdaten“ einen Eintrag an."/>
+                    </tooltip>
+                </Label>
 
             </HBox>
 

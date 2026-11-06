@@ -211,38 +211,27 @@ eNoVA-editor/
     <p>
         The caseworkers available for selection in the eNoVA Editor
         are stored in a file <code>caseworkers.xml</code>.
-        They can be created, edited and deleted directly in the eNoVA Editor
-        with the "Kontaktdaten" button next to the selection field.
     </p>
 
     <p>
-        Changes are saved in the user directory only:
-        <code>%APPDATA%\eNoVA-Editor\caseworkers.xml</code>.
-        They are available immediately, without a restart.
+        If a <code>caseworkers.xml</code> exists in the installation directory,
+        only this file is used. The contact data is then maintained centrally,
+        and the "Kontaktdaten" button is not shown.
     </p>
 
     <p>
-        At startup, the following order applies:
-    </p>
-
-    <ol>
-        <li>the <code>caseworkers.xml</code> in the user directory,</li>
-        <li>if there is no file there, the <code>caseworkers.xml</code>
-            in the installation directory,</li>
-        <li>if there is no file in either place, the selection stays empty
-            and no response can be generated.</li>
-    </ol>
-
-    <p>
-        The <code>caseworkers.xml</code> shipped in the installation directory
-        contains example data and serves as a template. It can be removed
-        after rollout.
+        If there is no <code>caseworkers.xml</code> in the installation directory,
+        the "Kontaktdaten" button appears next to the selection field.
+        With it, each user creates exactly one personal contact and can edit it
+        afterwards. Deleting it is not intended. The contact is saved in the
+        user directory: <code>%APPDATA%\eNoVA-Editor\caseworkers.xml</code>.
+        Changes are available immediately, without a restart.
     </p>
 
     <p>
-        If the file in the user directory is invalid, it is renamed to
-        <code>caseworkers.xml.ungueltig</code> and the contact data from the
-        installation directory is used.
+        If the file in the user directory is invalid or contains more than one
+        entry, it is renamed to <code>caseworkers.xml.ungueltig</code>, and the
+        contact has to be created again with "Kontaktdaten".
     </p>
 
 
@@ -522,7 +511,8 @@ XJustiz response XML
 
     <div class="notice">
         Write access to the installation directory is not required for normal use.
-        The contact data requires write access to the user directory
+        If there is no <code>caseworkers.xml</code> in the installation directory,
+        the contact data requires write access to the user directory
         <code>%APPDATA%\eNoVA-Editor</code>.
         When configuration files such as
         <code>sender-config.xml</code>,

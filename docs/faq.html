@@ -250,12 +250,14 @@
             Wie verwalte ich meine Kontaktdaten?
         </summary>
         <p>
-            Über die Schaltfläche „Kontaktdaten“ neben dem Auswahlfeld
-            „Sachbearbeiter*in“ können Einträge angelegt, bearbeitet und
-            gelöscht werden. Die Änderungen werden in
+            Ist im Installationsverzeichnis eine <code>caseworkers.xml</code>
+            vorhanden, werden die Kontaktdaten zentral gepflegt und die
+            Schaltfläche „Kontaktdaten“ wird nicht angezeigt. Andernfalls legen
+            Sie über die Schaltfläche „Kontaktdaten“ neben dem Auswahlfeld
+            „Sachbearbeiter*in“ genau einen eigenen Kontakt an und können ihn
+            später bearbeiten. Er wird in
             <code>%APPDATA%\eNoVA-Editor\caseworkers.xml</code> gespeichert
-            und stehen sofort zur Verfügung. Werden alle Einträge gelöscht,
-            gelten wieder die Kontaktdaten aus dem Installationsverzeichnis.
+            und steht sofort zur Verfügung. Ein Löschen ist nicht vorgesehen.
         </p>
     </details>
 
@@ -264,10 +266,11 @@
             Warum ist die Auswahl leer und ich kann keine Antwort generieren?
         </summary>
         <p>
-            Es wurde weder im Benutzerverzeichnis noch im
-            Installationsverzeichnis eine <code>caseworkers.xml</code> gefunden.
-            Legen Sie über die Schaltfläche „Kontaktdaten“ mindestens einen
-            Eintrag an. Danach kann die Antwort generiert werden.
+            Es wurde weder im Installationsverzeichnis noch im
+            Benutzerverzeichnis eine gültige <code>caseworkers.xml</code>
+            gefunden. Neben dem Auswahlfeld steht dann „Keine Kontaktdaten
+            vorhanden“. Legen Sie über die Schaltfläche „Kontaktdaten“ Ihren
+            Kontakt an. Danach kann die Antwort generiert werden.
         </p>
     </details>
 </main>

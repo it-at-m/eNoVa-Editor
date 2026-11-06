@@ -211,39 +211,28 @@ eNoVA-editor/
     <p>
         Die im eNoVA-Editor auswählbaren Sachbearbeiterinnen und Sachbearbeiter
         werden in einer Datei <code>caseworkers.xml</code> gespeichert.
-        Sie können direkt im eNoVA-Editor über die Schaltfläche
-        „Kontaktdaten“ neben dem Auswahlfeld angelegt, bearbeitet und
-        gelöscht werden.
     </p>
 
     <p>
-        Änderungen werden ausschließlich im Benutzerverzeichnis gespeichert:
+        Ist im Installationsverzeichnis eine <code>caseworkers.xml</code> vorhanden,
+        wird ausschließlich diese verwendet. Die Kontaktdaten werden dann zentral
+        gepflegt, die Schaltfläche „Kontaktdaten“ wird nicht angezeigt.
+    </p>
+
+    <p>
+        Ist im Installationsverzeichnis keine <code>caseworkers.xml</code> vorhanden,
+        erscheint neben dem Auswahlfeld die Schaltfläche „Kontaktdaten“.
+        Darüber legt jede Benutzerin und jeder Benutzer genau einen eigenen
+        Kontakt an und kann ihn anschließend bearbeiten. Ein Löschen ist nicht
+        vorgesehen. Der Kontakt wird im Benutzerverzeichnis gespeichert:
         <code>%APPDATA%\eNoVA-Editor\caseworkers.xml</code>.
-        Sie stehen sofort ohne Neustart zur Verfügung.
+        Änderungen stehen sofort ohne Neustart zur Verfügung.
     </p>
 
     <p>
-        Beim Start gilt folgende Reihenfolge:
-    </p>
-
-    <ol>
-        <li>die <code>caseworkers.xml</code> im Benutzerverzeichnis,</li>
-        <li>falls dort keine Datei vorhanden ist, die <code>caseworkers.xml</code>
-            im Installationsverzeichnis,</li>
-        <li>ist an beiden Orten keine Datei vorhanden, bleibt die Auswahl leer
-            und es kann keine Antwort generiert werden.</li>
-    </ol>
-
-    <p>
-        Die mitgelieferte <code>caseworkers.xml</code> im Installationsverzeichnis
-        enthält Beispieldaten und dient als Vorlage. Sie kann nach der Auslieferung
-        entfernt werden.
-    </p>
-
-    <p>
-        Ist die Datei im Benutzerverzeichnis fehlerhaft, wird sie in
-        <code>caseworkers.xml.ungueltig</code> umbenannt und es werden die
-        Kontaktdaten aus dem Installationsverzeichnis verwendet.
+        Ist die Datei im Benutzerverzeichnis fehlerhaft oder enthält sie mehr
+        als einen Eintrag, wird sie in <code>caseworkers.xml.ungueltig</code>
+        umbenannt und der Kontakt muss über „Kontaktdaten“ neu angelegt werden.
     </p>
 
 
@@ -525,7 +514,8 @@ XJustiz-Antwort-XML
 
     <div class="notice">
         Für die normale Nutzung sind keine Schreibrechte auf das
-        Installationsverzeichnis erforderlich. Für die Kontaktdaten werden
+        Installationsverzeichnis erforderlich. Ist im Installationsverzeichnis
+        keine <code>caseworkers.xml</code> vorhanden, werden für die Kontaktdaten
         Schreibrechte auf das Benutzerverzeichnis
         <code>%APPDATA%\eNoVA-Editor</code> benötigt. <br>
         Sollen die Konfigurationsdateien wie
