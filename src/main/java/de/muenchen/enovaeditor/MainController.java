@@ -8,6 +8,7 @@ import de.muenchen.enovaeditor.codelist.GenericodeReader;
 import de.muenchen.enovaeditor.config.ApplicationPaths;
 import de.muenchen.enovaeditor.config.SenderConfigLoader;
 import de.muenchen.enovaeditor.config.caseworker.CaseworkerConfigLoader;
+import de.muenchen.enovaeditor.config.caseworker.CaseworkerDialog;
 import de.muenchen.enovaeditor.config.caseworker.CaseworkerEntry;
 import de.muenchen.enovaeditor.config.decision.DecisionConfigLoader;
 import de.muenchen.enovaeditor.config.manufacturer.ManufacturerInfo;
@@ -41,7 +42,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -76,6 +80,8 @@ public class MainController {
     private final List<CodelistEntry> decisionEntries = new ArrayList<>();
     private final List<javafx.scene.Node> singleDecisionNodes = new ArrayList<>();
     private Path openedXmlPath;
+    private Path caseworkersFile;
+    private boolean caseworkersFromInstallationDirectory;
     private String senderName;
     private Map<String, List<String>> allowedDecisionsByRequestCode = Map.of();
     private Map<String, String> requestLabelsByCode = Map.of();
@@ -111,6 +117,12 @@ public class MainController {
 
     @FXML
     private Label splitFlurstueckeHint;
+
+    @FXML
+    private Label caseworkerHint;
+
+    @FXML
+    private Button kontaktdatenButton;
 
     @FXML
     private void initialize() {
@@ -231,7 +243,7 @@ public class MainController {
 
             List<String> decisionCodes = decisionComboBoxes.stream().map(ComboBox::getValue).map(CodelistEntry::code).toList();
 
-            AnswerParameters parameters = new AnswerParameters(fileNumber.getText(), UUID.randomUUID().toString(), manufacturerInfo, selectedCaseworker.name(), decisionCodes);
+            AnswerParameters parameters = new AnswerParameters(fileNumber.getText(), UUID.randomUUID().toString(), manufacturerInfo, selectedCaseworker.name(), caseworkersFile.toUri().toString(), decisionCodes);
 
             answerDocument = answerTransformer.transform(inputDocument, parameters);
             outputPaths = OutputPathUtil.createOutputPaths(openedXmlPath, "Output");
@@ -685,8 +697,149 @@ public class MainController {
         senderNameLabel.setText(senderName);
     }
 
+    @FXML
+    protected void onKontaktdatenClick() {
+        boolean saved;
+
+        try {
+            saved = CaseworkerDialog.show(
+                    fileStatusLabel.getScene().getWindow(),
+                    userCaseworkersFile(),
+                    loadTelekommunikationsarten()
+            );
+        } catch (Exception exception) {
+            ProblemDialog.show(
+                    Alert.AlertType.ERROR,
+                    "Kontaktdaten können nicht bearbeitet werden",
+                    "Die Kontaktdaten bleiben unverändert.",
+                    exception,
+                    List.of()
+            );
+            return;
+        }
+
+        if (!saved) {
+            return;
+        }
+
+        try {
+            loadCaseworkers();
+        } catch (Exception exception) {
+            caseworkersFile = null;
+            showCaseworkers(List.of());
+
+            ProblemDialog.show(
+                    Alert.AlertType.ERROR,
+                    "Kontaktdaten konnten nicht geladen werden",
+                    "Die Auswahl der Sachbearbeiter*innen bleibt leer.",
+                    exception,
+                    List.of()
+            );
+        }
+    }
+
     private void loadCaseworkers() throws AppException {
-        List<CaseworkerEntry> caseworkerEntries = caseworkerConfigLoader.load();
+        Path userFile = userCaseworkersFile();
+        Path installationFile = ApplicationPaths.getApplicationDirectory()
+                .resolve(CaseworkerConfigLoader.CONFIG_FILE);
+
+        boolean installationFileExists = Files.exists(installationFile);
+
+        kontaktdatenButton.setVisible(!installationFileExists);
+        kontaktdatenButton.setManaged(!installationFileExists);
+
+        List<CaseworkerEntry> caseworkerEntries = List.of();
+        Path loadedFile = null;
+
+        if (installationFileExists) {
+            caseworkerEntries = caseworkerConfigLoader.load(installationFile);
+            loadedFile = installationFile;
+
+        } else if (userFile != null && Files.exists(userFile)) {
+            try {
+                caseworkerEntries = caseworkerConfigLoader.load(userFile);
+                loadedFile = userFile;
+            } catch (AppException exception) {
+                backUpInvalidUserFile(userFile, exception);
+            }
+
+            if (caseworkerEntries.size() > 1) {
+                caseworkerEntries = List.of();
+                loadedFile = null;
+                backUpUserFileWithSeveralEntries(userFile);
+            }
+        }
+
+        caseworkersFile = loadedFile;
+        caseworkersFromInstallationDirectory = installationFileExists;
+
+        showCaseworkers(caseworkerEntries);
+    }
+
+    private Path userCaseworkersFile() throws AppException {
+        Path userDirectory = ApplicationPaths.getUserDirectory();
+
+        return userDirectory == null
+                ? null
+                : userDirectory.resolve(CaseworkerConfigLoader.CONFIG_FILE);
+    }
+
+    private void backUpInvalidUserFile(Path userFile, AppException problem) {
+        List<ErrorDetail> details = new ArrayList<>();
+        Path backupFile = renameToInvalid(userFile);
+
+        if (backupFile != null) {
+            details.add(new ErrorDetail("Gesicherte Datei", backupFile.toString()));
+        } else {
+            details.add(new ErrorDetail(
+                    "Sicherung fehlgeschlagen",
+                    "Die Datei wurde nicht umbenannt und wird beim nächsten Speichern der Kontaktdaten überschrieben."
+            ));
+        }
+
+        ProblemDialog.show(
+                Alert.AlertType.WARNING,
+                "Persönliche Kontaktdaten konnten nicht geladen werden",
+                "Es sind keine Kontaktdaten vorhanden.",
+                problem,
+                details
+        );
+    }
+
+    private void backUpUserFileWithSeveralEntries(Path userFile) {
+        Path backupFile = renameToInvalid(userFile);
+
+        Alert warning = new Alert(Alert.AlertType.WARNING);
+        warning.setTitle("Persönliche Kontaktdaten ungültig");
+        warning.setHeaderText(null);
+
+        Label message = new Label(backupFile != null
+                ? "Die persönlichen Kontaktdaten enthalten mehr als einen Eintrag. "
+                + "Die Datei wurde in „" + backupFile.getFileName() + "“ umbenannt. "
+                + "Legen Sie Ihre Kontaktdaten über „Kontaktdaten“ neu an."
+                : "Die persönlichen Kontaktdaten enthalten mehr als einen Eintrag. "
+                + "Die Datei konnte nicht umbenannt werden und wird beim nächsten Speichern "
+                + "der Kontaktdaten überschrieben. Legen Sie Ihre Kontaktdaten über „Kontaktdaten“ neu an.");
+        message.setWrapText(true);
+
+        warning.getDialogPane().setContent(message);
+        warning.getDialogPane().setPrefWidth(600);
+        warning.showAndWait();
+    }
+
+    private Path renameToInvalid(Path userFile) {
+        Path backupFile = userFile.resolveSibling(CaseworkerConfigLoader.CONFIG_FILE + ".ungueltig");
+
+        try {
+            Files.move(userFile, backupFile, StandardCopyOption.REPLACE_EXISTING);
+            return backupFile;
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    private void showCaseworkers(List<CaseworkerEntry> caseworkerEntries) {
+        CaseworkerEntry previousSelection = caseworkerComboBox.getValue();
 
         double maxTextWidth = 0;
 
@@ -700,7 +853,35 @@ public class MainController {
         }
 
         caseworkerComboBox.setPrefWidth(maxTextWidth + CASEWORKER_WIDTH_PADDING);
-        caseworkerComboBox.getItems().addAll(caseworkerEntries);
+        caseworkerComboBox.getItems().setAll(caseworkerEntries);
+        caseworkerComboBox.setValue(
+                previousSelection != null && caseworkerEntries.contains(previousSelection)
+                        ? previousSelection
+                        : null
+        );
+
+        caseworkerHint.setVisible(caseworkerEntries.isEmpty());
+        caseworkerHint.setManaged(caseworkerEntries.isEmpty());
+
+        selectPersonalContact();
+    }
+
+    private boolean isPersonalContactLoaded() {
+        return caseworkersFile != null && !caseworkersFromInstallationDirectory;
+    }
+
+    private void selectPersonalContact() {
+        if (isPersonalContactLoaded() && caseworkerComboBox.getItems().size() == 1) {
+            caseworkerComboBox.setValue(caseworkerComboBox.getItems().getFirst());
+        }
+    }
+
+    private List<CodelistEntry> loadTelekommunikationsarten() throws AppException {
+        CodelistConfig config = new CodelistConfig();
+        CodelistDefinition definition = config.get("telekommunikationsart");
+        Path codelistFile = resolveCodelistFile(definition);
+
+        return new GenericodeReader().readAll(codelistFile, definition);
     }
 
     private void loadDecisions() throws AppException {
@@ -766,6 +947,8 @@ public class MainController {
         for (ComboBox<CodelistEntry> comboBox : decisionComboBoxes) {
             comboBox.setValue(null);
         }
+
+        selectPersonalContact();
     }
 
     private void clearDecisionUi() {

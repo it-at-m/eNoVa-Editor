@@ -210,17 +210,29 @@ eNoVA-editor/
 
     <p>
         Die im eNoVA-Editor auswählbaren Sachbearbeiterinnen und Sachbearbeiter
-        werden in der Datei <code>caseworkers.xml</code> konfiguriert.
+        werden in einer Datei <code>caseworkers.xml</code> gespeichert.
     </p>
 
     <p>
-        Die mitgelieferten Beispieldaten müssen durch die Daten der eigenen
-        Organisation ersetzt werden.
+        Ist im Installationsverzeichnis eine <code>caseworkers.xml</code> vorhanden,
+        wird ausschließlich diese verwendet. Die Kontaktdaten werden dann zentral
+        gepflegt, die Schaltfläche „Kontaktdaten“ wird nicht angezeigt.
     </p>
 
     <p>
-        Die dort hinterlegten Einträge werden beim Start der Anwendung geladen
-        und stehen anschließend im Auswahlfeld für die Sachbearbeitung zur Verfügung.
+        Ist im Installationsverzeichnis keine <code>caseworkers.xml</code> vorhanden,
+        erscheint neben dem Auswahlfeld die Schaltfläche „Kontaktdaten“.
+        Darüber legt jede Benutzerin und jeder Benutzer genau einen eigenen
+        Kontakt an und kann ihn anschließend bearbeiten. Ein Löschen ist nicht
+        vorgesehen. Der Kontakt wird im Benutzerverzeichnis gespeichert:
+        <code>%APPDATA%\eNoVA-Editor\caseworkers.xml</code>.
+        Änderungen stehen sofort ohne Neustart zur Verfügung.
+    </p>
+
+    <p>
+        Ist die Datei im Benutzerverzeichnis fehlerhaft oder enthält sie mehr
+        als einen Eintrag, wird sie in <code>caseworkers.xml.ungueltig</code>
+        umbenannt und der Kontakt muss über „Kontaktdaten“ neu angelegt werden.
     </p>
 
 
@@ -502,7 +514,10 @@ XJustiz-Antwort-XML
 
     <div class="notice">
         Für die normale Nutzung sind keine Schreibrechte auf das
-        Installationsverzeichnis erforderlich. <br>
+        Installationsverzeichnis erforderlich. Ist im Installationsverzeichnis
+        keine <code>caseworkers.xml</code> vorhanden, werden für die Kontaktdaten
+        Schreibrechte auf das Benutzerverzeichnis
+        <code>%APPDATA%\eNoVA-Editor</code> benötigt. <br>
         Sollen die Konfigurationsdateien wie
         <code>sender-config.xml</code>,
         <code>caseworkers.xml</code>,
