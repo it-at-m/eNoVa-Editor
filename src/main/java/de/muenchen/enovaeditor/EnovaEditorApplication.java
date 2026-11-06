@@ -20,7 +20,7 @@ import java.util.Objects;
 public class EnovaEditorApplication extends Application {
 
     private static final double INITIAL_WIDTH = 800;
-    private static final double INITIAL_HEIGHT = 520;
+    private static final double INITIAL_HEIGHT = 600;
 
     @Override
     public void start(Stage stage) {
