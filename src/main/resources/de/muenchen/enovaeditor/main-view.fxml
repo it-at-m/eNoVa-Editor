@@ -165,10 +165,12 @@
                     <HBox spacing="10.0" alignment="CENTER_LEFT">
                         <ComboBox fx:id="addRequestComboBox"
                                   promptText="Frage auswählen"
+                                  minWidth="0"
                                   maxWidth="Infinity"
                                   HBox.hgrow="ALWAYS"/>
                         <Button fx:id="addRequestButton"
                                 text="Frage hinzufügen"
+                                minWidth="-Infinity"
                                 onAction="#onAddRequest"/>
                     </HBox>
 
