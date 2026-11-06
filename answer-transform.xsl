@@ -34,6 +34,9 @@
     <!-- Codes der ausgewählten Sachentscheidungen, die von der Anwendung übergeben wird -->
     <xsl:param name="decisionCodes"/>
 
+    <!-- Hinweistexte zu den jeweils zugehörigen Fragen in der Reihenfolge der Sachentscheidungen -->
+    <xsl:param name="requestHints"/>
+
     <!-- Produktname der Anwendung, der aus den internen Herstellerinformationen übergeben wird -->
     <xsl:param name="productName"/>
 
@@ -315,6 +318,7 @@
     <!-- Sachentscheidung: Ersetzt das Ersuchen durch die ausgewählten Sachentscheidungen und ergänzt alle Käufer und Verkäufer als Adressaten -->
     <xsl:template match="tns:fachdaten/tns:auswahl_GegenstandDerNachricht/tns:ersuchenSachentscheidung[1]">
         <xsl:for-each select="$decisionCodes">
+            <xsl:variable name="decisionPosition" select="position()"/>
             <xsl:if test="$includeEnovaComments">
                 <xsl:comment>eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt</xsl:comment>
             </xsl:if>
@@ -340,6 +344,9 @@
                         </tns:ref.rollennummer>
                     </tns:adressatDerSachentscheidung>
                 </xsl:for-each>
+                <tns:hinweise_sonstige>
+                    <xsl:value-of select="$requestHints[$decisionPosition]"/>
+                </tns:hinweise_sonstige>
             </tns:sachentscheidung>
         </xsl:for-each>
     </xsl:template>

@@ -46,7 +46,10 @@ public class AnswerTransformer {
         transformer.setParameter("fileNumber", parameters.fileNumber());
         transformer.setParameter("messageId", parameters.messageId());
         transformer.setParameter("caseworkerName", parameters.caseworkerName());
-        transformer.setParameter("decisionCodes", parameters.decisionCodes());
+        transformer.setParameter("decisionCodes", parameters.decisions().stream()
+                .map(DecisionAnswer::decisionCode).toList());
+        transformer.setParameter("requestHints", parameters.decisions().stream()
+                .map(DecisionAnswer::requestHint).toList());
 
         transformer.setParameter("productName", parameters.manufacturerInfo().productName());
         transformer.setParameter("manufacturerName", parameters.manufacturerInfo().manufacturerName());
