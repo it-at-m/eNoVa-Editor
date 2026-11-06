@@ -81,6 +81,7 @@ public class MainController {
     private final List<javafx.scene.Node> singleDecisionNodes = new ArrayList<>();
     private Path openedXmlPath;
     private Path caseworkersFile;
+    private boolean caseworkersFromInstallationDirectory;
     private String senderName;
     private Map<String, List<String>> allowedDecisionsByRequestCode = Map.of();
     private Map<String, String> requestLabelsByCode = Map.of();
@@ -770,6 +771,7 @@ public class MainController {
         }
 
         caseworkersFile = loadedFile;
+        caseworkersFromInstallationDirectory = installationFileExists;
 
         showCaseworkers(caseworkerEntries);
     }
@@ -860,6 +862,18 @@ public class MainController {
 
         caseworkerHint.setVisible(caseworkerEntries.isEmpty());
         caseworkerHint.setManaged(caseworkerEntries.isEmpty());
+
+        selectPersonalContact();
+    }
+
+    private boolean isPersonalContactLoaded() {
+        return caseworkersFile != null && !caseworkersFromInstallationDirectory;
+    }
+
+    private void selectPersonalContact() {
+        if (isPersonalContactLoaded() && caseworkerComboBox.getItems().size() == 1) {
+            caseworkerComboBox.setValue(caseworkerComboBox.getItems().getFirst());
+        }
     }
 
     private List<CodelistEntry> loadTelekommunikationsarten() throws AppException {
@@ -933,6 +947,8 @@ public class MainController {
         for (ComboBox<CodelistEntry> comboBox : decisionComboBoxes) {
             comboBox.setValue(null);
         }
+
+        selectPersonalContact();
     }
 
     private void clearDecisionUi() {

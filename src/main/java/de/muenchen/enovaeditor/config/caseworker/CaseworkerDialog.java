@@ -39,6 +39,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public final class CaseworkerDialog {
 
@@ -46,6 +47,8 @@ public final class CaseworkerDialog {
     private static final String XMLNS_NAMESPACE = "http://www.w3.org/2000/xmlns/";
 
     private static final List<String> ALLOWED_TELEKOMMUNIKATIONSARTEN = List.of("001", "002", "003", "004", "007");
+    private static final String TELEKOMMUNIKATIONSART_EMAIL = "001";
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("[^@\\s]+@[^@\\s]+\\.[^@\\s]+");
 
     // Reihenfolgen gemäß XJustiz 3.6.2 (xjustiz_0000_grunddatensatz_3_6.xsd)
     private static final List<String> NATUERLICHE_PERSON_ORDER = List.of(
@@ -484,8 +487,14 @@ public final class CaseworkerDialog {
                 return "Bei einer Telekommunikation ist keine Art ausgewählt.";
             }
 
-            if (text(telekommunikation, "verbindung").isBlank()) {
+            String verbindung = text(telekommunikation, "verbindung");
+
+            if (verbindung.isBlank()) {
                 return "Bei einer Telekommunikation fehlt die Verbindung.";
+            }
+
+            if (code.equals(TELEKOMMUNIKATIONSART_EMAIL) && !EMAIL_PATTERN.matcher(verbindung).matches()) {
+                return "Die E-Mail-Adresse „" + verbindung + "“ ist ungültig.";
             }
         }
 
