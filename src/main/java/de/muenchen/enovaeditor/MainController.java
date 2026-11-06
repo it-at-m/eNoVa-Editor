@@ -31,7 +31,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -85,6 +84,12 @@ public class MainController {
     private GridPane multipleDecisionGrid;
 
     @FXML
+    private ComboBox<CodelistEntry> addRequestComboBox;
+
+    @FXML
+    private Button addRequestButton;
+
+    @FXML
     private Label fileStatusLabel;
 
     @FXML
@@ -113,6 +118,7 @@ public class MainController {
         setupBindings();
 
         configureCaseworkerComboBox();
+        configureAddRequestComboBox();
         configureFileNumberField();
     }
 
@@ -431,6 +437,28 @@ public class MainController {
         successDialog.showAndWait();
     }
 
+    @FXML
+    protected void onAddRequest() {
+        CodelistEntry request = addRequestComboBox.getValue();
+
+        if (openedDocument.get() == null || request == null) {
+            return;
+        }
+
+        try {
+            addDecisionRow(request.code());
+            addRequestComboBox.setValue(null);
+        } catch (AppException exception) {
+            ProblemDialog.show(
+                    Alert.AlertType.ERROR,
+                    "Frage konnte nicht hinzugefügt werden",
+                    "Die Frage wurde nicht in das Formular übernommen.",
+                    exception,
+                    List.of()
+            );
+        }
+    }
+
     private File chooseXmlFile() {
 
         FileChooser fileChooser = new FileChooser();
@@ -465,6 +493,22 @@ public class MainController {
 
             @Override
             public CaseworkerEntry fromString(String s) {
+                return null;
+            }
+        });
+    }
+
+    private void configureAddRequestComboBox() {
+        configureDecisionOptions(addRequestComboBox);
+        configureSelectedDecision(addRequestComboBox);
+        addRequestComboBox.setConverter(new StringConverter<CodelistEntry>() {
+            @Override
+            public String toString(CodelistEntry request) {
+                return request == null ? "" : request.value();
+            }
+
+            @Override
+            public CodelistEntry fromString(String text) {
                 return null;
             }
         });
@@ -559,6 +603,13 @@ public class MainController {
                 );
             }
 
+            if (!requestLabelsByCode.containsKey(requestCode)) {
+                throw new AppException(
+                        "Für das Ersuchen ist keine Bezeichnung konfiguriert.",
+                        List.of(new ErrorDetail("Request-Code", requestCode))
+                );
+            }
+
             requestCodes.add(requestCode);
         }
 
@@ -604,13 +655,6 @@ public class MainController {
                         valueText.setText("");
                         setText(null);
                         setGraphic(null);
-            if (!requestLabelsByCode.containsKey(requestCode)) {
-                throw new AppException(
-                        "Für das Ersuchen ist keine Bezeichnung konfiguriert.",
-                        List.of(new ErrorDetail("Request-Code", requestCode))
-                );
-            }
-
                         setStyle(null);
                     } else {
                         valueText.setText(item.value());
@@ -733,6 +777,9 @@ public class MainController {
         }
 
         requestLabelsByCode = Map.copyOf(labels);
+        addRequestComboBox.getItems().setAll(entries.stream()
+                .filter(entry -> allowedDecisionsByRequestCode.containsKey(entry.code()))
+                .toList());
     }
 
     private Path resolveCodelistFile(CodelistDefinition definition) throws AppException {
@@ -751,6 +798,7 @@ public class MainController {
         for (DecisionRow row : decisionRows) {
             row.decisionComboBox().setValue(null);
         }
+        addRequestComboBox.setValue(null);
     }
 
     private void clearDecisionUi() {
@@ -798,6 +846,8 @@ public class MainController {
     private void setupDecisionFieldsDisabledBinding() {
         fileNumber.disableProperty().bind(openedDocument.isNull());
         caseworkerComboBox.disableProperty().bind(openedDocument.isNull());
+        addRequestComboBox.disableProperty().bind(openedDocument.isNull());
+        addRequestButton.disableProperty().bind(openedDocument.isNull().or(addRequestComboBox.valueProperty().isNull()));
     }
 
     private record DecisionRow(String requestCode, ComboBox<CodelistEntry> decisionComboBox) {
