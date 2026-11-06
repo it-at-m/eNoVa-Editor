@@ -516,7 +516,7 @@ public class MainController {
         addRequestComboBox.setConverter(new StringConverter<CodelistEntry>() {
             @Override
             public String toString(CodelistEntry request) {
-                return request == null ? "" : request.value();
+                return request == null ? "" : formatCodelistEntry(request);
             }
 
             @Override
@@ -552,7 +552,14 @@ public class MainController {
 
         for (int row = 0; row < decisionRows.size(); row++) {
             DecisionRow decisionRow = decisionRows.get(row);
-            Label label = new Label((row + 1) + ". " + requestLabelsByCode.get(decisionRow.requestCode()));
+            Label label = new Label(
+                    (row + 1) + ". " + formatCodelistEntry(
+                            new CodelistEntry(
+                                    decisionRow.requestCode(),
+                                    requestLabelsByCode.get(decisionRow.requestCode())
+                            )
+                    )
+            );
             label.setWrapText(true);
 
             Button removeButton = new Button("Entfernen");
@@ -669,7 +676,7 @@ public class MainController {
                         setGraphic(null);
                         setStyle(null);
                     } else {
-                        valueText.setText(item.value());
+                        valueText.setText(formatCodelistEntry(item));
 
                         setText(null);
                         setGraphic(valueText);
@@ -699,13 +706,17 @@ public class MainController {
                     setText(null);
                     setGraphic(null);
                 } else {
-                    valueText.setText(item.value());
+                    valueText.setText(formatCodelistEntry(item));
 
                     setText(null);
                     setGraphic(valueText);
                 }
             }
         });
+    }
+
+    private String formatCodelistEntry(CodelistEntry entry) {
+        return entry.value() + " (" + entry.code() + ")";
     }
 
     private void configureFileNumberField() {
