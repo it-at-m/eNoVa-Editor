@@ -739,7 +739,6 @@ public class MainController {
     }
 
     private void loadCaseworkers() throws AppException {
-        Path userFile = userCaseworkersFile();
         Path installationFile = ApplicationPaths.getApplicationDirectory()
                 .resolve(CaseworkerConfigLoader.CONFIG_FILE);
 
@@ -755,18 +754,22 @@ public class MainController {
             caseworkerEntries = caseworkerConfigLoader.load(installationFile);
             loadedFile = installationFile;
 
-        } else if (userFile != null && Files.exists(userFile)) {
-            try {
-                caseworkerEntries = caseworkerConfigLoader.load(userFile);
-                loadedFile = userFile;
-            } catch (AppException exception) {
-                backUpInvalidUserFile(userFile, exception);
-            }
+        } else {
+            Path userFile = userCaseworkersFile();
 
-            if (caseworkerEntries.size() > 1) {
-                caseworkerEntries = List.of();
-                loadedFile = null;
-                backUpUserFileWithSeveralEntries(userFile);
+            if (userFile != null && Files.exists(userFile)) {
+                try {
+                    caseworkerEntries = caseworkerConfigLoader.load(userFile);
+                    loadedFile = userFile;
+                } catch (AppException exception) {
+                    backUpInvalidUserFile(userFile, exception);
+                }
+
+                if (caseworkerEntries.size() > 1) {
+                    caseworkerEntries = List.of();
+                    loadedFile = null;
+                    backUpUserFileWithSeveralEntries(userFile);
+                }
             }
         }
 
