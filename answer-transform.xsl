@@ -258,6 +258,14 @@
         <!-- Wählt den in der Anwendung ausgewählten Sachbearbeiter aus -->
         <xsl:variable name="selectedCaseworker" select="$caseworkers/caseworkers/entry[@name = $caseworkerName]"/>
 
+        <!-- Bricht ab, wenn der ausgewählte Sachbearbeiter nicht mehr in den Kontaktdaten enthalten ist -->
+        <xsl:if test="empty($selectedCaseworker)">
+            <xsl:sequence select="error(
+                    QName('urn:enova-editor', 'enova:kontaktFehlt'),
+                    'Der ausgewählte Kontakt „' || $caseworkerName || '“ ist in den Kontaktdaten nicht mehr vorhanden. '
+                    || 'Bitte starten Sie den eNoVA-Editor neu und wählen Sie den Kontakt erneut aus.')"/>
+        </xsl:if>
+
         <xsl:copy>
 
             <!-- Übernimmt alle vorhandenen Inhalte der Verfahrensdaten -->
