@@ -29,6 +29,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -50,6 +51,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class MainController {
 
@@ -1057,18 +1059,18 @@ public class MainController {
             String workflowHint,
             List<ErrorDetail> successfulResults
     ) {
-
-        try {
-            browserOpener.open(htmlPath);
-
-        } catch (Exception exception) {
-            ProblemDialog.show(
-                    Alert.AlertType.WARNING,
-                    "Browser konnte nicht geöffnet werden",
-                    workflowHint,
-                    exception,
-                    successfulResults
-            );
-        }
+        CompletableFuture.runAsync(() -> {
+            try {
+                browserOpener.open(htmlPath);
+            } catch (Exception exception) {
+                Platform.runLater(() -> ProblemDialog.show(
+                        Alert.AlertType.WARNING,
+                        "Browser konnte nicht geöffnet werden",
+                        workflowHint,
+                        exception,
+                        successfulResults
+                ));
+            }
+        });
     }
 }
