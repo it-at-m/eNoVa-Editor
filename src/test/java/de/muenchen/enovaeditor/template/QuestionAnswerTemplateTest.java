@@ -65,7 +65,7 @@ class QuestionAnswerTemplateTest {
     private Document transform(Document input, List<DecisionAnswer> decisions) throws Exception {
         return new AnswerTransformer().transform(input, new AnswerParameters(
                 "AZ-81", "message-81", new ManufacturerInfo("eNoVA", "München", "1.0"),
-                "Bürgermeister", decisions
+                "Bürgermeister", new File("caseworkers.xml").toURI().toString(), decisions
         ));
     }
 
