@@ -10,6 +10,6 @@ public record AnswerParameters(
         ManufacturerInfo manufacturerInfo,
         String caseworkerName,
         String caseworkersFile,
-        List<String> decisionCodes
+        List<DecisionAnswer> decisions
 ) {
 }

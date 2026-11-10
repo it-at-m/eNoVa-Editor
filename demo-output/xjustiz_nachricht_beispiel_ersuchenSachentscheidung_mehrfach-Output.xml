@@ -41,7 +41,7 @@
          <tns:auswahl_aktenzeichen>
             <tns:aktenzeichen.freitext>UVZ-4697</tns:aktenzeichen.freitext>
          </tns:auswahl_aktenzeichen>
-         <!--eNoVA: Nachrichten-ID wurde aus dem Aktenzeichen des ursprünglichen Absenders übernommen-->
+         <!--eNoVA: Nachrichten-ID wurde aus der eigenenNachrichtenID des ursprünglichen Absenders übernommen-->
          <tns:fremdeNachrichtenID>f8f9e173-58ac-4db1-b709-845e8306bd65</tns:fremdeNachrichtenID>
       </tns:empfaenger>
       <!--eNoVA: Herstellerinformationen wurden aus den internen Herstellerinformationen der Anwendung übernommen-->
@@ -276,6 +276,7 @@
                   <tns:ref.rollennummer>4</tns:ref.rollennummer>
                </tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
+            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GrdstVG (011)</tns:hinweise_sonstige>
          </tns:sachentscheidung>
          <!--eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt-->
          <tns:sachentscheidung>
@@ -293,6 +294,7 @@
                   <tns:ref.rollennummer>4</tns:ref.rollennummer>
                </tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
+            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GVO (012)</tns:hinweise_sonstige>
          </tns:sachentscheidung>
          <!--eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt-->
          <tns:sachentscheidung>
@@ -310,6 +312,7 @@
                   <tns:ref.rollennummer>4</tns:ref.rollennummer>
                </tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
+            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte und hilfsweise um Erteilung eines Negativattests (013)</tns:hinweise_sonstige>
          </tns:sachentscheidung>
       </tns:auswahl_GegenstandDerNachricht>
       <tns:datenDerUrkunde>
