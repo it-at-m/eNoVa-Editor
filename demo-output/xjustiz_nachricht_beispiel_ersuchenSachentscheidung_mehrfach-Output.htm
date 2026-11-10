@@ -2,55 +2,230 @@
 <html lang="de">
   <head>
     <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>eNoVA - Output</title>
     <style>
+      * {
+          box-sizing: border-box;
+      }
+
+      body {
+          margin: 0;
+          padding: 32px 16px;
+          background: #eef1f5;
+          color: #1f2933;
+          font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+          font-size: 15px;
+          line-height: 1.6;
+      }
+
+      .seite {
+          max-width: 780px;
+          margin: 0 auto;
+          padding: 48px 56px;
+          background: #ffffff;
+          border: 1px solid #d9e0e7;
+          border-radius: 6px;
+      }
+
+      p {
+          margin: 0 0 14px 0;
+      }
+
+      .hinweis {
+          margin: 0 0 32px 0;
+          padding: 8px 14px;
+          background: #fdf1f0;
+          border-left: 4px solid #c0392b;
+          border-radius: 3px;
+          color: #9b2c20;
+          font-size: 13px;
+          text-align: left;
+      }
+
+      .absender {
+          margin: 0 0 28px 0;
+          padding-bottom: 14px;
+          border-bottom: 1px solid #d9e0e7;
+          color: #5b6670;
+          font-size: 13px;
+          line-height: 1.5;
+      }
+
       .kopf-zeile {
           display: flex;
           width: 100%;
-          margin-top: 40px;
+          margin-top: 24px;
       }
 
       .empfaenger {
           flex: 1;
+          font-size: 16px;
+          line-height: 1.5;
       }
 
       .kontakt {
           margin-left: auto;
-          padding-top: 20px;
-          padding-right: 10px;
-          text-align: right;
+          padding: 12px 16px;
+          min-width: 230px;
+          background: #f3f6f9;
+          border-radius: 4px;
+          color: #5b6670;
+          font-size: 13px;
+          line-height: 1.7;
       }
 
       .datum-zeile {
           text-align: right;
-          margin-top: 20px;
-          padding-right: 10px
+          margin-top: 28px;
+          color: #5b6670;
+          font-size: 14px;
+      }
+
+      .betreff {
+          margin: 32px 0 20px 0;
+          font-size: 18px;
+          font-weight: 600;
+          line-height: 1.4;
+          color: #1f4e79;
+      }
+
+      h3 {
+          margin: 32px 0 12px 0;
+          padding-bottom: 6px;
+          border-bottom: 2px solid #1f4e79;
+          color: #1f4e79;
+          font-size: 16px;
+          font-weight: 600;
+          letter-spacing: 0.2px;
       }
 
       .person-block {
-          margin-bottom: 15px;
+          margin-bottom: 12px;
+          padding: 10px 16px;
+          background: #f3f6f9;
+          border-left: 3px solid #1f4e79;
+          border-radius: 0 4px 4px 0;
+          line-height: 1.55;
+      }
+
+      .geburt {
+          color: #5b6670;
+          font-size: 14px;
+      }
+
+      .urkunde {
+          line-height: 1.9;
+      }
+
+      .label {
+          display: inline-block;
+          min-width: 190px;
+          color: #5b6670;
       }
 
       .grundstueck-block {
           margin-bottom: 20px;
+          padding: 14px 16px;
+          border: 1px solid #d9e0e7;
+          border-radius: 4px;
+          line-height: 1.8;
       }
 
       .flurstuecke {
-          margin-top: 5px;
+          margin-top: 10px;
+          padding-top: 10px;
+          border-top: 1px dashed #d9e0e7;
       }
 
       .flurstueck-block {
-          margin-bottom: 8px;
+          margin-bottom: 6px;
+          padding: 6px 12px;
+          background: #f3f6f9;
+          border-radius: 3px;
       }
 
-      .hinweis {
-          color: red;
-          text-align: center;
+      .flurstueck-block .label {
+          min-width: 90px;
+      }
+
+      .entscheidung {
+          margin: 24px 0 14px 0;
+          padding: 12px 16px;
+          background: #f3f6f9;
+          border-left: 4px solid #1f4e79;
+          border-radius: 0 4px 4px 0;
+      }
+
+      .entscheidung strong {
+          color: #1f4e79;
+      }
+
+      ol {
+          margin: 0 0 18px 0;
+          padding-left: 22px;
+      }
+
+      li {
+          margin-bottom: 4px;
+      }
+
+      .gruss {
+          margin-top: 28px;
+      }
+
+      .sachbearbeiter {
+          font-weight: 600;
+      }
+
+      .behoerde {
+          color: #5b6670;
+          font-size: 14px;
+      }
+
+      @media (max-width: 640px) {
+          body {
+              padding: 0;
+          }
+
+          .seite {
+              padding: 24px 18px;
+              border: 0;
+              border-radius: 0;
+          }
+
+          .kopf-zeile {
+              display: block;
+          }
+
+          .kontakt {
+              margin-top: 16px;
+          }
+
+          .label {
+              display: block;
+              min-width: 0;
+          }
+      }
+
+      @media print {
+          body {
+              padding: 0;
+              background: #ffffff;
+          }
+
+          .seite {
+              max-width: none;
+              padding: 0;
+              border: 0;
+              border-radius: 0;
+          }
       }
     </style>
   </head>
 
   <body>
+    <div class="seite">
     <div class="hinweis">Internes Ausgangsdokument generiert aus der XJustiz-Nachricht</div>
 
     <!--
@@ -60,96 +235,10 @@
         Dort stehen die Rolle und die Person, die zu diesem Absender gehören.
         Die gefundenen Daten können danach innerhalb dieses Bereichs verwendet werden.
     -->
-    
 
-    <p>
-      <!--
-          Rollenbezeichnung ausgeben:
-          Der Name "rollenbezeichnung" gehört zur Konfiguration
-          in codelists.properties.
-          Der XPath liefert den Rollen-Code, zum Beispiel 208.
-          Über die Codelist wird daraus dann die Bezeichnung.
-      -->
-      Aussteller(in)
-
-      <!--
-          Informationen der Person/Absender aus der zuvor gefundenen Beteiligung ausgeben.
-      -->
-      
-      Antonia
-      Allenthaler
-
-      <br>
-
-      Hauptstrasse
-      2
-
-      <br>
-
-      98776
-      Hinterhugeldapfing
-
-    </p>
-
-    <div class="kopf-zeile">
-
-
-      <div class="empfaenger">
-        <!-- Fall 1: Empfänger über ref.rollennummer -->
-        <div>
-          Dr.
-
-          Martin
-
-          Müller
-        </div>
-
-        <div>
-          Anton-Wilhelm-Amo-Straße
-
-          34
-        </div>
-
-        <div>
-          10117
-
-          Berlin
-        </div>
-
-        <!-- Fall 2: Keine ref.rollennummer -->
-        
-      </div>
-
-
-      <div class="kontakt">
-        
-
-          E-Mail:
-          vorkaufsrecht@hinterhugeldapfing.de
-
-          <br>
-        
-
-        <br>
-
-        Aktenzeichen:
-        LH 2026-1234
-      </div>
-
-    </div>
-
-    <div class="datum-zeile">
-      <!-- Ort des aktuellen Beteiligten -->
-      Hinterhugeldapfing,
-
-      <!-- Erstellungsdatum der Nachricht im Format TT.MM.JJJJ -->
-      24.10.2026
-    </div>
-
-    
 
     <!-- Betreff / Verfahrensgegenstand -->
-    <p>
+    <p class="betreff">
       Ersuchen Genehmigung GrdstVG; 100000019136
     </p>
 
@@ -158,20 +247,159 @@
     </p>
 
     <p>
-      bezüglich Ihrer Anfrage teilen wir Ihnen mit:
+      Bezüglich Ihrer Anfrage teilen wir Ihnen mit:
     </p>
 
-    <!-- Rollenbezeichnung für Verkäufer (Code 168) aus der Codeliste -->
-    <h3>
-      Veräußerer (Veräußerin):
-      <br>
-      <span style="font-size: 16px; font-weight: normal;">(Dies können auch mehrere Personen sein.)</span>
-    </h3>
+    <p class="entscheidung" style="margin-bottom: 0;"><strong>Frage – Antwort:</strong></p>
 
-    
+    <ol style="margin-top: 0;">
+
+
+      <li>
+        <div>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GrdstVG (011)</div>
+        <div>Unsere Entscheidung:
+        Erteilung der Genehmigung gemäß § 2 GrdstVG
+        (019)</div>
+      </li>
+
+
+
+      <li>
+        <div>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GVO (012)</div>
+        <div>Unsere Entscheidung:
+        Erteilung der Genehmigung gemäß § 2 GVO
+        (021)</div>
+      </li>
+
+
+
+      <li>
+        <div>Antwort auf die Frage: Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte und hilfsweise um Erteilung eines Negativattests (013)</div>
+        <div>Unsere Entscheidung:
+        Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte
+        (023)</div>
+      </li>
+
+
+    </ol>
+
+    <h3>Urkundendaten:</h3>
+    <p class="urkunde">
+      <span class="label">Urkundenverzeichnisnummer (UVZ):</span>
+      4697
+
+      <br>
+
+      <span class="label">Beurkundungsdatum:</span>
+      13.08.2026
+    </p>
+
+    <h3>Grundstück(e):</h3>
+
+
+
+    <div class="grundstueck-block">
+
+      <div>
+        <span class="label">Amtsgericht:</span>
+        München
+      </div>
+
+      <div>
+        <span class="label">Grundbuchbezirk:</span>
+        Obermenzing
+      </div>
+
+      <div>
+        <span class="label">Grundbuchblatt:</span>
+        1714
+      </div>
+
+      <div class="flurstuecke">
+
+
+
+        <div class="flurstueck-block">
+          <div>
+            <span class="label">Gemarkung:</span>
+            8694
+          </div>
+
+          <div>
+            <span class="label">Flurstück:</span>
+            306/46
+          </div>
+        </div>
+
+
+
+      </div>
+
+    </div>
+
+
+
+    <div class="grundstueck-block">
+
+      <div>
+        <span class="label">Amtsgericht:</span>
+        München
+      </div>
+
+      <div>
+        <span class="label">Grundbuchbezirk:</span>
+        Langwied
+      </div>
+
+      <div>
+        <span class="label">Grundbuchblatt:</span>
+        1715
+      </div>
+
+      <div class="flurstuecke">
+
+
+
+        <div class="flurstueck-block">
+          <div>
+            <span class="label">Gemarkung:</span>
+            8685
+          </div>
+
+          <div>
+            <span class="label">Flurstück:</span>
+            306/46
+          </div>
+        </div>
+
+
+
+        <div class="flurstueck-block">
+          <div>
+            <span class="label">Gemarkung:</span>
+            8685
+          </div>
+
+          <div>
+            <span class="label">Flurstück:</span>
+            307
+          </div>
+        </div>
+
+
+
+      </div>
+
+    </div>
+
+
+
+    <h3>Verkäufer (in/innen):</h3>
+
+
 
     <div class="person-block">
-      
+
       Max
       Verkäufer
 
@@ -187,23 +415,18 @@
 
       <br>
 
-      Geboren am
-      13.08.1965
+      <span class="geburt">Geboren am
+      13.08.1965</span>
     </div>
 
-    
 
-    <!-- Rollenbezeichnung für Käufer (Code 072) aus der Codeliste -->
-    <h3>
-      Erwerber(in):
-      <br>
-      <span style="font-size: 16px; font-weight: normal;">(Dies können auch mehrere Personen sein.)</span>
-    </h3>
 
-    
+    <h3>Käufer (in/innen):</h3>
+
+
 
     <div class="person-block">
-      
+
       Martina
       Käuferin
 
@@ -219,157 +442,13 @@
 
       <br>
 
-      Geboren am
-      28.09.1978
+      <span class="geburt">Geboren am
+      28.09.1978</span>
     </div>
 
-    
 
-    <h3>Urkundendaten:</h3>
-    <p>
-      Urkundenverzeichnisnummer (UVZ):
-      4697
 
-      <br>
-
-      Beurkundungsdatum:
-      13.08.2026
-    </p>
-
-    <h3>Grundstück(e):</h3>
-
-    
-
-    <div class="grundstueck-block">
-
-      <div>
-        Amtsgericht:
-        München
-      </div>
-
-      <div>
-        Grundbuchbezirk:
-        Obermenzing
-      </div>
-
-      <div>
-        Grundbuchblatt:
-        1714
-      </div>
-
-      <div class="flurstuecke">
-
-        
-
-        <div class="flurstueck-block">
-          <div>
-            Gemarkung:
-            8694
-          </div>
-
-          <div>
-            Flurstück:
-            306/46
-          </div>
-        </div>
-
-        
-
-      </div>
-
-    </div>
-
-    
-
-    <div class="grundstueck-block">
-
-      <div>
-        Amtsgericht:
-        München
-      </div>
-
-      <div>
-        Grundbuchbezirk:
-        Langwied
-      </div>
-
-      <div>
-        Grundbuchblatt:
-        1715
-      </div>
-
-      <div class="flurstuecke">
-
-        
-
-        <div class="flurstueck-block">
-          <div>
-            Gemarkung:
-            8685
-          </div>
-
-          <div>
-            Flurstück:
-            306/46
-          </div>
-        </div>
-
-        
-
-        <div class="flurstueck-block">
-          <div>
-            Gemarkung:
-            8685
-          </div>
-
-          <div>
-            Flurstück:
-            307
-          </div>
-        </div>
-
-        
-
-      </div>
-
-    </div>
-
-    
-
-    <p style="margin-bottom: 0;"><strong>Frage – Antwort:</strong></p>
-
-    <ol style="margin-top: 0;">
-      
-
-      <li>
-        <div>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GrdstVG (011)</div>
-        <div>Unsere Entscheidung:
-        Erteilung der Genehmigung gemäß § 2 GrdstVG
-        (019)</div>
-      </li>
-
-      
-
-      <li>
-        <div>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GVO (012)</div>
-        <div>Unsere Entscheidung:
-        Erteilung der Genehmigung gemäß § 2 GVO
-        (021)</div>
-      </li>
-
-      
-
-      <li>
-        <div>Antwort auf die Frage: Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte und hilfsweise um Erteilung eines Negativattests (013)</div>
-        <div>Unsere Entscheidung:
-        Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte
-        (023)</div>
-      </li>
-
-      
-    </ol>
-
-    <p>
+    <p class="gruss">
       Mit freundlichen Grüßen
     </p>
 
@@ -381,17 +460,18 @@
         Fall 2: Keine ref.rollennummer vorhanden.
         Dann wird auswahl_kommunikationspartner/sonstige verwendet.
     -->
-    <div>
-      Antonia
+    <div class="sachbearbeiter">
 
-      Allenthaler
 
-      
+
+
+
     </div>
 
     <!-- Instanzbehörde -->
-    <div>
+    <div class="behoerde">
       LH München
+    </div>
     </div>
   </body>
 </html>
