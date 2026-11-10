@@ -567,7 +567,10 @@ public class MainController {
             );
             label.setWrapText(true);
 
-            Button removeButton = new Button("Entfernen");
+            Button removeButton = new Button("✕");
+            removeButton.setStyle("-fx-text-fill: #c62828; -fx-font-weight: bold;");
+            removeButton.setTooltip(new Tooltip("Frage entfernen"));
+            removeButton.setAccessibleText("Frage entfernen");
             removeButton.setOnAction(event -> {
                 decisionRows.remove(decisionRow);
                 refreshDecisionRows();
