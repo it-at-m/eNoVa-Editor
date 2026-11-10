@@ -2,55 +2,209 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>eNoVA - Input</title>
   <style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 32px 16px;
+        background: #eef1f5;
+        color: #1f2933;
+        font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    .seite {
+        max-width: 780px;
+        margin: 0 auto;
+        padding: 48px 56px;
+        background: #ffffff;
+        border: 1px solid #d9e0e7;
+        border-radius: 6px;
+    }
+
+    p {
+        margin: 0 0 14px 0;
+    }
+
+    .hinweis {
+        margin: 0 0 32px 0;
+        padding: 8px 14px;
+        background: #fdf1f0;
+        border-left: 4px solid #c0392b;
+        border-radius: 3px;
+        color: #9b2c20;
+        font-size: 13px;
+        text-align: left;
+    }
+
+    .absender {
+        margin: 0 0 28px 0;
+        padding-bottom: 14px;
+        border-bottom: 1px solid #d9e0e7;
+        color: #5b6670;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
     .kopf-zeile {
         display: flex;
         width: 100%;
-        margin-top: 40px;
+        margin-top: 24px;
     }
 
     .empfaenger {
         flex: 1;
+        font-size: 16px;
+        line-height: 1.5;
     }
 
     .kontakt {
         margin-left: auto;
-        padding-top: 20px;
-        padding-right: 10px;
-        text-align: right;
+        padding: 12px 16px;
+        min-width: 230px;
+        background: #f3f6f9;
+        border-radius: 4px;
+        color: #5b6670;
+        font-size: 13px;
+        line-height: 1.7;
     }
 
     .datum-zeile {
         text-align: right;
-        margin-top: 20px;
-        padding-right: 10px
+        margin-top: 28px;
+        color: #5b6670;
+        font-size: 14px;
+    }
+
+    .betreff {
+        margin: 32px 0 20px 0;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 1.4;
+        color: #1f4e79;
+    }
+
+    h3 {
+        margin: 32px 0 12px 0;
+        padding-bottom: 6px;
+        border-bottom: 2px solid #1f4e79;
+        color: #1f4e79;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 0.2px;
     }
 
     .person-block {
-        margin-bottom: 15px;
+        margin-bottom: 12px;
+        padding: 10px 16px;
+        background: #f3f6f9;
+        border-left: 3px solid #1f4e79;
+        border-radius: 0 4px 4px 0;
+        line-height: 1.55;
+    }
+
+    .geburt {
+        color: #5b6670;
+        font-size: 14px;
+    }
+
+    .urkunde {
+        line-height: 1.9;
+    }
+
+    .label {
+        display: inline-block;
+        min-width: 190px;
+        color: #5b6670;
     }
 
     .grundstueck-block {
         margin-bottom: 20px;
+        padding: 14px 16px;
+        border: 1px solid #d9e0e7;
+        border-radius: 4px;
+        line-height: 1.8;
     }
 
     .flurstuecke {
-        margin-top: 5px;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed #d9e0e7;
     }
 
     .flurstueck-block {
-        margin-bottom: 8px;
+        margin-bottom: 6px;
+        padding: 6px 12px;
+        background: #f3f6f9;
+        border-radius: 3px;
     }
 
-    .hinweis {
-        color: red;
-        text-align: center;
+    .flurstueck-block .label {
+        min-width: 90px;
+    }
+
+    ol {
+        margin: 0 0 18px 0;
+        padding-left: 22px;
+    }
+
+    li {
+        margin-bottom: 4px;
+    }
+
+    .gruss {
+        margin-top: 28px;
+    }
+
+    @media (max-width: 640px) {
+        body {
+            padding: 0;
+        }
+
+        .seite {
+            padding: 24px 18px;
+            border: 0;
+            border-radius: 0;
+        }
+
+        .kopf-zeile {
+            display: block;
+        }
+
+        .kontakt {
+            margin-top: 16px;
+        }
+
+        .label {
+            display: block;
+            min-width: 0;
+        }
+    }
+
+    @media print {
+        body {
+            padding: 0;
+            background: #ffffff;
+        }
+
+        .seite {
+            max-width: none;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+        }
     }
   </style>
 </head>
 
 <body>
+<div class="seite">
 <div class="hinweis">Internes Eingangsdokument generiert aus der XJustiz-Nachricht</div>
 
 <!--
@@ -65,7 +219,7 @@ tns:rolle/tns:rollennummer =
 //tns:absender/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
 ]}}
 
-<p>
+<p class="absender">
   <!--
       Rollenbezeichnung ausgeben:
       Der Name "rollenbezeichnung" gehört zur Konfiguration
@@ -184,7 +338,7 @@ tns:rolle/tns:rollennummer =
 {{/each}}
 
 <!-- Betreff / Verfahrensgegenstand -->
-<p>
+<p class="betreff">
   {{xpath://tns:grunddaten/tns:verfahrensdaten/tns:instanzdaten/tns:verfahrensgegenstand/tns:gegenstand}}
 </p>
 
@@ -196,12 +350,85 @@ tns:rolle/tns:rollennummer =
   hiermit zeigen wir die Beurkundung nachfolgenden Grundstücksverkauf an:
 </p>
 
-<!-- Rollenbezeichnung für Verkäufer (Code 168) aus der Codeliste -->
-<h3>
-  {{codelist:rollenbezeichnung xpath:'168'}}:
+<p>Wir bitten um</p>
+
+<ol>
+  {{#each xpath://tns:fachdaten/tns:auswahl_GegenstandDerNachricht/tns:ersuchenSachentscheidung}}
+
+  <li>
+    {{codelist:ersuchenSachentscheidung
+    xpath:tns:ersuchenSachentscheidung/code}}
+    ({{xpath:tns:ersuchenSachentscheidung/code}})
+  </li>
+
+  {{/each}}
+</ol>
+
+<h3>Urkundendaten:</h3>
+<p class="urkunde">
+  <span class="label">Urkundenverzeichnisnummer (UVZ):</span>
+  {{xpath://tns:datenDerUrkunde/tns:urNr}}
+
   <br>
-  <span style="font-size: 16px; font-weight: normal;">(Dies können auch mehrere Personen sein.)</span>
-</h3>
+
+  <span class="label">Beurkundungsdatum:</span>
+  {{xpath:concat(
+  substring(normalize-space(//tns:datenDerUrkunde/tns:urkundsdatum), 9, 2), '.',
+  substring(normalize-space(//tns:datenDerUrkunde/tns:urkundsdatum), 6, 2), '.',
+  substring(normalize-space(//tns:datenDerUrkunde/tns:urkundsdatum), 1, 4)
+  )}}
+</p>
+
+<h3>Grundstück(e):</h3>
+
+{{#each xpath://tns:fachdaten/tns:beschreibungDesBetroffenenRechts}}
+
+<div class="grundstueck-block">
+
+  <div>
+    <span class="label">Amtsgericht:</span>
+    {{xpath:tns:bundeslandfremdesGrundbuchblatt/tns:amtsgericht}}
+  </div>
+
+  <div>
+    <span class="label">Grundbuchbezirk:</span>
+    {{xpath:tns:bundeslandfremdesGrundbuchblatt/tns:grundbuchbezirk}}
+  </div>
+
+  <div>
+    <span class="label">Grundbuchblatt:</span>
+    {{xpath:tns:bundeslandfremdesGrundbuchblatt/tns:grundbuchblatt}}
+  </div>
+
+  <div class="flurstuecke">
+
+    {{#each xpath:tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:grundstueck/tns:flurstuecke}}
+
+    <div class="flurstueck-block">
+      <div>
+        <span class="label">Gemarkung:</span>
+        {{xpath:tns:identifikationFlurstueck/tns:gemarkungsschluessel}}
+      </div>
+
+      <div>
+        <span class="label">Flurstück:</span>
+        {{xpath:concat(
+        tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:zaehler,
+        substring('/', 1, number(boolean(tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:nenner))),
+        tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:nenner
+        )}}
+      </div>
+    </div>
+
+    {{/each}}
+
+  </div>
+
+</div>
+
+{{/each}}
+
+<h3>Verkäufer (in/innen):</h3>
 
 {{#each xpath://tns:beteiligung[
 tns:rolle/tns:rollenbezeichnung/code='168'
@@ -224,7 +451,7 @@ tns:rolle/tns:rollenbezeichnung/code='168'
 
   <br>
 
-  Geboren am
+  <span class="geburt">Geboren am
   {{xpath:concat(
   substring(normalize-space(tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:geburt/tns:geburtsdatum),
   9, 2), '.',
@@ -232,17 +459,12 @@ tns:rolle/tns:rollenbezeichnung/code='168'
   6, 2), '.',
   substring(normalize-space(tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:geburt/tns:geburtsdatum),
   1, 4)
-  )}}
+  )}}</span>
 </div>
 
 {{/each}}
 
-<!-- Rollenbezeichnung für Käufer (Code 072) aus der Codeliste -->
-<h3>
-  {{codelist:rollenbezeichnung xpath:'072'}}:
-  <br>
-  <span style="font-size: 16px; font-weight: normal;">(Dies können auch mehrere Personen sein.)</span>
-</h3>
+<h3>Käufer (in/innen):</h3>
 
 {{#each xpath://tns:beteiligung[
 tns:rolle/tns:rollenbezeichnung/code='072'
@@ -265,7 +487,7 @@ tns:rolle/tns:rollenbezeichnung/code='072'
 
   <br>
 
-  Geboren am
+  <span class="geburt">Geboren am
   {{xpath:concat(
   substring(normalize-space(tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:geburt/tns:geburtsdatum),
   9, 2), '.',
@@ -273,95 +495,18 @@ tns:rolle/tns:rollenbezeichnung/code='072'
   6, 2), '.',
   substring(normalize-space(tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:geburt/tns:geburtsdatum),
   1, 4)
-  )}}
+  )}}</span>
 </div>
 
 {{/each}}
 
-<h3>Urkundendaten:</h3>
-<p>
-  Urkundenverzeichnisnummer (UVZ):
-  {{xpath://tns:datenDerUrkunde/tns:urNr}}
-
-  <br>
-
-  Beurkundungsdatum:
-  {{xpath:concat(
-  substring(normalize-space(//tns:datenDerUrkunde/tns:urkundsdatum), 9, 2), '.',
-  substring(normalize-space(//tns:datenDerUrkunde/tns:urkundsdatum), 6, 2), '.',
-  substring(normalize-space(//tns:datenDerUrkunde/tns:urkundsdatum), 1, 4)
-  )}}
-</p>
-
-<h3>Grundstück(e):</h3>
-
-{{#each xpath://tns:fachdaten/tns:beschreibungDesBetroffenenRechts}}
-
-<div class="grundstueck-block">
-
-  <div>
-    Amtsgericht:
-    {{xpath:tns:bundeslandfremdesGrundbuchblatt/tns:amtsgericht}}
-  </div>
-
-  <div>
-    Grundbuchbezirk:
-    {{xpath:tns:bundeslandfremdesGrundbuchblatt/tns:grundbuchbezirk}}
-  </div>
-
-  <div>
-    Grundbuchblatt:
-    {{xpath:tns:bundeslandfremdesGrundbuchblatt/tns:grundbuchblatt}}
-  </div>
-
-  <div class="flurstuecke">
-
-    {{#each xpath:tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:grundstueck/tns:flurstuecke}}
-
-    <div class="flurstueck-block">
-      <div>
-        Gemarkung:
-        {{xpath:tns:identifikationFlurstueck/tns:gemarkungsschluessel}}
-      </div>
-
-      <div>
-        Flurstück:
-        {{xpath:concat(
-        tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:zaehler,
-        substring('/', 1, number(boolean(tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:nenner))),
-        tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:nenner
-        )}}
-      </div>
-    </div>
-
-    {{/each}}
-
-  </div>
-
-</div>
-
-{{/each}}
-
-<p>Wir bitten um</p>
-
-<ol>
-  {{#each xpath://tns:fachdaten/tns:auswahl_GegenstandDerNachricht/tns:ersuchenSachentscheidung}}
-
-  <li>
-    {{codelist:ersuchenSachentscheidung
-    xpath:tns:ersuchenSachentscheidung/code}}
-    ({{xpath:tns:ersuchenSachentscheidung/code}})
-  </li>
-
-  {{/each}}
-</ol>
-
-<p>
+<p class="gruss">
   Mit freundlichen Grüßen
 </p>
 
 <p>
   {{xpath://tns:absender/tns:informationen/tns:auswahl_kommunikationspartner/tns:sonstige}}
 </p>
+</div>
 </body>
 </html>
