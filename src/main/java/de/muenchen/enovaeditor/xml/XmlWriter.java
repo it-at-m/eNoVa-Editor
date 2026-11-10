@@ -20,11 +20,13 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.AccessDeniedException;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,10 @@ public class XmlWriter {
     private final OutputConfigLoader outputConfigLoader = new OutputConfigLoader();
 
     public void write(Document document, File targetFile) throws AppException {
+        write(document, targetFile, false);
+    }
+
+    public void write(Document document, File targetFile, boolean replaceExisting) throws AppException {
 
         LineEnding lineEnding = outputConfigLoader.loadLineEnding();
 
@@ -44,7 +50,7 @@ public class XmlWriter {
         String formattedXml = serialize(document, transformer, lineEnding, targetPath);
 
         try {
-            writeSafely(targetPath, formattedXml);
+            writeSafely(targetPath, formattedXml, replaceExisting);
 
         } catch (FileAlreadyExistsException e) {
             throw writeException(
@@ -191,7 +197,7 @@ public class XmlWriter {
         return normalized.replace("\n", lineEnding.value());
     }
 
-    private void writeSafely(Path targetPath, String xml) throws IOException {
+    private void writeSafely(Path targetPath, String xml, boolean replaceExisting) throws IOException {
         Path directory = targetPath.toAbsolutePath().getParent();
         Path tempFile = Files.createTempFile(directory, ".enova-", ".tmp");
 
@@ -204,11 +210,15 @@ public class XmlWriter {
                     StandardOpenOption.TRUNCATE_EXISTING
             );
 
-            if (Files.exists(targetPath)) {
-                throw new FileAlreadyExistsException(targetPath.toString());
-            }
+            if (replaceExisting) {
+                replace(tempFile, targetPath);
+            } else {
+                if (Files.exists(targetPath)) {
+                    throw new FileAlreadyExistsException(targetPath.toString());
+                }
 
-            Files.move(tempFile, targetPath);
+                Files.move(tempFile, targetPath);
+            }
 
         } catch (IOException | RuntimeException exception) {
             try {
@@ -218,6 +228,19 @@ public class XmlWriter {
             }
 
             throw exception;
+        }
+    }
+
+    private void replace(Path tempFile, Path targetPath) throws IOException {
+        try {
+            Files.move(
+                    tempFile,
+                    targetPath,
+                    StandardCopyOption.ATOMIC_MOVE,
+                    StandardCopyOption.REPLACE_EXISTING
+            );
+        } catch (AtomicMoveNotSupportedException e) {
+            Files.move(tempFile, targetPath, StandardCopyOption.REPLACE_EXISTING);
         }
     }
 }

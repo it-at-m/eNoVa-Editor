@@ -31,6 +31,9 @@
     <!-- Name des ausgewählten Sachbearbeiters, der von der Anwendung übergeben wird -->
     <xsl:param name="caseworkerName"/>
 
+    <!-- Datei-URI der Kontaktdaten, die die Anwendung verwendet (Benutzer- oder Installationsverzeichnis) -->
+    <xsl:param name="caseworkersFile"/>
+
     <!-- Codes der ausgewählten Sachentscheidungen, die von der Anwendung übergeben wird -->
     <xsl:param name="decisionCodes"/>
 
@@ -71,8 +74,8 @@
     <!-- Liest den Absendernamen aus der externen sender-config.xml -->
     <xsl:variable name="senderName" select="doc('sender-config.xml')/sender/name"/>
 
-    <!-- Liest die Sachbearbeiter aus der externen caseworkers.xml -->
-    <xsl:variable name="caseworkers" select="doc('caseworkers.xml')"/>
+    <!-- Liest die Sachbearbeiter aus der von der Anwendung verwendeten caseworkers.xml -->
+    <xsl:variable name="caseworkers" select="doc($caseworkersFile)"/>
 
 
     <!-- ========================================================= -->
@@ -255,13 +258,21 @@
         <!-- Wählt den in der Anwendung ausgewählten Sachbearbeiter aus -->
         <xsl:variable name="selectedCaseworker" select="$caseworkers/caseworkers/entry[@name = $caseworkerName]"/>
 
+        <!-- Bricht ab, wenn der ausgewählte Sachbearbeiter nicht mehr in den Kontaktdaten enthalten ist -->
+        <xsl:if test="empty($selectedCaseworker)">
+            <xsl:sequence select="error(
+                    QName('urn:enova-editor', 'enova:kontaktFehlt'),
+                    'Der ausgewählte Kontakt „' || $caseworkerName || '“ ist in den Kontaktdaten nicht mehr vorhanden. '
+                    || 'Bitte starten Sie den eNoVA-Editor neu und wählen Sie den Kontakt erneut aus.')"/>
+        </xsl:if>
+
         <xsl:copy>
 
             <!-- Übernimmt alle vorhandenen Inhalte der Verfahrensdaten -->
             <xsl:apply-templates select="@* | node()"/>
 
             <xsl:if test="$includeEnovaComments">
-                <xsl:comment>eNoVA: Beteiligung wurde für den ausgewählten Sachbearbeiter aus caseworkers.xml ergänzt; Rollen- und Beteiligtennummer wurden als nächste freie Nummern aus den vorhandenen Verfahrensdaten ermittelt</xsl:comment>
+                <xsl:comment>eNoVA: Beteiligung wurde für den ausgewählten Sachbearbeiter aus den Kontaktdaten (caseworkers.xml) ergänzt; Rollen- und Beteiligtennummer wurden als nächste freie Nummern aus den vorhandenen Verfahrensdaten ermittelt</xsl:comment>
             </xsl:if>
 
             <!-- Fügt den ausgewählten Sachbearbeiter als neue Beteiligung hinzu -->

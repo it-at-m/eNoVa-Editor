@@ -17,13 +17,13 @@ import java.util.Set;
 
 public class CaseworkerConfigLoader {
 
-    private static final String CONFIG_FILE = "caseworkers.xml";
+    public static final String CONFIG_FILE = "caseworkers.xml";
 
     private final XmlLoader xmlLoader = new XmlLoader();
 
-    public List<CaseworkerEntry> load() throws AppException {
+    public List<CaseworkerEntry> load(Path file) throws AppException {
 
-        Path configPath = ApplicationFileUtil.resolveReadableFile(CONFIG_FILE);
+        Path configPath = ApplicationFileUtil.requireReadableFile(file);
         Document document = xmlLoader.load(configPath.toFile());
 
         Element root = document.getDocumentElement();

@@ -4,6 +4,7 @@ import de.muenchen.enovaeditor.error.AppException;
 import de.muenchen.enovaeditor.error.ErrorDetail;
 import de.muenchen.enovaeditor.util.ApplicationFileUtil;
 import net.sf.saxon.TransformerFactoryImpl;
+import net.sf.saxon.trans.XPathException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXParseException;
@@ -21,6 +22,8 @@ public class AnswerTransformer {
 
     private static final String DOCTYPE_FEATURE = "disallow-doctype-decl";
     private static final String RULE_FILE = "answer-transform.xsl";
+    // Fehler mit diesem Namensraum löst answer-transform.xsl gezielt aus, ihr Text ist für Anwender gedacht.
+    private static final String ENOVA_ERROR_NAMESPACE = "urn:enova-editor";
 
     public Document transform(Document document, AnswerParameters parameters) throws AppException {
         Path xsltPath = ApplicationFileUtil.resolveReadableFile(RULE_FILE);
@@ -46,6 +49,7 @@ public class AnswerTransformer {
         transformer.setParameter("fileNumber", parameters.fileNumber());
         transformer.setParameter("messageId", parameters.messageId());
         transformer.setParameter("caseworkerName", parameters.caseworkerName());
+        transformer.setParameter("caseworkersFile", parameters.caseworkersFile());
         transformer.setParameter("decisionCodes", parameters.decisionCodes());
 
         transformer.setParameter("productName", parameters.manufacturerInfo().productName());
@@ -145,9 +149,18 @@ public class AnswerTransformer {
                 SAXParseException.class
         );
 
+        XPathException xpathException = findException(
+                exception,
+                XPathException.class
+        );
+
         String userMessage = isDoctypeNotAllowed(saxParseException)
                 ? "Die XML-Datei enthält eine DOCTYPE-Deklaration. "
                 + "DOCTYPE-Deklarationen werden aus Sicherheitsgründen nicht unterstützt."
+                : xpathException != null
+                && xpathException.getErrorCodeQName() != null
+                && ENOVA_ERROR_NAMESPACE.equals(xpathException.getErrorCodeQName().getURI())
+                ? xpathException.getMessage()
                 : message;
 
         SourceLocator locator = findLocator(exception);
