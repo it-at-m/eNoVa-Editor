@@ -100,6 +100,14 @@
         letter-spacing: 0.2px;
     }
 
+    h3 .mehrere-personen {
+        display: block;
+        color: #5b6670;
+        font-size: 13px;
+        font-weight: 400;
+        letter-spacing: normal;
+    }
+
     .person-block {
         margin-bottom: 12px;
         padding: 10px 16px;
@@ -216,7 +224,7 @@
 -->
 {{#each xpath://tns:beteiligung[
 tns:rolle/tns:rollennummer =
-//tns:absender/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+//tns:absender/tns:informationen/tns:auswahl_verweisGrunddaten//tns:ref.rollennummer[not(*)]
 ]}}
 
 <p class="absender">
@@ -230,7 +238,7 @@ tns:rolle/tns:rollennummer =
   {{codelist:rollenbezeichnung xpath:
   tns:rolle[
   tns:rollennummer =
-  //tns:absender/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+  //tns:absender/tns:informationen/tns:auswahl_verweisGrunddaten//tns:ref.rollennummer[not(*)]
   ]/tns:rollenbezeichnung/code
   }}
 
@@ -261,41 +269,41 @@ tns:rolle/tns:rollennummer =
     <div>
       {{xpath://tns:beteiligung[
       tns:rolle/tns:rollennummer =
-      //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+      //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten//tns:ref.rollennummer[not(*)]
       ]/tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:titel}}
 
       {{xpath://tns:beteiligung[
       tns:rolle/tns:rollennummer =
-      //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+      //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten//tns:ref.rollennummer[not(*)]
       ]/tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:vorname}}
 
       {{xpath://tns:beteiligung[
       tns:rolle/tns:rollennummer =
-      //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+      //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten//tns:ref.rollennummer[not(*)]
       ]/tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:nachname}}
     </div>
 
     <div>
       {{xpath://tns:beteiligung[
       tns:rolle/tns:rollennummer =
-      //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+      //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten//tns:ref.rollennummer[not(*)]
       ]/tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:strasse}}
 
       {{xpath://tns:beteiligung[
       tns:rolle/tns:rollennummer =
-      //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+      //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten//tns:ref.rollennummer[not(*)]
       ]/tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:hausnummer}}
     </div>
 
     <div>
       {{xpath://tns:beteiligung[
       tns:rolle/tns:rollennummer =
-      //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+      //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten//tns:ref.rollennummer[not(*)]
       ]/tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:postleitzahl}}
 
       {{xpath://tns:beteiligung[
       tns:rolle/tns:rollennummer =
-      //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten/tns:ref.rollennummer
+      //tns:empfaenger/tns:informationen/tns:auswahl_verweisGrunddaten//tns:ref.rollennummer[not(*)]
       ]/tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:anschrift/tns:ort}}
     </div>
 
@@ -428,7 +436,10 @@ tns:rolle/tns:rollennummer =
 
 {{/each}}
 
-<h3>Verkäufer (in/innen):</h3>
+<h3>
+  {{codelist:rollenbezeichnung xpath:'168'}}:
+  <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
+</h3>
 
 {{#each xpath://tns:beteiligung[
 tns:rolle/tns:rollenbezeichnung/code='168'
@@ -464,7 +475,10 @@ tns:rolle/tns:rollenbezeichnung/code='168'
 
 {{/each}}
 
-<h3>Käufer (in/innen):</h3>
+<h3>
+  {{codelist:rollenbezeichnung xpath:'072'}}:
+  <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
+</h3>
 
 {{#each xpath://tns:beteiligung[
 tns:rolle/tns:rollenbezeichnung/code='072'

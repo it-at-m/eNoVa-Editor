@@ -100,6 +100,14 @@
           letter-spacing: 0.2px;
       }
 
+      h3 .mehrere-personen {
+          display: block;
+          color: #5b6670;
+          font-size: 13px;
+          font-weight: 400;
+          letter-spacing: normal;
+      }
+
       .person-block {
           margin-bottom: 12px;
           padding: 10px 16px;
@@ -235,7 +243,93 @@
         Dort stehen die Rolle und die Person, die zu diesem Absender gehören.
         Die gefundenen Daten können danach innerhalb dieses Bereichs verwendet werden.
     -->
+    
 
+    <p class="absender">
+      <!--
+          Rollenbezeichnung ausgeben:
+          Der Name "rollenbezeichnung" gehört zur Konfiguration
+          in codelists.properties.
+          Der XPath liefert den Rollen-Code, zum Beispiel 208.
+          Über die Codelist wird daraus dann die Bezeichnung.
+      -->
+      Aussteller(in)
+
+      <!--
+          Informationen der Person/Absender aus der zuvor gefundenen Beteiligung ausgeben.
+      -->
+      
+      Antonia
+      Allenthaler
+
+      <br>
+
+      Hauptstrasse
+      2
+
+      <br>
+
+      98776
+      Hinterhugeldapfing
+
+    </p>
+
+    <div class="kopf-zeile">
+
+
+      <div class="empfaenger">
+        <!-- Fall 1: Empfänger über ref.rollennummer -->
+        <div>
+          Dr.
+
+          Martin
+
+          Müller
+        </div>
+
+        <div>
+          Anton-Wilhelm-Amo-Straße
+
+          34
+        </div>
+
+        <div>
+          10117
+
+          Berlin
+        </div>
+
+        <!-- Fall 2: Keine ref.rollennummer -->
+        
+      </div>
+
+
+      <div class="kontakt">
+        
+
+          E-Mail:
+          vorkaufsrecht@hinterhugeldapfing.de
+
+          <br>
+        
+
+        <br>
+
+        Aktenzeichen:
+        LH 2026-1234
+      </div>
+
+    </div>
+
+    <div class="datum-zeile">
+      <!-- Ort des aktuellen Beteiligten -->
+      Hinterhugeldapfing,
+
+      <!-- Erstellungsdatum der Nachricht im Format TT.MM.JJJJ -->
+      24.10.2026
+    </div>
+
+    
 
     <!-- Betreff / Verfahrensgegenstand -->
     <p class="betreff">
@@ -253,7 +347,7 @@
     <p class="entscheidung" style="margin-bottom: 0;"><strong>Frage – Antwort:</strong></p>
 
     <ol style="margin-top: 0;">
-
+      
 
       <li>
         <div>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GrdstVG (011)</div>
@@ -262,7 +356,7 @@
         (019)</div>
       </li>
 
-
+      
 
       <li>
         <div>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GVO (012)</div>
@@ -271,7 +365,7 @@
         (021)</div>
       </li>
 
-
+      
 
       <li>
         <div>Antwort auf die Frage: Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte und hilfsweise um Erteilung eines Negativattests (013)</div>
@@ -280,7 +374,7 @@
         (023)</div>
       </li>
 
-
+      
     </ol>
 
     <h3>Urkundendaten:</h3>
@@ -296,7 +390,7 @@
 
     <h3>Grundstück(e):</h3>
 
-
+    
 
     <div class="grundstueck-block">
 
@@ -317,7 +411,7 @@
 
       <div class="flurstuecke">
 
-
+        
 
         <div class="flurstueck-block">
           <div>
@@ -331,13 +425,13 @@
           </div>
         </div>
 
-
+        
 
       </div>
 
     </div>
 
-
+    
 
     <div class="grundstueck-block">
 
@@ -358,7 +452,7 @@
 
       <div class="flurstuecke">
 
-
+        
 
         <div class="flurstueck-block">
           <div>
@@ -372,7 +466,7 @@
           </div>
         </div>
 
-
+        
 
         <div class="flurstueck-block">
           <div>
@@ -386,20 +480,23 @@
           </div>
         </div>
 
-
+        
 
       </div>
 
     </div>
 
+    
 
+    <h3>
+      Veräußerer (Veräußerin):
+      <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
+    </h3>
 
-    <h3>Verkäufer (in/innen):</h3>
-
-
+    
 
     <div class="person-block">
-
+      
       Max
       Verkäufer
 
@@ -419,14 +516,17 @@
       13.08.1965</span>
     </div>
 
+    
 
+    <h3>
+      Erwerber(in):
+      <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
+    </h3>
 
-    <h3>Käufer (in/innen):</h3>
-
-
+    
 
     <div class="person-block">
-
+      
       Martina
       Käuferin
 
@@ -446,7 +546,7 @@
       28.09.1978</span>
     </div>
 
-
+    
 
     <p class="gruss">
       Mit freundlichen Grüßen
@@ -461,11 +561,11 @@
         Dann wird auswahl_kommunikationspartner/sonstige verwendet.
     -->
     <div class="sachbearbeiter">
+      Antonia
 
+      Allenthaler
 
-
-
-
+      
     </div>
 
     <!-- Instanzbehörde -->

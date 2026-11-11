@@ -100,6 +100,14 @@
         letter-spacing: 0.2px;
     }
 
+    h3 .mehrere-personen {
+        display: block;
+        color: #5b6670;
+        font-size: 13px;
+        font-weight: 400;
+        letter-spacing: normal;
+    }
+
     .person-block {
         margin-bottom: 12px;
         padding: 10px 16px;
@@ -216,6 +224,92 @@
 -->
 
 
+<p class="absender">
+  <!--
+      Rollenbezeichnung ausgeben:
+      Der Name "rollenbezeichnung" gehört zur Konfiguration
+      in codelists.properties.
+      Der XPath liefert den Rollen-Code, zum Beispiel 208.
+      Über die Codelist wird daraus dann die Bezeichnung.
+  -->
+  Notar(in)
+
+  <!--
+      Informationen der Person/Absender aus der zuvor gefundenen Beteiligung ausgeben.
+  -->
+  Dr.
+  Martin
+  Müller
+
+  <br>
+
+  Anton-Wilhelm-Amo-Straße
+  34
+
+  <br>
+
+  10117
+  Berlin
+
+</p>
+
+<div class="kopf-zeile">
+
+
+  <div class="empfaenger">
+    <!-- Fall 1: Empfänger über ref.rollennummer -->
+    <div>
+      
+
+      
+
+      
+    </div>
+
+    <div>
+      
+
+      
+    </div>
+
+    <div>
+      
+
+      
+    </div>
+
+    <!-- Fall 2: Keine ref.rollennummer -->
+    LH München
+  </div>
+
+
+  <div class="kontakt">
+    
+
+    Telefon:
+    030 - 1231239321
+
+    <br>
+    
+
+    <br>
+
+    Aktenzeichen:
+    UVZ-4697
+  </div>
+
+</div>
+
+<div class="datum-zeile">
+  <!-- Ort des aktuellen Beteiligten -->
+  Berlin,
+
+  <!-- Erstellungsdatum der Nachricht im Format TT.MM.JJJJ -->
+  13.08.2026
+</div>
+
+
+
 <!-- Betreff / Verfahrensgegenstand -->
 <p class="betreff">
   Ersuchen Genehmigung GrdstVG; 100000019136
@@ -232,28 +326,28 @@
 <p>Wir bitten um</p>
 
 <ol>
-
+  
 
   <li>
     Erteilung der Genehmigung nach § 2 GrdstVG
     (011)
   </li>
 
-
+  
 
   <li>
     Erteilung der Genehmigung nach § 2 GVO
     (012)
   </li>
 
-
+  
 
   <li>
     Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte und hilfsweise um Erteilung eines Negativattests
     (013)
   </li>
 
-
+  
 </ol>
 
 <h3>Urkundendaten:</h3>
@@ -290,7 +384,7 @@
 
   <div class="flurstuecke">
 
-
+    
 
     <div class="flurstueck-block">
       <div>
@@ -304,7 +398,7 @@
       </div>
     </div>
 
-
+    
 
   </div>
 
@@ -331,7 +425,7 @@
 
   <div class="flurstuecke">
 
-
+    
 
     <div class="flurstueck-block">
       <div>
@@ -345,7 +439,7 @@
       </div>
     </div>
 
-
+    
 
     <div class="flurstueck-block">
       <div>
@@ -359,7 +453,7 @@
       </div>
     </div>
 
-
+    
 
   </div>
 
@@ -367,12 +461,15 @@
 
 
 
-<h3>Verkäufer (in/innen):</h3>
+<h3>
+  Veräußerer (Veräußerin):
+  <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
+</h3>
 
 
 
 <div class="person-block">
-
+  
   Max
   Verkäufer
 
@@ -394,12 +491,15 @@
 
 
 
-<h3>Käufer (in/innen):</h3>
+<h3>
+  Erwerber(in):
+  <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
+</h3>
 
 
 
 <div class="person-block">
-
+  
   Martina
   Käuferin
 
