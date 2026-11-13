@@ -107,6 +107,9 @@ public class MainController {
     private ComboBox<CaseworkerEntry> caseworkerComboBox;
 
     @FXML
+    private Label caseworkerNameLabel;
+
+    @FXML
     private TextField fileNumber;
 
     @FXML
@@ -795,6 +798,12 @@ public class MainController {
         kontaktdatenButton.setVisible(!installationFileExists);
         kontaktdatenButton.setManaged(!installationFileExists);
 
+        // Persönliche Kontaktdaten enthalten genau einen Kontakt, daher Anzeige statt Auswahl.
+        caseworkerComboBox.setVisible(installationFileExists);
+        caseworkerComboBox.setManaged(installationFileExists);
+        caseworkerNameLabel.setVisible(!installationFileExists);
+        caseworkerNameLabel.setManaged(!installationFileExists);
+
         List<CaseworkerEntry> caseworkerEntries = List.of();
         Path loadedFile = null;
 
@@ -915,6 +924,10 @@ public class MainController {
         caseworkerHint.setManaged(caseworkerEntries.isEmpty());
 
         selectPersonalContact();
+
+        CaseworkerEntry selectedCaseworker = caseworkerComboBox.getValue();
+        caseworkerNameLabel.setText(selectedCaseworker == null ? "" : selectedCaseworker.name());
+        caseworkerNameLabel.setPrefWidth(maxTextWidth + CASEWORKER_WIDTH_PADDING);
     }
 
     private boolean isPersonalContactLoaded() {
