@@ -20,6 +20,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -80,7 +81,6 @@ public final class CaseworkerDialog {
     private final Dialog<ButtonType> dialog = new Dialog<>();
     private final VBox telekommunikationRows = new VBox(10);
 
-    private final TextField nameField = new TextField();
     private final TextField vornameField = new TextField();
     private final TextField titelField = new TextField();
     private final TextField namensvorsatzField = new TextField();
@@ -180,19 +180,11 @@ public final class CaseworkerDialog {
     private GridPane createNameGrid() {
         GridPane grid = createFormGrid();
 
-        addRow(grid, 0, "Anzeigename*:", nameField);
-        addRow(grid, 1, "Vorname*:", vornameField);
-        addRow(grid, 2, "Nachname*:", nachnameField);
-        addRow(grid, 3, "Titel:", titelField);
-        addRow(grid, 4, "Namensvorsatz:", namensvorsatzField);
-        addRow(grid, 5, "Namenszusatz:", namenszusatzField);
-
-        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (isEditing()) {
-                entry.setAttribute("name", newValue.trim());
-                dirty = true;
-            }
-        });
+        addRow(grid, 0, "Vorname*:", vornameField);
+        addRow(grid, 1, "Nachname*:", nachnameField);
+        addRow(grid, 2, "Titel:", titelField);
+        addRow(grid, 3, "Namensvorsatz:", namensvorsatzField);
+        addRow(grid, 4, "Namenszusatz:", namenszusatzField);
 
         bindNameField(vornameField, "vorname");
         bindNameField(titelField, "titel");
@@ -292,7 +284,6 @@ public final class CaseworkerDialog {
             Element vollerName = vollerName(entry);
             Element anschrift = child(natuerlichePerson(entry), "anschrift");
 
-            nameField.setText(entry.getAttribute("name"));
             vornameField.setText(text(vollerName, "vorname"));
             titelField.setText(text(vollerName, "titel"));
             namensvorsatzField.setText(text(vollerName, "namensvorsatz"));
@@ -344,7 +335,10 @@ public final class CaseworkerDialog {
         TextField verbindungField = new TextField(text(telekommunikation, "verbindung"));
         HBox.setHgrow(verbindungField, Priority.ALWAYS);
 
-        Button removeButton = new Button("Entfernen");
+        Button removeButton = new Button("✕");
+        removeButton.setStyle("-fx-text-fill: #c62828; -fx-font-weight: bold;");
+        removeButton.setTooltip(new Tooltip("Telekommunikation entfernen"));
+        removeButton.setAccessibleText("Telekommunikation entfernen");
 
         artComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             Element art = child(telekommunikation, "telekommunikationsart");
@@ -449,6 +443,10 @@ public final class CaseworkerDialog {
             return false;
         }
 
+        // Der Name dient der Antworterzeugung als Schlüssel des Eintrags.
+        Element vollerName = vollerName(entry);
+        entry.setAttribute("name", text(vollerName, "vorname").trim() + " " + text(vollerName, "nachname").trim());
+
         try {
             writeUserFile();
             return true;
@@ -466,10 +464,6 @@ public final class CaseworkerDialog {
     }
 
     private String validate() {
-        if (entry.getAttribute("name").isBlank()) {
-            return "Der Anzeigename fehlt.";
-        }
-
         Element vollerName = vollerName(entry);
 
         if (text(vollerName, "vorname").isBlank()) {
