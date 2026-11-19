@@ -32,7 +32,7 @@ public class BrowserOpener {
 
         String authority = uri.getRawAuthority();
 
-        if (authority == null || authority.isBlank()) {
+        if (authority == null || authority.isBlank() || "localhost".equalsIgnoreCase(authority)) {
             return uri;
         }
 
