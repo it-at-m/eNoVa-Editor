@@ -340,6 +340,9 @@
                         <xsl:value-of select="."/>
                     </code>
                 </tns:sachentscheidung>
+                <tns:hinweise_sonstige>
+                    <xsl:value-of select="$requestHints[$decisionPosition]"/>
+                </tns:hinweise_sonstige>
 
                 <xsl:if test="$includeEnovaComments and exists($addresseeRoleNumbers)">
                     <xsl:comment>eNoVA: Alle Käufer und Verkäufer wurden anhand ihrer Rollennummern als Adressaten der Sachentscheidung referenziert</xsl:comment>
@@ -349,15 +352,10 @@
                 <xsl:for-each select="$addresseeRoleNumbers">
                     <tns:adressatDerSachentscheidung>
                         <tns:ref.rollennummer>
-							<tns:ref.rollennummer>
-								<xsl:value-of select="."/>
-							</tns:ref.rollennummer>
+                            <xsl:value-of select="."/>
                         </tns:ref.rollennummer>
                     </tns:adressatDerSachentscheidung>
                 </xsl:for-each>
-                <tns:hinweise_sonstige>
-                    <xsl:value-of select="$requestHints[$decisionPosition]"/>
-                </tns:hinweise_sonstige>
             </tns:sachentscheidung>
         </xsl:for-each>
     </xsl:template>
