@@ -12,13 +12,48 @@ import java.util.List;
 public class BrowserOpener {
 
     public void open(Path htmlFile) throws AppException {
-        open(htmlFile.toUri(), htmlFileDetail(htmlFile),
+        Path absolutePath = htmlFile.toAbsolutePath().normalize();
+        URI uri = toBrowserUri(absolutePath.toUri());
+        open(uri, htmlFileDetail(absolutePath),
                 "Die HTML-Datei konnte nicht im Standardbrowser geöffnet werden.");
     }
 
     public void open(URI uri) throws AppException {
-        open(uri, List.of(new ErrorDetail("Adresse", uri.toString())),
+        URI browserUri = toBrowserUri(uri);
+        open(browserUri, List.of(new ErrorDetail("Adresse", browserUri.toString())),
                 "Die Seite konnte nicht im Standardbrowser geöffnet werden.");
+    }
+
+    private URI toBrowserUri(URI uri) {
+
+        if (!"file".equalsIgnoreCase(uri.getScheme())) {
+            return uri;
+        }
+
+        String authority = uri.getRawAuthority();
+
+        if (authority == null || authority.isBlank() || "localhost".equalsIgnoreCase(authority)) {
+            return uri;
+        }
+
+        String rawPath = uri.getRawPath() != null
+                ? uri.getRawPath()
+                : "";
+
+        StringBuilder newUri = new StringBuilder()
+                .append("file://///")
+                .append(authority)
+                .append(rawPath);
+
+        if (uri.getRawQuery() != null) {
+            newUri.append("?").append(uri.getRawQuery());
+        }
+
+        if (uri.getRawFragment() != null) {
+            newUri.append("#").append(uri.getRawFragment());
+        }
+
+        return URI.create(newUri.toString());
     }
 
     private void open(URI uri, List<ErrorDetail> details, String failureMessage) throws AppException {
