@@ -184,6 +184,15 @@
 
     <!-- Nachrichten-ID: Ersetzt die vorhandene ID durch eine neu erzeugte eindeutige Nachrichten-ID -->
     <xsl:template match="tns:nachrichtenkopf/tns:absender/tns:eigeneNachrichtenID">
+        <!-- Aktenzeichen: Ergänzt das Aktenzeichen aus dem Eingabefeld, wenn das Ersuchen keines enthält (Reihenfolge laut Schema vor eigeneNachrichtenID) -->
+        <xsl:if test="not(../tns:aktenzeichen)">
+            <xsl:if test="$includeEnovaComments">
+                <xsl:comment>eNoVA: Aktenzeichen wurde mit dem Wert aus dem Eingabefeld ergänzt</xsl:comment>
+            </xsl:if>
+            <tns:aktenzeichen>
+                <xsl:value-of select="$fileNumber"/>
+            </tns:aktenzeichen>
+        </xsl:if>
         <xsl:if test="$includeEnovaComments">
             <xsl:comment>eNoVA: Nachrichten-ID wurde durch eine von der Anwendung neu erzeugte eindeutige Nachrichten-ID ersetzt</xsl:comment>
         </xsl:if>
@@ -201,15 +210,27 @@
             <!-- Übernimmt alle Kindelemente des ursprünglichen Absenders außer dem Aktenzeichen -->
             <xsl:copy-of select="../tns:absender/node()[not(self::tns:aktenzeichen or self::tns:eigeneNachrichtenID)]"/>
 
-            <!-- Übernimmt das Aktenzeichen des ursprünglichen Absenders in die Empfängerstruktur -->
-            <xsl:if test="$includeEnovaComments">
-                <xsl:comment>eNoVA: Empfänger-Aktenzeichen wurde aus dem Aktenzeichen des ursprünglichen Absenders übernommen</xsl:comment>
-            </xsl:if>
-            <tns:auswahl_aktenzeichen>
-                <tns:aktenzeichen.freitext>
-                    <xsl:value-of select="../tns:absender/tns:aktenzeichen"/>
-                </tns:aktenzeichen.freitext>
-            </tns:auswahl_aktenzeichen>
+            <!-- Übernimmt das Aktenzeichen des ursprünglichen Absenders in die Empfängerstruktur; ohne (oder mit leerem) Aktenzeichen: unbekannt -->
+            <xsl:choose>
+                <xsl:when test="normalize-space(../tns:absender/tns:aktenzeichen) != ''">
+                    <xsl:if test="$includeEnovaComments">
+                        <xsl:comment>eNoVA: Empfänger-Aktenzeichen wurde aus dem Aktenzeichen des ursprünglichen Absenders übernommen</xsl:comment>
+                    </xsl:if>
+                    <tns:auswahl_aktenzeichen>
+                        <tns:aktenzeichen.freitext>
+                            <xsl:value-of select="../tns:absender/tns:aktenzeichen"/>
+                        </tns:aktenzeichen.freitext>
+                    </tns:auswahl_aktenzeichen>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:if test="$includeEnovaComments">
+                        <xsl:comment>eNoVA: Empfänger-Aktenzeichen ist unbekannt, da das Ersuchen kein oder ein leeres Absender-Aktenzeichen enthält</xsl:comment>
+                    </xsl:if>
+                    <tns:auswahl_aktenzeichen>
+                        <tns:aktenzeichen.unbekannt>true</tns:aktenzeichen.unbekannt>
+                    </tns:auswahl_aktenzeichen>
+                </xsl:otherwise>
+            </xsl:choose>
 			
 			<!-- Übernimmt die Nachrichten-ID des ursprünglichen Absenders in die Empfängerstruktur -->
             <xsl:if test="$includeEnovaComments">
