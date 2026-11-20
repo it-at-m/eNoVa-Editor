@@ -156,6 +156,12 @@
     .flurstueck-block .label {
         min-width: 90px;
     }
+	
+	.grundstueck-adresse {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed #d9e0e7;
+    }
 
     ol {
         margin: 0 0 18px 0;
@@ -426,10 +432,34 @@ tns:rolle/tns:rollennummer =
         tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:nenner
         )}}
       </div>
+	  
+	  
+	  <div>
+	  	{{#each xpath:tns:wirtschaftsart}}
+			<span class="label">Wirtschaftsart:</span>
+			{{codelist:wirtschaftsart xpath:code}}
+	    {{/each}} 
+	  </div>
+	  
     </div>
 
     {{/each}}
 
+  </div>
+  
+  <div class="grundstueck-adresse">
+  
+    <div>
+		<span class="label">Straße/Hausnummer:</span>
+		{{xpath:tns:anschrift/tns:strasse}}
+        {{xpath:tns:anschrift/tns:hausnummer}}		
+	  </div>
+
+	  <div>
+		<span class="label">PLZ/Ort:</span>
+		{{xpath:tns:anschrift/tns:postleitzahl}}
+        {{xpath:tns:anschrift/tns:ort}}	
+	  </div>  
   </div>
 
 </div>
