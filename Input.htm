@@ -379,19 +379,21 @@ tns:rolle/tns:rollennummer =
 </ol>
 
 <h3>Urkundendaten:</h3>
-<p class="urkunde">
-  <span class="label">Urkundenverzeichnisnummer (UVZ):</span>
-  {{xpath://tns:datenDerUrkunde/tns:urNr}}
+	{{#each xpath://tns:datenDerUrkunde}}
+		<p class="urkunde">
+		  <span class="label">Urkundenverzeichnisnummer (UVZ):</span>
+		  {{xpath:tns:urNr}}
 
-  <br>
+		  <br>
 
-  <span class="label">Beurkundungsdatum:</span>
-  {{xpath:concat(
-  substring(normalize-space(//tns:datenDerUrkunde/tns:urkundsdatum), 9, 2), '.',
-  substring(normalize-space(//tns:datenDerUrkunde/tns:urkundsdatum), 6, 2), '.',
-  substring(normalize-space(//tns:datenDerUrkunde/tns:urkundsdatum), 1, 4)
-  )}}
-</p>
+		  <span class="label">Beurkundungsdatum:</span>
+		  {{xpath:concat(
+		  substring(normalize-space(tns:urkundsdatum), 9, 2), '.',
+		  substring(normalize-space(tns:urkundsdatum), 6, 2), '.',
+		  substring(normalize-space(tns:urkundsdatum), 1, 4)
+		  )}}
+		</p>
+	{{/each}}
 
 <h3>Grundstück(e):</h3>
 
@@ -441,6 +443,11 @@ tns:rolle/tns:rollennummer =
 	    {{/each}} 
 	  </div>
 	  
+	  <div>
+		<span class="label">Größe:</span>
+		{{xpath:tns:groesse}}
+	  </div>
+	  
     </div>
 
     {{/each}}
@@ -459,6 +466,13 @@ tns:rolle/tns:rollennummer =
 		<span class="label">PLZ/Ort:</span>
 		{{xpath:tns:anschrift/tns:postleitzahl}}
         {{xpath:tns:anschrift/tns:ort}}	
+	  </div>  
+	  
+	  <div>
+		<span class="label">Grundstücksart:</span>
+		{{#each xpath:tns:weitereAngabenZumGrundstueck/tns:grundstuecksart}}
+			{{codelist:grundstuecksart xpath:code}}
+		{{/each}} 
 	  </div>  
   </div>
 
