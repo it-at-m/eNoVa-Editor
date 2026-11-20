@@ -10,7 +10,7 @@
       <tns:absender>
          <tns:informationen><!--Type.GDS.Kommunikationspartner-->
             <tns:auswahl_kommunikationspartner><!--eNoVA: Kommunikationspartner wurde durch den Wert aus sender-config.xml ersetzt-->
-               <tns:sonstige>LH München</tns:sonstige>
+               <tns:sonstige>Behördenname in sender-config.xml eintragen</tns:sonstige>
             </tns:auswahl_kommunikationspartner>
             <tns:auswahl_verweisGrunddaten><!--optional--><!--eNoVA: Rollennummer wurde durch die nächste freie Rollennummer aus den vorhandenen Verfahrensdaten ersetzt-->
                <tns:ref.rollennummer>
@@ -48,7 +48,7 @@
       <tns:herstellerinformation>
          <tns:nameDesProdukts>LHM-eNoVA-Generator</tns:nameDesProdukts>
          <tns:herstellerDesProdukts>Landeshauptstadt München it@M</tns:herstellerDesProdukts>
-         <tns:version>0.9.3</tns:version>
+         <tns:version>1.1.0</tns:version>
       </tns:herstellerinformation>
    </tns:nachrichtenkopf>
    <tns:grunddaten>
@@ -59,7 +59,7 @@
          <!--alphanumerisch-->
          <tns:instanzdaten>
             <tns:auswahl_instanzbehoerde><!--Im Regelfall sollte dies identisch mit nachrichtenkopf.empfaenger sein --><!--eNoVA: Instanzbehörde wurde durch den Wert aus sender-config.xml ersetzt-->
-               <tns:sonstige>LH München</tns:sonstige>
+               <tns:sonstige>Behördenname in sender-config.xml eintragen</tns:sonstige>
             </tns:auswahl_instanzbehoerde>
             <tns:verfahrensgegenstand>
                <tns:gegenstand>Ersuchen Genehmigung GrdstVG; 100000019136</tns:gegenstand>
@@ -180,7 +180,7 @@
                </tns:auswahl_beteiligter>
             </tns:beteiligter>
          </tns:beteiligung>
-         <!--eNoVA: Beteiligung wurde für den ausgewählten Sachbearbeiter aus caseworkers.xml ergänzt; Rollen- und Beteiligtennummer wurden als nächste freie Nummern aus den vorhandenen Verfahrensdaten ermittelt-->
+         <!--eNoVA: Beteiligung wurde für den ausgewählten Sachbearbeiter aus den Kontaktdaten (caseworkers.xml) ergänzt; Rollen- und Beteiligtennummer wurden als nächste freie Nummern aus den vorhandenen Verfahrensdaten ermittelt-->
          <tns:beteiligung>
             <tns:rolle>
                <tns:rollennummer>5</tns:rollennummer>
@@ -265,63 +265,49 @@
             <tns:sachentscheidung listVersionID="1.1">
                <code>019</code>
             </tns:sachentscheidung>
+            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GrdstVG (011)</tns:hinweise_sonstige>
             <!--eNoVA: Alle Käufer und Verkäufer wurden anhand ihrer Rollennummern als Adressaten der Sachentscheidung referenziert-->
             <tns:adressatDerSachentscheidung>
-               <tns:ref.rollennummer>
-                  <tns:ref.rollennummer>3</tns:ref.rollennummer>
-               </tns:ref.rollennummer>
+               <tns:ref.rollennummer>3</tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
             <tns:adressatDerSachentscheidung>
-               <tns:ref.rollennummer>
-                  <tns:ref.rollennummer>4</tns:ref.rollennummer>
-               </tns:ref.rollennummer>
+               <tns:ref.rollennummer>4</tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
-            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GrdstVG (011)</tns:hinweise_sonstige>
          </tns:sachentscheidung>
          <!--eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt-->
          <tns:sachentscheidung>
             <tns:sachentscheidung listVersionID="1.1">
                <code>021</code>
             </tns:sachentscheidung>
+            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GVO (012)</tns:hinweise_sonstige>
             <!--eNoVA: Alle Käufer und Verkäufer wurden anhand ihrer Rollennummern als Adressaten der Sachentscheidung referenziert-->
             <tns:adressatDerSachentscheidung>
-               <tns:ref.rollennummer>
-                  <tns:ref.rollennummer>3</tns:ref.rollennummer>
-               </tns:ref.rollennummer>
+               <tns:ref.rollennummer>3</tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
             <tns:adressatDerSachentscheidung>
-               <tns:ref.rollennummer>
-                  <tns:ref.rollennummer>4</tns:ref.rollennummer>
-               </tns:ref.rollennummer>
+               <tns:ref.rollennummer>4</tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
-            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GVO (012)</tns:hinweise_sonstige>
          </tns:sachentscheidung>
          <!--eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt-->
          <tns:sachentscheidung>
             <tns:sachentscheidung listVersionID="1.1">
                <code>023</code>
             </tns:sachentscheidung>
+            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte und hilfsweise um Erteilung eines Negativattests (013)</tns:hinweise_sonstige>
             <!--eNoVA: Alle Käufer und Verkäufer wurden anhand ihrer Rollennummern als Adressaten der Sachentscheidung referenziert-->
             <tns:adressatDerSachentscheidung>
-               <tns:ref.rollennummer>
-                  <tns:ref.rollennummer>3</tns:ref.rollennummer>
-               </tns:ref.rollennummer>
+               <tns:ref.rollennummer>3</tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
             <tns:adressatDerSachentscheidung>
-               <tns:ref.rollennummer>
-                  <tns:ref.rollennummer>4</tns:ref.rollennummer>
-               </tns:ref.rollennummer>
+               <tns:ref.rollennummer>4</tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
-            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte und hilfsweise um Erteilung eines Negativattests (013)</tns:hinweise_sonstige>
          </tns:sachentscheidung>
       </tns:auswahl_GegenstandDerNachricht>
       <tns:datenDerUrkunde>
          <tns:urNr>4697</tns:urNr>
          <tns:urkundsdatum>2026-08-13</tns:urkundsdatum>
          <tns:urkundsperson>
-            <tns:ref.rollennummer>
-               <tns:ref.rollennummer>1</tns:ref.rollennummer>
-            </tns:ref.rollennummer>
+            <tns:ref.rollennummer>1</tns:ref.rollennummer>
             <!--Verweis auf grunddaten.verfahrensdaten.beteiliung.beteiligter.beteiligtennummer, nicht auf rolle.rollennummer!-->
          </tns:urkundsperson>
       </tns:datenDerUrkunde>

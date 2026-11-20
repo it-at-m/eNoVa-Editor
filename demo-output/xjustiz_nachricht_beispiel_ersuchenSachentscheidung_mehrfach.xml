@@ -212,9 +212,7 @@
 			<tns:urNr>4697</tns:urNr>
 			<tns:urkundsdatum>2026-08-13</tns:urkundsdatum>
 			<tns:urkundsperson>
-				<tns:ref.rollennummer>
-					<tns:ref.rollennummer>1</tns:ref.rollennummer>
-				</tns:ref.rollennummer>
+				<tns:ref.rollennummer>1</tns:ref.rollennummer>
 				<!--Verweis auf grunddaten.verfahrensdaten.beteiliung.beteiligter.beteiligtennummer, nicht auf rolle.rollennummer!-->
 			</tns:urkundsperson>
 		</tns:datenDerUrkunde>
