@@ -275,6 +275,9 @@
 									<tns:nenner>46</tns:nenner><!--Optional, hauptsächt vorhanden, wenn das Grundstück igrendwann geteilt wurde. Auch als 'Bruchteilsnummer' bekannt -->
 								</tns:flurstuecksnummer>
 							</tns:identifikationFlurstueck> <!-- 001='Erholungsfläche'--> 
+							<tns:wirtschaftsart listVersionID="1.0"><!-- https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:dabag.wirtschaftsart -->
+								<code>001</code> 
+							</tns:wirtschaftsart>
 							<tns:groesse>359</tns:groesse><!--Das format macht hier keine näheren Angaben, wie die Größe angegeben wird. Es ist anzunehmen, dass m² gemeint sind. -->
 						</tns:flurstuecke>
 						<tns:flurstuecke>

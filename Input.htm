@@ -143,7 +143,6 @@
     .flurstuecke {
         margin-top: 10px;
         padding-top: 10px;
-        border-top: 1px dashed #d9e0e7;
     }
 
     .flurstueck-block {
@@ -156,6 +155,10 @@
     .flurstueck-block .label {
         min-width: 90px;
     }
+	
+	.wirtschaftsart-item:not(:last-child)::after {
+		content: ", ";
+	}
 	
 	.grundstueck-adresse {
         margin-top: 10px;
@@ -415,52 +418,102 @@ tns:rolle/tns:rollennummer =
     <span class="label">Grundbuchblatt:</span>
     {{xpath:tns:bundeslandfremdesGrundbuchblatt/tns:grundbuchblatt}}
   </div>
+  
+  <script>a=0;</script>
 
-  <div class="flurstuecke">
+  {{#each xpath:tns:buchungsstelle/tns:auswahl_buchungsstelle}}
+	
+	{{#each xpath:tns:grundstueck}}
+		<div class="flurstuecke">
+			{{#each xpath:tns:flurstuecke}}
+			<div class="flurstueck-block">
+			  <div>
+				<span class="label">Gemarkung:</span>
+				{{xpath:tns:identifikationFlurstueck/tns:gemarkungsschluessel}}
+			  </div>
 
-    {{#each xpath:tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:grundstueck/tns:flurstuecke}}
-
-    <div class="flurstueck-block">
-      <div>
-        <span class="label">Gemarkung:</span>
-        {{xpath:tns:identifikationFlurstueck/tns:gemarkungsschluessel}}
-      </div>
-
-      <div>
-        <span class="label">Flurstück:</span>
-        {{xpath:concat(
-        tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:zaehler,
-        substring('/', 1, number(boolean(tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:nenner))),
-        tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:nenner
-        )}}
-      </div>
-	  
-	  
-	  <div>
-		<style>
-		  .wirtschaftsart-item:not(:last-child)::after {
-			content: ", ";
-		  }
-		</style>
-
-		<span class="label">Wirtschaftsart:</span>
-		<span>
-		  {{#each xpath:tns:wirtschaftsart}}
-			<span class="wirtschaftsart-item">{{codelist:wirtschaftsart xpath:code}}</span>
-		  {{/each}}
-		</span>
-	  </div>
-	  
-	  <div>
-		<span class="label">Größe:</span>
-		{{xpath:tns:groesse}}
-	  </div>
-	  
-    </div>
-
-    {{/each}}
-
-  </div>
+			  <div>
+				<span class="label">Flurstück:</span>
+				{{xpath:concat(
+				tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:zaehler,
+				substring('/', 1, number(boolean(tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:nenner))),
+				tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:nenner
+				)}}
+			  </div>
+			  
+			  
+			  <div>
+				<span class="label">Wirtschaftsart:</span>
+				<span>
+				  {{#each xpath:tns:wirtschaftsart}}
+					<span class="wirtschaftsart-item">{{codelist:wirtschaftsart xpath:code}}</span>
+				  {{/each}}
+				</span>
+			  </div>
+			  
+			  <div>
+				<span class="label">Größe:</span>
+				{{xpath:tns:groesse}}
+			  </div>
+			  
+			</div>
+			{{/each}}
+		</div>
+	{{/each}}
+	
+	<script>
+		if(a===0){
+			document.write('<span id="sonderfall" style="display: none;" class="label">Sonderfall:</span>'); 
+			a=1;
+		}
+	</script>
+	
+	<div class="andere_buchungsstelle">	
+		{{#each xpath:tns:erbbaurecht}}
+			<div id="erbbaurecht" class="sonderfall-item">{{xpath:tns:art/code}}</div>
+			<script> 
+				if(document.getElementById('erbbaurecht').textContent.trim() != '') 
+					{ 
+						document.getElementById('sonderfall').style.display = 'block';
+						document.getElementById('erbbaurecht').textContent = 'Erbbaurecht';
+					}; 
+			</script>
+		{{/each}}
+		
+		{{#each xpath:tns:nutzungsrecht}}
+			<div id="nutzungsrecht" class="sonderfall-item">{{xpath:tns:art/code}}</div>
+			<script> 
+				if(document.getElementById('nutzungsrecht').textContent.trim() != '') 
+					{ 
+						document.getElementById('sonderfall').style.display = 'block';
+						document.getElementById('nutzungsrecht').textContent = 'Nutzungsrecht';
+					}; 
+			</script>
+		{{/each}}
+			
+		{{#each xpath:tns:wegEinheit}}
+			<div id="wegeinheit" class="sonderfall-item">{{xpath:tns:sondereigentum}}</div>
+			<script> 
+				if(document.getElementById('wegeinheit').textContent.trim() != '') 
+					{ 
+						document.getElementById('sonderfall').style.display = 'block';
+						document.getElementById('wegeinheit').textContent = 'WEG-Einheit';
+					}; 
+			</script>
+		{{/each}}
+		
+		{{#each xpath:tns:miteigentumP3GBO}}
+			<div id="miteigentum" class="sonderfall-item">{{xpath:tns:anteil}}</div>
+			<script> 
+				if(document.getElementById('miteigentum').textContent.trim() != '') 
+					{ 
+						document.getElementById('sonderfall').style.display = 'block';
+						document.getElementById('miteigentum').textContent = 'Miteigentum';
+					}; 
+			</script>
+		{{/each}}
+	</div>
+  {{/each}}
   
   <div class="grundstueck-adresse">
   

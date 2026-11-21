@@ -246,6 +246,54 @@
 					</tns:grundstueck>
 				</tns:auswahl_buchungsstelle>
 			</tns:buchungsstelle>
+			<tns:buchungsstelle>
+				<tns:lfdNummer>4</tns:lfdNummer>
+				<tns:auswahl_buchungsstelle>
+					<tns:erbbaurecht>
+						<tns:art listVersionID="1.0">
+							<code>001</code>
+						</tns:art>
+						<tns:belastung></tns:belastung>
+					</tns:erbbaurecht>
+				</tns:auswahl_buchungsstelle>
+			</tns:buchungsstelle>
+			<tns:buchungsstelle>
+				<tns:lfdNummer>5</tns:lfdNummer>
+				<tns:auswahl_buchungsstelle>
+					<tns:nutzungsrecht>
+						<tns:art listVersionID="1.0">
+							<code>001</code>
+						</tns:art>
+					</tns:nutzungsrecht>
+				</tns:auswahl_buchungsstelle>
+			</tns:buchungsstelle>
+			<tns:buchungsstelle>
+				<tns:lfdNummer>6</tns:lfdNummer>
+				<tns:auswahl_buchungsstelle>
+					<tns:wegEinheit>
+						<tns:sondereigentum>
+							<tns:bezeichnung>Wohnung</tns:bezeichnung>
+						</tns:sondereigentum>
+						<tns:stockwerkseigentum></tns:stockwerkseigentum>
+					</tns:wegEinheit>
+				</tns:auswahl_buchungsstelle>
+			</tns:buchungsstelle>
+			<tns:buchungsstelle>
+				<tns:lfdNummer>7</tns:lfdNummer>
+				<tns:auswahl_buchungsstelle>
+					<tns:miteigentumP3GBO>
+						<tns:anteil>
+							<tns:auswahl_anteil>
+								<tns:anteilSonstiges>17 Quadratmeter</tns:anteilSonstiges>
+							</tns:auswahl_anteil>
+						</tns:anteil>
+						<tns:herrschendeBuchungsstelle></tns:herrschendeBuchungsstelle>
+						<tns:dienendeBuchungsstelle></tns:dienendeBuchungsstelle>
+					</tns:miteigentumP3GBO>
+				</tns:auswahl_buchungsstelle>
+			</tns:buchungsstelle>
+				
+			
 			<tns:anschrift>
 				<tns:strasse>Aberlestraße</tns:strasse>
 				<tns:hausnummer>34</tns:hausnummer>
