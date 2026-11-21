@@ -6,7 +6,7 @@
    <tns:nachrichtenkopf xjustizVersion="3.6.2"><!--In der Antwort muss der Nachrichtenkopf praktisch komplett neu geschrieben werden. 
 			Lediglich die Absenderdaten können für den Notar-Empfänger verwendet werden. 
 			Derzeit gehe ich davon aus, dass das Grundbuchamt eine eigene Nachricht bekommt, das bedeutet, dass dieses separat als Empfänger in einer eigenene XML-Datei zu benennen ist.--><!--eNoVA: Erstellungszeitpunkt wurde durch den aktuellen Systemzeitpunkt ersetzt-->
-      <tns:erstellungszeitpunkt>2026-11-21T15:52:51.8169439+01:00</tns:erstellungszeitpunkt>
+      <tns:erstellungszeitpunkt>2026-11-21T17:08:02.5519809+01:00</tns:erstellungszeitpunkt>
       <tns:absender>
          <tns:informationen><!--Type.GDS.Kommunikationspartner-->
             <tns:auswahl_kommunikationspartner><!--eNoVA: Kommunikationspartner wurde durch den Wert aus sender-config.xml ersetzt-->
@@ -22,7 +22,7 @@
          <!--eNoVA: Aktenzeichen wurde durch den Wert aus dem Eingabefeld ersetzt-->
          <tns:aktenzeichen>asdf</tns:aktenzeichen>
          <!--eNoVA: Nachrichten-ID wurde durch eine von der Anwendung neu erzeugte eindeutige Nachrichten-ID ersetzt-->
-         <tns:eigeneNachrichtenID>075a8c6e-9c06-4ea6-b5b1-cb63f88f47ac</tns:eigeneNachrichtenID>
+         <tns:eigeneNachrichtenID>7096fb67-48b2-41f7-a49a-fdb77867b30c</tns:eigeneNachrichtenID>
       </tns:absender>
       <!--eNoVA: Empfängerdaten wurden aus den Daten des ursprünglichen Absenders übernommen-->
       <tns:empfaenger>
@@ -196,6 +196,12 @@
                         <tns:vorname>Rupert</tns:vorname>
                         <tns:nachname>Späth</tns:nachname>
                      </tns:vollerName>
+                     <tns:anschrift>
+                        <tns:anschriftstyp listVersionID="3.0">
+                           <code>003</code>
+                        </tns:anschriftstyp>
+                        <tns:ort>München</tns:ort>
+                     </tns:anschrift>
                      <tns:telekommunikation>
                         <tns:telekommunikationsart listVersionID="2.3">
                            <code>001</code>

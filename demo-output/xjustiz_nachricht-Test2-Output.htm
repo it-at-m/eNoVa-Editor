@@ -143,7 +143,6 @@
       .flurstuecke {
           margin-top: 10px;
           padding-top: 10px;
-          border-top: 1px dashed #d9e0e7;
       }
 
       .flurstueck-block {
@@ -156,6 +155,16 @@
       .flurstueck-block .label {
           min-width: 90px;
       }
+
+	.wirtschaftsart-item:not(:last-child)::after {
+		content: ", ";
+	}
+	
+	.grundstueck-adresse {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed #d9e0e7;
+    }
 
       .entscheidung {
           margin: 24px 0 14px 0;
@@ -302,6 +311,7 @@
         <!-- Fall 2: Keine ref.rollennummer -->
         
       </div>
+      <!-- Ende div Empfänge -->
 
 
       <div class="kontakt">
@@ -316,7 +326,7 @@
         <br>
 
         Aktenzeichen:
-        1234
+        asdf
       </div>
 
     </div>
@@ -378,15 +388,27 @@
     </ol>
 
     <h3>Urkundendaten:</h3>
-    <p class="urkunde">
-      <span class="label">Urkundenverzeichnisnummer (UVZ):</span>
-      4697
+	
+		<p class="urkunde">
+		  <span class="label">Urkundenverzeichnisnummer (UVZ):</span>
+		  4697
 
-      <br>
+		  <br>
 
-      <span class="label">Beurkundungsdatum:</span>
-      13.08.2026
-    </p>
+		  <span class="label">Beurkundungsdatum:</span>
+		  13.08.2026
+		</p>
+	
+		<p class="urkunde">
+		  <span class="label">Urkundenverzeichnisnummer (UVZ):</span>
+		  4698
+
+		  <br>
+
+		  <span class="label">Beurkundungsdatum:</span>
+		  21.11.2026
+		</p>
+	
 
     <h3>Grundstück(e):</h3>
 
@@ -409,27 +431,205 @@
         1714
       </div>
 
-      <div class="flurstuecke">
+      <script>a=0;</script>
 
-        
+      
+	
+		
+		  <div class="flurstuecke">
+			
 
-        <div class="flurstueck-block">
-          <div>
-            <span class="label">Gemarkung:</span>
-            8694
-          </div>
+			<div class="flurstueck-block">
+			  <div>
+				<span class="label">Gemarkung:</span>
+				8694
+			  </div>
 
-          <div>
-            <span class="label">Flurstück:</span>
-            306/46
-          </div>
-        </div>
+			  <div>
+				<span class="label">Flurstück:</span>
+				306/46
+			  </div>
 
-        
 
-      </div>
+			  <div>
+				<span class="label">Wirtschaftsart:</span>
+				<span>
+				  
+					<span class="wirtschaftsart-item">Erholungsfläche</span>
+				  
+					<span class="wirtschaftsart-item">Friedhof</span>
+				  
+					<span class="wirtschaftsart-item">Industrie- und Gewerbefläche</span>
+				  
+				</span>
+			  </div>
+			  
+			  <div>
+				<span class="label">Größe:</span>
+				357
+			  </div>
+			</div>
+			
+		</div>
+	
+	
+	<script>
+		if(a===0){
+			document.write('<span id="sonderfall" style="display: none;" class="label">Sonderfall:</span>'); 
+			a=1;
+		}
+	</script>
+	
+	<div class="andere_buchungsstelle">	
+		
+		
+		
+			
+		
+		
+		
+	</div>
+  
+	
+		
+	
+	<script>
+		if(a===0){
+			document.write('<span id="sonderfall" style="display: none;" class="label">Sonderfall:</span>'); 
+			a=1;
+		}
+	</script>
+	
+	<div class="andere_buchungsstelle">	
+		
+			<div id="erbbaurecht" class="sonderfall-item">001</div>
+			<script> 
+				if(document.getElementById('erbbaurecht').textContent.trim() != '') 
+					{ 
+						document.getElementById('sonderfall').style.display = 'block';
+						document.getElementById('erbbaurecht').textContent = 'Erbbaurecht';
+					}; 
+			</script>
+		
+		
+		
+			
+		
+		
+		
+	</div>
+  
+	
+		
+	
+	<script>
+		if(a===0){
+			document.write('<span id="sonderfall" style="display: none;" class="label">Sonderfall:</span>'); 
+			a=1;
+		}
+	</script>
+	
+	<div class="andere_buchungsstelle">	
+		
+		
+		
+			<div id="nutzungsrecht" class="sonderfall-item">001</div>
+			<script> 
+				if(document.getElementById('nutzungsrecht').textContent.trim() != '') 
+					{ 
+						document.getElementById('sonderfall').style.display = 'block';
+						document.getElementById('nutzungsrecht').textContent = 'Nutzungsrecht';
+					}; 
+			</script>
+		
+			
+		
+		
+		
+	</div>
+  
+	
+		
+	
+	<script>
+		if(a===0){
+			document.write('<span id="sonderfall" style="display: none;" class="label">Sonderfall:</span>'); 
+			a=1;
+		}
+	</script>
+	
+	<div class="andere_buchungsstelle">	
+		
+		
+		
+			
+		
+			<div id="wegeinheit" class="sonderfall-item">Wohnung</div>
+			<script> 
+				if(document.getElementById('wegeinheit').textContent.trim() != '') 
+					{ 
+						document.getElementById('sonderfall').style.display = 'block';
+						document.getElementById('wegeinheit').textContent = 'WEG-Einheit';
+					}; 
+			</script>
+		
+		
+		
+	</div>
+  
+	
+		
+	
+	<script>
+		if(a===0){
+			document.write('<span id="sonderfall" style="display: none;" class="label">Sonderfall:</span>'); 
+			a=1;
+		}
+	</script>
+	
+	<div class="andere_buchungsstelle">	
+		
+		
+		
+			
+		
+		
+		
+			<div id="miteigentum" class="sonderfall-item">17 Quadratmeter</div>
+			<script> 
+				if(document.getElementById('miteigentum').textContent.trim() != '') 
+					{ 
+						document.getElementById('sonderfall').style.display = 'block';
+						document.getElementById('miteigentum').textContent = 'Miteigentum';
+					}; 
+			</script>
+		
+	</div>
+  
+  
+  <div class="grundstueck-adresse">
+  
+    <div>
+		<span class="label">Straße/Hausnummer:</span>
+		Aberlestraße
+        34		
+	  </div>
 
-    </div>
+	  <div>
+		<span class="label">PLZ/Ort:</span>
+		81379
+        München	
+	  </div>  
+	  
+	  <div>
+		<span class="label">Grundstücksart:</span>
+		
+			Wohngebäude
+		 
+	  </div>  
+  </div>
+
+</div>
 
     
 
@@ -450,55 +650,211 @@
         1715
       </div>
 
-      <div class="flurstuecke">
+      <script>a=0;</script>
 
-        
+      
+	
+		
+		  <div class="flurstuecke">
+			
 
-        <div class="flurstueck-block">
-          <div>
-            <span class="label">Gemarkung:</span>
-            8685
-          </div>
+			<div class="flurstueck-block">
+			  <div>
+				<span class="label">Gemarkung:</span>
+				8685
+			  </div>
 
-          <div>
-            <span class="label">Flurstück:</span>
-            306/46
-          </div>
-        </div>
+			  <div>
+				<span class="label">Flurstück:</span>
+				306/46
+			  </div>
 
-        
 
-        <div class="flurstueck-block">
-          <div>
-            <span class="label">Gemarkung:</span>
-            8685
-          </div>
+			  <div>
+				<span class="label">Wirtschaftsart:</span>
+				<span>
+				  
+					<span class="wirtschaftsart-item">Erholungsfläche</span>
+				  
+				</span>
+			  </div>
+			  
+			  <div>
+				<span class="label">Größe:</span>
+				359
+			  </div>
+			</div>
+			
 
-          <div>
-            <span class="label">Flurstück:</span>
-            307
-          </div>
-        </div>
+			<div class="flurstueck-block">
+			  <div>
+				<span class="label">Gemarkung:</span>
+				8685
+			  </div>
 
-        
+			  <div>
+				<span class="label">Flurstück:</span>
+				307
+			  </div>
 
-      </div>
 
-    </div>
+			  <div>
+				<span class="label">Wirtschaftsart:</span>
+				<span>
+				  
+					<span class="wirtschaftsart-item">Mischnutzung</span>
+				  
+				</span>
+			  </div>
+			  
+			  <div>
+				<span class="label">Größe:</span>
+				776
+			  </div>
+			</div>
+			
+		</div>
+	
+	
+	<script>
+		if(a===0){
+			document.write('<span id="sonderfall" style="display: none;" class="label">Sonderfall:</span>'); 
+			a=1;
+		}
+	</script>
+	
+	<div class="andere_buchungsstelle">	
+		
+		
+		
+			
+		
+		
+		
+	</div>
+  
+  
+  <div class="grundstueck-adresse">
+  
+    <div>
+		<span class="label">Straße/Hausnummer:</span>
+		Huberstraße
+        18		
+	  </div>
+
+	  <div>
+		<span class="label">PLZ/Ort:</span>
+		81377
+        München	
+	  </div>  
+	  
+	  <div>
+		<span class="label">Grundstücksart:</span>
+		
+			Bebaut
+		 
+	  </div>  
+  </div>
+
+</div>
 
     
 
-    <h3>
+    
+	    <h3>Art des Rechtsgeschäfts:</h3>
+	    <div>
+		   <span id="art">
+			    
+				    Freitext
+			    
+		   </span>
+		    <span>Teilungserklärung / Teilungsvertrag nach WEG</span>	
+	    </div>
+     
+    <script> 
+	    if(document.getElementById('art').textContent.trim().toLowerCase() === 'freitext') 
+	    	{ document.getElementById('art').style.display = 'none';}; 
+    </script>
+
+    <h3 id="eigentuemer" style="display: none;">
+      Eigentümer(in):
+      <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
+    </h3>
+
+    
+
+    <div class="person-block">
+      
+      Max
+      Besitzer
+
+      <br>
+
+      Zenettistraße
+      24
+
+      <br>
+
+      80337
+      München
+
+      <br>
+
+      <span class="geburt">Geboren am
+      13.08.1965</span>
+    </div>
+
+    <script>
+      document.getElementById('eigentuemer').style.display = 'block';
+    </script>
+
+    
+
+    <h3 id="veraeusserer" style="display: none;">
       Veräußerer (Veräußerin):
       <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
     </h3>
 
     
 
-    <h3>
+    <h3 id="erwerber" style="display: none;">
       Erwerber(in):
       <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
     </h3>
+
+    
+
+    <h3 id="vertreter" style="display: none;">
+      Gesetzliche(r) Vertreter(in):
+      <span class="mehrere-personen">(Dies können auch mehrere Personen sein.) </span>
+    </h3>
+
+    
+
+    <div class="person-block">
+      
+      Yvonne
+      Vertreterin
+
+      <br>
+
+      Oberländerstraße
+      36
+
+      <br>
+
+      1136
+      Wien
+
+      <br>
+
+      <span class="geburt">Geboren am
+      28.09.1978</span>
+    </div>
+
+    <script>
+      document.getElementById('vertreter').style.display = 'block';
+    </script>
 
     
 

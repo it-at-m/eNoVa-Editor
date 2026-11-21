@@ -1,161 +1,161 @@
 <!doctype html>
 <html lang="de">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>eNoVA - Input</title>
-  <style>
-    * {
-        box-sizing: border-box;
-    }
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>eNoVA - Input</title>
+    <style>
+      * {
+          box-sizing: border-box;
+      }
 
-    body {
-        margin: 0;
-        padding: 32px 16px;
-        background: #eef1f5;
-        color: #1f2933;
-        font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-        font-size: 15px;
-        line-height: 1.6;
-    }
+      body {
+          margin: 0;
+          padding: 32px 16px;
+          background: #eef1f5;
+          color: #1f2933;
+          font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+          font-size: 15px;
+          line-height: 1.6;
+      }
 
-    .seite {
-        max-width: 780px;
-        margin: 0 auto;
-        padding: 48px 56px;
-        background: #ffffff;
-        border: 1px solid #d9e0e7;
-        border-radius: 6px;
-    }
+      .seite {
+          max-width: 780px;
+          margin: 0 auto;
+          padding: 48px 56px;
+          background: #ffffff;
+          border: 1px solid #d9e0e7;
+          border-radius: 6px;
+      }
 
-    p {
-        margin: 0 0 14px 0;
-    }
+      p {
+          margin: 0 0 14px 0;
+      }
 
-    .hinweis {
-        margin: 0 0 32px 0;
-        padding: 8px 14px;
-        background: #fdf1f0;
-        border-left: 4px solid #c0392b;
-        border-radius: 3px;
-        color: #9b2c20;
-        font-size: 13px;
-        text-align: left;
-    }
+      .hinweis {
+          margin: 0 0 32px 0;
+          padding: 8px 14px;
+          background: #fdf1f0;
+          border-left: 4px solid #c0392b;
+          border-radius: 3px;
+          color: #9b2c20;
+          font-size: 13px;
+          text-align: left;
+      }
 
-    .absender {
-        margin: 0 0 28px 0;
-        padding-bottom: 14px;
-        border-bottom: 1px solid #d9e0e7;
-        color: #5b6670;
-        font-size: 13px;
-        line-height: 1.5;
-    }
+      .absender {
+          margin: 0 0 28px 0;
+          padding-bottom: 14px;
+          border-bottom: 1px solid #d9e0e7;
+          color: #5b6670;
+          font-size: 13px;
+          line-height: 1.5;
+      }
 
-    .kopf-zeile {
-        display: flex;
-        width: 100%;
-        margin-top: 24px;
-    }
+      .kopf-zeile {
+          display: flex;
+          width: 100%;
+          margin-top: 24px;
+      }
 
-    .empfaenger {
-        flex: 1;
-        font-size: 16px;
-        line-height: 1.5;
-    }
+      .empfaenger {
+          flex: 1;
+          font-size: 16px;
+          line-height: 1.5;
+      }
 
-    .kontakt {
-        margin-left: auto;
-        padding: 12px 16px;
-        min-width: 230px;
-        background: #f3f6f9;
-        border-radius: 4px;
-        color: #5b6670;
-        font-size: 13px;
-        line-height: 1.7;
-    }
+      .kontakt {
+          margin-left: auto;
+          padding: 12px 16px;
+          min-width: 230px;
+          background: #f3f6f9;
+          border-radius: 4px;
+          color: #5b6670;
+          font-size: 13px;
+          line-height: 1.7;
+      }
 
-    .datum-zeile {
-        text-align: right;
-        margin-top: 28px;
-        color: #5b6670;
-        font-size: 14px;
-    }
+      .datum-zeile {
+          text-align: right;
+          margin-top: 28px;
+          color: #5b6670;
+          font-size: 14px;
+      }
 
-    .betreff {
-        margin: 32px 0 20px 0;
-        font-size: 18px;
-        font-weight: 600;
-        line-height: 1.4;
-        color: #1f4e79;
-    }
+      .betreff {
+          margin: 32px 0 20px 0;
+          font-size: 18px;
+          font-weight: 600;
+          line-height: 1.4;
+          color: #1f4e79;
+      }
 
-    h3 {
-        margin: 32px 0 12px 0;
-        padding-bottom: 6px;
-        border-bottom: 2px solid #1f4e79;
-        color: #1f4e79;
-        font-size: 16px;
-        font-weight: 600;
-        letter-spacing: 0.2px;
-    }
+      h3 {
+          margin: 32px 0 12px 0;
+          padding-bottom: 6px;
+          border-bottom: 2px solid #1f4e79;
+          color: #1f4e79;
+          font-size: 16px;
+          font-weight: 600;
+          letter-spacing: 0.2px;
+      }
 
-    h3 .mehrere-personen {
-        display: block;
-        color: #5b6670;
-        font-size: 13px;
-        font-weight: 400;
-        letter-spacing: normal;
-    }
+      h3 .mehrere-personen {
+          display: block;
+          color: #5b6670;
+          font-size: 13px;
+          font-weight: 400;
+          letter-spacing: normal;
+      }
 
-    .person-block {
-        margin-bottom: 12px;
-        padding: 10px 16px;
-        background: #f3f6f9;
-        border-left: 3px solid #1f4e79;
-        border-radius: 0 4px 4px 0;
-        line-height: 1.55;
-    }
+      .person-block {
+          margin-bottom: 12px;
+          padding: 10px 16px;
+          background: #f3f6f9;
+          border-left: 3px solid #1f4e79;
+          border-radius: 0 4px 4px 0;
+          line-height: 1.55;
+      }
 
-    .geburt {
-        color: #5b6670;
-        font-size: 14px;
-    }
+      .geburt {
+          color: #5b6670;
+          font-size: 14px;
+      }
 
-    .urkunde {
-        line-height: 1.9;
-    }
+      .urkunde {
+          line-height: 1.9;
+      }
 
-    .label {
-        display: inline-block;
-        min-width: 190px;
-        color: #5b6670;
-    }
+      .label {
+          display: inline-block;
+          min-width: 190px;
+          color: #5b6670;
+      }
 
-    .grundstueck-block {
-        margin-bottom: 20px;
-        padding: 14px 16px;
-        border: 1px solid #d9e0e7;
-        border-radius: 4px;
-        line-height: 1.8;
-    }
+      .grundstueck-block {
+          margin-bottom: 20px;
+          padding: 14px 16px;
+          border: 1px solid #d9e0e7;
+          border-radius: 4px;
+          line-height: 1.8;
+      }
 
-    .flurstuecke {
-        margin-top: 10px;
-        padding-top: 10px;
-    }
+      .flurstuecke {
+          margin-top: 10px;
+          padding-top: 10px;
+      }
 
-    .flurstueck-block {
-        margin-bottom: 6px;
-        padding: 6px 12px;
-        background: #f3f6f9;
-        border-radius: 3px;
-    }
+      .flurstueck-block {
+          margin-bottom: 6px;
+          padding: 6px 12px;
+          background: #f3f6f9;
+          border-radius: 3px;
+      }
 
-    .flurstueck-block .label {
-        min-width: 90px;
-    }
-	
+      .flurstueck-block .label {
+          min-width: 90px;
+      }
+
 	.wirtschaftsart-item:not(:last-child)::after {
 		content: ", ";
 	}
@@ -166,200 +166,205 @@
         border-top: 1px dashed #d9e0e7;
     }
 
-    ol {
-        margin: 0 0 18px 0;
-        padding-left: 22px;
-    }
-
-    li {
-        margin-bottom: 4px;
-    }
-
-    .gruss {
-        margin-top: 28px;
-    }
-
-    @media (max-width: 640px) {
-        body {
-            padding: 0;
-        }
-
-        .seite {
-            padding: 24px 18px;
-            border: 0;
-            border-radius: 0;
-        }
-
-        .kopf-zeile {
-            display: block;
-        }
-
-        .kontakt {
-            margin-top: 16px;
-        }
-
-        .label {
-            display: block;
-            min-width: 0;
-        }
-    }
-
-    @media print {
-        body {
-            padding: 0;
-            background: #ffffff;
-        }
-
-        .seite {
-            max-width: none;
-            padding: 0;
-            border: 0;
-            border-radius: 0;
-        }
-    }
-  </style>
-</head>
-
-<body>
-<div class="seite">
-<div class="hinweis">Internes Eingangsdokument generiert aus der XJustiz-Nachricht</div>
-
-<!--
-    Absender suchen:
-    In der XML-Datei steht beim Absender eine Rollennummer.
-    Mit dieser Nummer suchen wir die passende Beteiligung.
-    Dort stehen die Rolle und die Person, die zu diesem Absender gehören.
-    Die gefundenen Daten können danach innerhalb dieses Bereichs verwendet werden.
--->
 
 
-<p class="absender">
-  <!--
-      Rollenbezeichnung ausgeben:
-      Der Name "rollenbezeichnung" gehört zur Konfiguration
-      in codelists.properties.
-      Der XPath liefert den Rollen-Code, zum Beispiel 208.
-      Über die Codelist wird daraus dann die Bezeichnung.
-  -->
-  Notar(in)
+      ol {
+          margin: 0 0 18px 0;
+          padding-left: 22px;
+      }
 
-  <!--
-      Informationen der Person/Absender aus der zuvor gefundenen Beteiligung ausgeben.
-  -->
-  Dr.
-  Martin
-  Müller
+      li {
+          margin-bottom: 4px;
+      }
 
-  <br>
-
-  Anton-Wilhelm-Amo-Straße
-  34
-
-  <br>
-
-  10117
-  Berlin
-
-</p>
-
-<div class="kopf-zeile">
+      .gruss {
+          margin-top: 28px;
+      }
 
 
-  <div class="empfaenger">
-    <!-- Fall 1: Empfänger über ref.rollennummer -->
-    <div>
-      
 
-      
+      @media (max-width: 640px) {
+          body {
+              padding: 0;
+          }
 
-      
-    </div>
+          .seite {
+              padding: 24px 18px;
+              border: 0;
+              border-radius: 0;
+          }
 
-    <div>
-      
+          .kopf-zeile {
+              display: block;
+          }
 
-      
-    </div>
+          .kontakt {
+              margin-top: 16px;
+          }
 
-    <div>
-      
+          .label {
+              display: block;
+              min-width: 0;
+          }
+      }
 
-      
-    </div>
+      @media print {
+          body {
+              padding: 0;
+              background: #ffffff;
+          }
 
-    <!-- Fall 2: Keine ref.rollennummer -->
-    LH München
-  </div>
+          .seite {
+              max-width: none;
+              padding: 0;
+              border: 0;
+              border-radius: 0;
+          }
+      }
+    </style>
+  </head>
 
+  <body>
+    <div class="seite">
+    <div class="hinweis">Internes Eingangsdokument generiert aus der XJustiz-Nachricht</div>
 
-  <div class="kontakt">
+    <!--
+        Absender suchen:
+        In der XML-Datei steht beim Absender eine Rollennummer.
+        Mit dieser Nummer suchen wir die passende Beteiligung.
+        Dort stehen die Rolle und die Person, die zu diesem Absender gehören.
+        Die gefundenen Daten können danach innerhalb dieses Bereichs verwendet werden.
+    -->
     
 
-    Telefon:
-    030 - 1231239321
+    <p class="absender">
+      <!--
+          Rollenbezeichnung ausgeben:
+          Der Name "rollenbezeichnung" gehört zur Konfiguration
+          in codelists.properties.
+          Der XPath liefert den Rollen-Code, zum Beispiel 208.
+          Über die Codelist wird daraus dann die Bezeichnung.
+      -->
+      Notar(in)
 
-    <br>
+      <!--
+          Informationen der Person/Absender aus der zuvor gefundenen Beteiligung ausgeben.
+      -->
+      Dr.
+      Martin
+      Müller
+
+      <br>
+
+      Anton-Wilhelm-Amo-Straße
+      34
+
+      <br>
+
+      10117
+      Berlin
+
+    </p>
+
+    <div class="kopf-zeile">
+
+
+      <div class="empfaenger">
+        <!-- Fall 1: Empfänger über ref.rollennummer -->
+        <div>
+          
+
+          
+
+          
+        </div>
+
+        <div>
+          
+
+          
+        </div>
+
+        <div>
+          
+
+          
+        </div>
+
+        <!-- Fall 2: Keine ref.rollennummer -->
+        LH München
+      </div>
+      <!-- Ende div Empfänge -->
+
+
+      <div class="kontakt">
+        
+
+          Telefon:
+          030 - 1231239321
+
+          <br>
+        
+
+        <br>
+
+        Aktenzeichen:
+        UVZ-4697
+      </div>
+
+    </div>
+
+    <div class="datum-zeile">
+      <!-- Ort des aktuellen Beteiligten -->
+      Berlin,
+
+      <!-- Erstellungsdatum der Nachricht im Format TT.MM.JJJJ -->
+      13.08.2026
+    </div>
+
     
 
-    <br>
+    <!-- Betreff / Verfahrensgegenstand -->
+    <p class="betreff">
+      Ersuchen Genehmigung GrdstVG; 100000019136
+    </p>
 
-    Aktenzeichen:
-    UVZ-4697
-  </div>
+    <p>
+        Guten Tag,
+    </p>
 
-</div>
+    <p>
+      hiermit zeigen wir nachfolgende Beurkundung an.
+    </p>
 
-<div class="datum-zeile">
-  <!-- Ort des aktuellen Beteiligten -->
-  Berlin,
+    <p>Wir bitten um</p>
 
-  <!-- Erstellungsdatum der Nachricht im Format TT.MM.JJJJ -->
-  13.08.2026
-</div>
+    <ol>
+      
 
+      <li>
+        Erteilung der Genehmigung nach § 2 GrdstVG
+        (011)
+      </li>
 
+      
 
-<!-- Betreff / Verfahrensgegenstand -->
-<p class="betreff">
-  Ersuchen Genehmigung GrdstVG; 100000019136
-</p>
+      <li>
+        Erteilung der Genehmigung nach § 2 GVO
+        (012)
+      </li>
 
-<p>
-  Guten Tag,
-</p>
+      
 
-<p>
-  hiermit zeigen wir nachfolgende Beurkundung.
-</p>
+      <li>
+        Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte und hilfsweise um Erteilung eines Negativattests
+        (013)
+      </li>
 
-<p>Wir bitten um</p>
+      
+    </ol>
 
-<ol>
-  
-
-  <li>
-    Erteilung der Genehmigung nach § 2 GrdstVG
-    (011)
-  </li>
-
-  
-
-  <li>
-    Erteilung der Genehmigung nach § 2 GVO
-    (012)
-  </li>
-
-  
-
-  <li>
-    Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte und hilfsweise um Erteilung eines Negativattests
-    (013)
-  </li>
-
-  
-</ol>
-
-<h3>Urkundendaten:</h3>
+    <h3>Urkundendaten:</h3>
 	
 		<p class="urkunde">
 		  <span class="label">Urkundenverzeichnisnummer (UVZ):</span>
@@ -372,34 +377,35 @@
 		</p>
 	
 
-<h3>Grundstück(e):</h3>
+    <h3>Grundstück(e):</h3>
 
+    
 
+    <div class="grundstueck-block">
 
-<div class="grundstueck-block">
+      <div>
+        <span class="label">Amtsgericht:</span>
+        München
+      </div>
 
-  <div>
-    <span class="label">Amtsgericht:</span>
-    München
-  </div>
+      <div>
+        <span class="label">Grundbuchbezirk:</span>
+        Obermenzing
+      </div>
 
-  <div>
-    <span class="label">Grundbuchbezirk:</span>
-    Obermenzing
-  </div>
+      <div>
+        <span class="label">Grundbuchblatt:</span>
+        1714
+      </div>
 
-  <div>
-    <span class="label">Grundbuchblatt:</span>
-    1714
-  </div>
-  
-  <script>a=0;</script>
+      <script>a=0;</script>
 
-  
+      
 	
-	
-		<div class="flurstuecke">
+		
+		  <div class="flurstuecke">
 			
+
 			<div class="flurstueck-block">
 			  <div>
 				<span class="label">Gemarkung:</span>
@@ -410,8 +416,8 @@
 				<span class="label">Flurstück:</span>
 				306/46
 			  </div>
-			  
-			  
+
+
 			  <div>
 				<span class="label">Wirtschaftsart:</span>
 				<span>
@@ -425,7 +431,6 @@
 				<span class="label">Größe:</span>
 				357
 			  </div>
-			  
 			</div>
 			
 		</div>
@@ -473,32 +478,33 @@
 
 </div>
 
+    
 
+    <div class="grundstueck-block">
 
-<div class="grundstueck-block">
+      <div>
+        <span class="label">Amtsgericht:</span>
+        München
+      </div>
 
-  <div>
-    <span class="label">Amtsgericht:</span>
-    München
-  </div>
+      <div>
+        <span class="label">Grundbuchbezirk:</span>
+        Langwied
+      </div>
 
-  <div>
-    <span class="label">Grundbuchbezirk:</span>
-    Langwied
-  </div>
+      <div>
+        <span class="label">Grundbuchblatt:</span>
+        1715
+      </div>
 
-  <div>
-    <span class="label">Grundbuchblatt:</span>
-    1715
-  </div>
-  
-  <script>a=0;</script>
+      <script>a=0;</script>
 
-  
+      
 	
-	
-		<div class="flurstuecke">
+		
+		  <div class="flurstuecke">
 			
+
 			<div class="flurstueck-block">
 			  <div>
 				<span class="label">Gemarkung:</span>
@@ -509,8 +515,8 @@
 				<span class="label">Flurstück:</span>
 				306/46
 			  </div>
-			  
-			  
+
+
 			  <div>
 				<span class="label">Wirtschaftsart:</span>
 				<span>
@@ -524,9 +530,9 @@
 				<span class="label">Größe:</span>
 				359
 			  </div>
-			  
 			</div>
 			
+
 			<div class="flurstueck-block">
 			  <div>
 				<span class="label">Gemarkung:</span>
@@ -537,8 +543,8 @@
 				<span class="label">Flurstück:</span>
 				307
 			  </div>
-			  
-			  
+
+
 			  <div>
 				<span class="label">Wirtschaftsart:</span>
 				<span>
@@ -552,7 +558,6 @@
 				<span class="label">Größe:</span>
 				776
 			  </div>
-			  
 			</div>
 			
 		</div>
@@ -600,104 +605,103 @@
 
 </div>
 
+    
 
+     
+    <script> 
+	    if(document.getElementById('art').textContent.trim().toLowerCase() === 'freitext') 
+	    	{ document.getElementById('art').style.display = 'none';}; 
+    </script>
 
- 
-<script> 
-	if(document.getElementById('art').textContent.trim().toLowerCase() === 'freitext') 
-		{ document.getElementById('art').style.display = 'none';}; 
-</script>
+    <h3 id="eigentuemer" style="display: none;">
+      Eigentümer(in):
+      <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
+    </h3>
 
-<h3 id="eigentuemer" style="display: none;">
-  Eigentümer(in):
-  <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
-</h3>
+    
 
+    <h3 id="veraeusserer" style="display: none;">
+      Veräußerer (Veräußerin):
+      <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
+    </h3>
 
+    
 
-<h3 id="veraeusserer" style="display: none;">
-  Veräußerer (Veräußerin):
-  <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
-</h3>
+    <div class="person-block">
+      
+      Max
+      Verkäufer
 
+      <br>
 
+      Zenettistraße
+      24
 
-<div class="person-block">
-  
-  Max
-  Verkäufer
+      <br>
 
-  <br>
+      80337
+      München
 
-  Zenettistraße
-  24
+      <br>
 
-  <br>
+      <span class="geburt">Geboren am
+      13.08.1965</span>
+    </div>
 
-  80337
-  München
+    <script>
+      document.getElementById('veraeusserer').style.display = 'block';
+    </script>
 
-  <br>
+    
 
-  <span class="geburt">Geboren am
-  13.08.1965</span>
-</div>
+    <h3 id="erwerber" style="display: none;">
+      Erwerber(in):
+      <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
+    </h3>
 
-<script>
-  document.getElementById('veraeusserer').style.display = 'block';
-</script>
+    
 
+    <div class="person-block">
+      
+      Martina
+      Käuferin
 
+      <br>
 
+      Oberländerstraße
+      36
 
-<h3 id="erwerber" style="display: none;">
-  Erwerber(in):
-  <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
-</h3>
+      <br>
 
+      1136
+      Wien
 
+      <br>
 
-<div class="person-block">
-  
-  Martina
-  Käuferin
+      <span class="geburt">Geboren am
+      28.09.1978</span>
+    </div>
 
-  <br>
+	<script>
+      document.getElementById('erwerber').style.display = 'block';
+    </script>
 
-  Oberländerstraße
-  36
+    
 
-  <br>
+    <h3 id="vertreter" style="display: none;">
+      Gesetzliche(r) Vertreter(in):
+      <span class="mehrere-personen">(Dies können auch mehrere Personen sein.) </span>
+    </h3>
 
-  1136
-  Wien
+    
 
-  <br>
+    <p class="gruss">
+      Mit freundlichen Grüßen
+    </p>
 
-  <span class="geburt">Geboren am
-  28.09.1978</span>
-</div>
-
-<script>
-  document.getElementById('erwerber').style.display = 'block';
-</script>
-
-
-
-<h3 id="vertreter" style="display: none;">
-  Gesetzliche(r) Vertreter(in):
-  <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
-</h3>
-
-
-
-<p class="gruss">
-  Mit freundlichen Grüßen
-</p>
-
-<p>
+    <p>
   Notar Dr. Müller
 </p>
-</div>
-</body>
+    </div>
+  </body>
 </html>
