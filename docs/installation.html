@@ -204,11 +204,27 @@ eNoVA-editor/
         Dieser Name wird vom eNoVA-Editor unter anderem bei der Erzeugung
         der XJustiz-Antwort verwendet.
     </p>
+	
+	<p>
+		Sollten mehrere Gemeinden in einer Verwaltungsgemeinschaft vom selben SachbearbeiterIn betreut werden, 
+		so finden sich ergänzende Hinweise in dem Issue: 
+		<a href="https://github.com/it-at-m/eNoVa-Editor/issues/124">https://github.com/it-at-m/eNoVa-Editor/issues/124</a>.
+	</p>
 
 
     <h2>4. Sachbearbeiter konfigurieren</h2>
 
     <p>
+		Die Kontaktdaten des SachbearberIn müssen nur einmal gepflegt werden. 
+		Es wird empfohlen allgemeine Telefonnummern und Gruppenpostfach-EMail-Adressen anzugeben, damit die Erreichbarkeit jederzeit gewährleistet ist.<br>
+		Das eNoVA.2900003-Format hat kein spezielles Feld, in dem die genau ausstellende Stelle bezeichnet werden kann.
+		Deswegen wird empfohlen, diese Angabe im Feld "Anschriftenzusatz" vorzunehmen. Beispiel: <i>Gemeinde Adorf - Vorkaufsrechtsstelle</i>.<br>
+		Seit Version 1.1.0 gibt es zwei Möglichkeiten, die SachbearbeiterInnen zu verwalten.
+	</p>
+	
+	<h3>Speichern mehrerer Sachbearbeiter in der caseworkers.xml</h3>
+	
+	<p>
         Die im eNoVA-Editor auswählbaren Sachbearbeiterinnen und Sachbearbeiter
         werden in einer Datei <code>caseworkers.xml</code> gespeichert.
     </p>
@@ -216,8 +232,11 @@ eNoVA-editor/
     <p>
         Ist im Installationsverzeichnis eine <code>caseworkers.xml</code> vorhanden,
         wird ausschließlich diese verwendet. Die Kontaktdaten werden dann zentral
-        gepflegt, die Schaltfläche „Kontaktdaten“ wird nicht angezeigt.
+        gepflegt, die Schaltfläche „Kontaktdaten“ wird nicht angezeigt.<br>
+		Im Installationsverzeichnis ist eine Musterdatei vorhanden, die auch Hinweise zu weiteren Konfigurationsmöglichkeiten enthällt.
     </p>
+
+	<h3>Selbständiges Verwalten der eigenen Kontaktdaten</h3>
 
     <p>
         Ist im Installationsverzeichnis keine <code>caseworkers.xml</code> vorhanden,
@@ -237,12 +256,13 @@ eNoVA-editor/
     </p>
 
 
-    <h2>5. Sachentscheidungen konfigurieren</h2>
+    <h2>5. Sachentscheidungen konfigurieren (optional)</h2>
 
     <p>
-        In der Datei <code>decision-config.xml</code> wird festgelegt,
+        In der Datei <code>decision-config.xml</code> ist festgelegt,
         welche Sachentscheidungen für ein bestimmtes Ersuchen ausgewählt
-        werden können.
+        werden können. Die ausgelieferte Datei ist mit der Bundesnotarkammer abgestimmt.
+		Änderungen sollten nur erfolgen, wenn es dafür konkrete Gründe gibt.
     </p>
 
     <p>
@@ -290,6 +310,11 @@ eNoVA-editor/
         <li><code>CR</code> – Carriage Return</li>
         <li><code>NONE</code> – Zeilenumbrüche werden entfernt</li>
     </ul>
+	
+	<p>
+		Die Option NONE ist empfohlen, wenn es Probleme gibt, dass beim Empfänger die Signatur als ungültig bezeichnet wird.<br>
+		Näheres dazu siehe: <a href="https://github.com/it-at-m/eNoVa-Editor/issues/16">https://github.com/it-at-m/eNoVa-Editor/issues/16</a>
+	</p>
 
 
     <h2>7. Anpassbare Dateien</h2>
@@ -313,31 +338,15 @@ eNoVA-editor/
         Änderungen an diesen Dateien betreffen die Darstellung im Browser.
         Die eigentliche XJustiz-Antwort-XML wird dadurch nicht direkt definiert.
     </p>
-
-
-    <h2>8. Technische Dateien</h2>
-
-    <div class="notice">
-        Die folgenden Dateien und Verzeichnisse gehören zur technischen
-        Konfiguration bzw. Programmlogik und sollten normalerweise nicht
-        verändert werden.
-    </div>
-
-
-    <h3><code>app/</code></h3>
-
-    <p>
-        Enthält die Anwendung, ihre benötigten Bibliotheken und die mitgelieferte
-        Java-Laufzeitumgebung.
-    </p>
-
-    <p class="notice">
-        Dateien in diesem Verzeichnis sollten nicht manuell verändert, verschoben
-        oder gelöscht werden.
-    </p>
-
-
-    <h3><code>codelists/</code></h3>
+	
+	<h2>8. Codelisten (nur bei konkreten Handlungsbedarf)</h2>
+	<p>
+		Der eNoVA-Editor verwendet die Codelisten der Seite: <a href="https://www.xrepository.de/" targe="_blank">https://www.xrepository.de/</a> unverändert. Sollten neuere verfügbar sein oder weitere Codelisten benötigt werden,
+		können diese im Verzeichnis <code>codelists</code> abgelegt werden und müssen dem eNoVA-Editor in der Datei: 
+		<code>codelists.properties</code> bekannt gemacht werden.		
+	</p>
+	
+	    <h3><code>codelists/</code></h3>
 
     <p>
         Enthält die XML-Dateien der vom eNoVA-Editor verwendeten
@@ -413,6 +422,46 @@ technischer Code → sichtbare Bezeichnung
         dass eine andere Codelist-Version oder eine nicht passende Datei
         verwendet wird. Änderungen sollten daher nur gezielt vorgenommen werden.
     </p>
+	
+	<h2>9. Zu versendende Dateien</h2>
+	
+	<p>
+		Im Regelfall sollte die Antwort an den Notar nur die Datei <code>xjustiz_nachricht.xml</code> 
+		und die zugehörige Signaturdatei enthalten. Deswegen sind in der Datei <code>schriftgutobjekte.xml</code> nur die Dateien:
+	</p>
+	<ul>
+		<li><code>xjustiz_nachricht.xml</code></li>
+		<li><code>xjustiz_nachricht.xml.pkcs7</code></li>
+	</ul>
+	<p>
+		eingetragen. Dies sind die beiden Dateien, die den Bescheid darstellen.
+	</p>
+	
+	<p class="notice">
+        Änderungen an <code>schriftgutobjekte.xml</code> sollten nur in Abstimmung mit der zuständigen Notarkammer erfolgen.
+    </p>
+
+
+    <h2>10. Technische Dateien</h2>
+
+    <div class="notice">
+        Die folgenden Dateien und Verzeichnisse gehören zur technischen
+        Konfiguration bzw. Programmlogik und sollten normalerweise nicht
+        verändert werden.
+    </div>
+
+
+    <h3><code>app/</code></h3>
+
+    <p>
+        Enthält die Anwendung, ihre benötigten Bibliotheken und die mitgelieferte
+        Java-Laufzeitumgebung.
+    </p>
+
+    <p class="notice">
+        Dateien in diesem Verzeichnis sollten nicht manuell verändert, verschoben
+        oder gelöscht werden.
+    </p>
 
 
     <h3><code>answer-transform.xsl</code></h3>
@@ -469,25 +518,6 @@ XJustiz-Antwort-XML
         XJustiz-Kenntnissen vorgenommen und anschließend getestet werden.
     </p>
 
-    <h3><code>schriftgutobjekte.xml</code></h3>
-
-    <p>
-        Diese Datei enthält den vorgegebenen Schriftgutobjekte-Bereich
-        für die erzeugte XJustiz-Antwort.
-    </p>
-
-    <p>
-        Die <code>answer-transform.xsl</code> ersetzt den vorhandenen
-        Schriftgutobjekte-Bereich aus der Eingabe-XML vollständig
-        durch den Inhalt dieser Datei.
-    </p>
-
-    <p class="notice">
-        Die Datei muss sich im Installationsverzeichnis neben
-        <code>answer-transform.xsl</code> befinden.
-        Sollen weitere Dateien mit der beBPo-Nachricht übermittelt werden,
-        müssen diese ebenfalls in dieser XML-Datei eingetragen werden.
-    </p>
 
     <h3><code>eNoVA-editor.cmd</code></h3>
 
@@ -502,11 +532,11 @@ XJustiz-Antwort-XML
     </p>
 
     <p class="notice">
-        Die Datei sollte normalerweise nicht verändert werden.
+        Die Datei sollte normalerweise nicht verändert werden. Eine Ausnahme stellt <a href="https://github.com/it-at-m/eNoVa-Editor/issues/124">Issue #124</a> dar. 
     </p>
 
 
-    <h2>9. Berechtigungen</h2>
+    <h2>11. Berechtigungen</h2>
 
     <p>
         Der eNoVA-Editor erzeugt die HTML-Ansichten und die Antwortdateien
@@ -530,7 +560,7 @@ XJustiz-Antwort-XML
     </div>
 
 
-    <h2>10. Anwendung starten</h2>
+    <h2>12. Anwendung starten</h2>
 
     <p>
         Starten Sie den eNoVA-Editor über:
@@ -552,7 +582,10 @@ XJustiz-Antwort-XML
     </p>
 
     <div class="notice">
-        <strong>Wichtig:</strong>
+        <strong>Wichtig:</strong><br>
+		<a href="https://github.com/it-at-m/eNoVa-Editor/blob/main/demo-output/xjustiz_nachricht_beispiel_ersuchenSachentscheidung_mehrfach.xml">Der Link</a> 
+		verweist nicht direkt auf die XML-Datei. Vielmehr wird eine HTML-Datei geöffnet. Oben rechts befinden sich die Knöpfe: "Raw", "Copy", "Download" und "Edit".
+		Verwenden Sie bitte den <strong>Download-Knopf.</strong><br>
         Die heruntergeladene XML-Datei muss in einem Verzeichnis abgelegt werden,
         in dem der Benutzer Schreibrechte besitzt, beispielsweise in einem
         Unterverzeichnis von <code>Dokumente</code>.
