@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>FAQ – eNoVA-Editor</title>
+
+    <style>
+        :root {
+            font-family: system-ui, -apple-system,
+                BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: #1d1d1f;
+            background: white;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        main {
+            width: min(900px, calc(100% - 40px));
+            margin: 0 auto;
+            padding: 32px 0;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+        }
+
+        a {
+            color: #005a9c;
+        }
+
+        details {
+            padding: 16px 0;
+            border-bottom: 1px solid #dddddd;
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        details p {
+            margin-bottom: 0;
+        }
+
+        code {
+            overflow-wrap: anywhere;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+<main>
+    <p id="back-link">
+        <a href="index.html#home">
+            ← Zurück zum eNoVA-Editor
+        </a>
+    </p>
+
+    <h1>Häufig gestellte Fragen (FAQ)</h1>
+
+    <details>
+        <summary>
+            Welche XJustiz-Nachrichten unterstützt der eNoVA-Editor?
+        </summary>
+        <p>
+            Der eNoVA-Editor unterstützt ausschließlich das Format
+            eNoVA.2900003. Er verarbeitet eingehende Nachrichten
+            vom Typ <code>ersuchenSachentscheidung</code> und erstellt
+            daraus Antwortnachrichten vom Typ
+            <code>sachentscheidung</code>.
+        </p>
+    </details>
+	
+	  <details>
+        <summary>
+            Welche Bescheide können mit dem eNoVA-Editor erstellt werden?
+        </summary>
+        <p>
+            Der eNoVA-Editor deckt eNoVA.2900003 vollständig ab. 
+			Die möglichen Fragen sind auf der Seite:<br>
+			<a href="https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:enova.ersuchensachentscheidung" target="_blank">
+			https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:enova.ersuchensachentscheidung
+			</a><br> aufgelistet.
+		</p>
+		<p>
+			Die Behörde kann auf diese mit folgenden Antworten reagieren:<br> 
+			<a href="https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:enova.sachentscheidung" target="_blank">
+			https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:enova.sachentscheidung
+			</a>
+        </p>
+		<p>
+			Welche Antworten auf welche Fragen möglich sind, steht in der Datei:<br>
+			<a href="https://github.com/it-at-m/eNoVa-Editor/blob/main/decision-config.xml">https://github.com/it-at-m/eNoVa-Editor/blob/main/decision-config.xml</a><br>
+			Diese Liste ist mit der Bundesnotarkammer abgestimmt.
+		</p>
+    </details>
+
+    <details>
+        <summary>
+            Kann eine Behörde selbst eine Anfrage an einen Notar erstellen?
+        </summary>
+        <p>
+            Nein. Beim Format eNoVA.2900003 wird die Kommunikation
+            immer durch eine Anfrage des Notars eingeleitet.
+            Die Behörde kann darauf mit einer Sachentscheidung
+            antworten, aber keine eigene initiale Anfrage erstellen.
+        </p>
+    </details>
+
+    <details>
+        <summary>
+            Muss die Antwort der Behörde als PDF erstellt werden?
+        </summary>
+        <p>
+            Nein. Die XML-Datei selbst stellt den Bescheid dar.
+            Ein zusätzliches PDF ist bei eNoVA.2900003 nicht
+            vorgesehen. Die XML-Antwort muss entsprechend
+            signiert werden.
+        </p>
+    </details>
+
+    <details>
+        <summary>
+            Wie muss die Antwort der Behörde signiert werden?
+        </summary>
+        <p>
+            Die Antwort benötigt eine Signatur
+            <strong>mit Organisationsvalidierung</strong>.
+            Dadurch kann die empfangende Stelle überprüfen,
+            ob der Bescheid tatsächlich von der zuständigen
+            Behörde stammt. Eine gewöhnliche persönliche
+            Signatur oder ein Siegel reicht dafür nicht aus.
+        </p>
+    </details>
+	
+	<details>
+        <summary>
+            Gibt es für Kommunen eine kostenlose Signatursoftware?
+        </summary>
+        <p>
+            Die Lösung des IT-Planungsrat enthält das 
+			<a href="https://www.governikus.de/loesungen/it-planungsrat/produkt-governikus/" target="_blank">Produkt Governikus</a>.
+			Darin ist <a href="https://www.governikus.de/produkte/data-boreum/" target="_blank">DATA Boreum</a> für kartensignieren und 
+			<a href="https://www.governikus.de/produkte/data-sign/" target="_blank">DATA Sign</a> für Fernsignaturen enthalten.	
+        </p>
+		<p>
+			Weitere Hinweise zum Bezug finden sich auf der Seite: <a href="https://www.governikus.de/loesungen/it-planungsrat/produkt-governikus/" target="_blank">https://www.governikus.de/loesungen/it-planungsrat/produkt-governikus/</a>
+		</p>
+    </details>
+
+    <details>
+        <summary>
+            Kann es passieren, dass eine Signatur beim Versand ungültig wird?
+        </summary>
+        <p>
+            In einem Testszenario konnte derartiges produziert werden.
+            Bereits Änderungen an den Zeilenumbrüchen einer XML-Datei
+            können eine binäre Signatur ungültig machen.
+            Windows verwendet üblicherweise CR+LF, Linux dagegen LF.
+            Eine solche Änderung konnte bei einem Test bei der
+            Übertragung über die beBPo-Infrastruktur erzeugt werden.
+            Deswegen hat der eNoVA-Editor eine Option, innerhalb
+            der XML-Antwort keine Zeilenumbrüche zu verwenden.
+        </p>
+    </details>
+	
+	<details>
+        <summary>
+            Was braucht man alles, um 'eNoVA-ready' zu sein?
+        </summary>
+        <p>
+            <ul>
+				<li>Ein besonderes elektronisches Behördenpostfach (beBPo).</li>
+				<li>Ein Tool oder eine Fachanwendung, die eNoVA.2900003 lesen, anzeigen und schreiben kann, beispielsweise den eNoVA-Editor.</li>
+				<li>Eine Signatur mit Organistaionsvalidierung. Die meisten Signaturen, 
+				die vor Mitte 2026 ausgestellt wurden, haben keine Angabe, zu welcher Gemeinde die ausstellende Person gehört. 
+				Diese müssen entsprechend ersetzt werden.</li>
+				<li>Eine Signatursoftware, die CAdES (detached) erstellen kann. Der Hersteller der Signatursoftware kann Auskunft geben, 
+				ob die Software den Anforderungen des eNoVA-Gesetzes gerecht wird.
+				Die Signatur-Software stellt möglicherweise weitere Anforderungen.</li> 
+			</ul>
+        </p>
+		<p>
+			Darüber hinaus darf nicht vergessen werden, dass eNoVA.2900003 ein volldigitales Format ist. Nachdem die Vorgänge im Regelfall aktenwürdig sind, dürfte es de facto unumgänglich sein, die eAkte einzusetzen.
+		</p>
+    </details>
+	
+	<details id="Organisationsvalidierung">
+        <summary>
+            Was ist bezüglich der 'Organisationsvalidierung' bei Signaturen zu beachten?
+        </summary>
+        <p>
+            Antwort vom 30.10.2026, von Frau Dr. Post, Notarassessorin und Mitglied der Geschäftsführung der Bundesnotarkammer.
+        </p>
+		<p>
+			<a href="https://www.gesetze-im-internet.de/gbo/__137.html" target="_blank">§ 137 Abs. 2 Nr. 3 GBO</a> verlangt, dass „die Behörde“ aus dem Signaturzertifikat „erkennbar“ ist. Nach Einschätzung der Bundesnotarkammer ist der rechtssicherste Weg, sowohl Dienstsitz als auch amtliche Bezeichnung anzugeben (bspw.: „Landeshauptstadt München, der Oberbürgermeister“). Abweichungen davon müssen im konkreten Einzelfall beurteilt werden. Wird statt amtlicher Bezeichnung eine organisatorische Untereinheit (bspw. Bauamt / Dezernat für (…)) angegeben, dürfte auch das die Behörde im Sinne der Norm erkennen lassen.
+		</p>
+		<p>
+			Update vom 23.11.2026:
+		</p>
+		<p>
+			Abweichend von dieser Empfehlung hat sich die Landeshauptstadt München nach externer Rechtsberatung und Konsulation interner Juristen dazu entschieden, als Organisangabe nur "Landeshauptstadt München" zu verwenden.<br>
+			Hintergrund ist, dass allgemein es in Bayern in Bescheiden wohl eher unüblich ist, hinter dem Namen der Kommune "Der Bürgermeister", "Die Oberbürgermeisterin" oder dergleichen zu schreiben.<br>
+			Da die Landeshauptstadt München bisher auf eine derartige Kennzeichnung bei Papierbescheiden verzichtet hat, wird sie bei den aktuellen Kartenbestellungen es wie bisher machen.			
+		</p>
+    </details>
+	
+	<details>
+        <summary>
+            Welche Hardware- und Software-Anforderungen stellt der eNoVA-Editor?
+        </summary>
+        <p>
+            Der eNoVA-Editor ist eine Java-Desktopanwendung. Prinzipiell ist er damit auf jedem Betriebssystem lauffähig. 
+			Derzeit wird nur MS Windows unterszützt. Weitere Betriebssysteme auf Anfrage.<br>
+			Weiteres siehe <a href="https://github.com/it-at-m/eNoVa-Editor/issues/38">https://github.com/it-at-m/eNoVa-Editor/issues/38</a>.
+        </p>
+    </details>
+	
+	<details>
+        <summary>
+            Wie kann ich die Anzeige des eNoVA-Editors unter Windows vergrößern?
+        </summary>
+        <p>
+            Drücken Sie die "Windows-Taste" und gleichzeitig die
+            "Plus-Taste". Geben Sie die gewünschte Vergrößerung
+            in Prozent ein. Schließen Sie das Fenster anschließend
+            und fahren Sie mit der Bearbeitung fort.
+        </p>
+    </details>
+	
+	<details>
+        <summary>
+            Welche Alternativen gibt es zum eNoVA-Editor?
+        </summary>
+        <p>
+            Als kostenlose Option stehen die XJustiz-Werkzeuge zur Verfügung:<br>
+			<a href="https://xjustiz-werkzeuge-3b2324.usercontent.opencode.de/anwendungsfaelle/enova/" target="_blank">
+			https://xjustiz-werkzeuge-3b2324.usercontent.opencode.de/anwendungsfaelle/enova/
+			</a>
+		</p>
+		<p>
+			Darüberhinaus gibt es mehrere kostenpflichtige Alternativen von kommerziellen Anbietern.
+        </p>
+    </details>
+    
+    <details>
+        <summary>
+            Welche Technologien werden im eNoVA-Editor verwendet?
+        </summary>
+        <p>
+            Der eNoVA-Editor ist eine Java-Desktopanwendung
+            auf Basis von Java 21 und JavaFX 21.
+            Zur Verarbeitung von XJustiz-Nachrichten werden
+            XML, XPath und XSLT (Saxon-HE) eingesetzt.
+            Als Build-Werkzeug dient Apache Maven.
+        </p>
+    </details>
+
+    <details>
+        <summary>
+            Was zeichnet den eNoVA-Editor aus?
+        </summary>
+        <p>
+           Der eNoVA-Editor wurde Konsequent für die Bedürfnisse von Kommunen jeder Größe entwickelt. 
+		   Als Folge wurde ein schnörkelloses und einfaches Anwendungsdesign gewählt. Daraus ergibt sich:
+        </p>
+		<ul>
+			<li>Als Desktopanwendung ist keine zusätzliche Hardware nötig.</li>
+			<li>Da die Daten auf dem Arbeitsplatz der SachbearbeiterIn bleiben, keine Cloud zum Einsatz kommt, und ausschließlich auf Standards gesetzt wird, besteht absolute Datenhoheit.</li>
+			<li>Der Code ist nicht nur Open Source, sondern die Anwendung ist so geschrieben, dass sie keine hohen Anforderungen oder Einarbeitungszeit von Entwicklern verursacht. Damit ist eine echte Änderbarkeit und Weiterentwickelbarkeit gegeben. Eine Kommune kann mit geringem Aufwand die Anwendung an spezielle Bedürfnisse anpassen.</li>
+			<li>Die beiden vorgenannten Punkte ergeben eine echte digitale Souveränität.</li>
+			<li>Da die Anwendung (in der derzeitigen Ausstattung) keine Schnittstellen besitzt, ist sie extrem sicher.</li>
+			<li>Da die Daten nur lokal gespeichert werden und keine Logfiles geschrieben werden, erfüllt sie hohe Datenschutzanforderungen.</li>
+			<li>Es gibt eine offene Community, so dass man sich über Probleme mit anderen austauschen kann.</li>
+			<li>Durch die Möglichkeit, Notaranfragen - nach Flurstücken getrennt - aufzuteilen, sowie evtl. unvollständige oder zur Urkunde nicht komplett passende Anfragen zu ändern bzw. zu ergänzen, wird das ganze Spektrum, was innerhalb des Formats zulässig ist, ausgenutzt.</li>
+			<li>Eingaben, die spezifisch für eine Kommune oder einen SachberarbeiterIn sind, werden in Konfigurationsdateien gespeichert und müssen deswegen nicht jedes mal neu eingeben werden.</li>
+		</ul>
+    </details>
+
+    <details>
+        <summary>
+            Wie verwalte ich meine Kontaktdaten?
+        </summary>
+        <p>
+            Ist im Installationsverzeichnis eine <code>caseworkers.xml</code>
+            vorhanden, werden die Kontaktdaten zentral gepflegt und die
+            Schaltfläche „Kontaktdaten“ wird nicht angezeigt. Andernfalls legen
+            Sie über die Schaltfläche „Kontaktdaten“ neben dem Feld
+            „Sachbearbeiter*in“ genau einen eigenen Kontakt an und können ihn
+            später bearbeiten. Er wird in
+            <code>%APPDATA%\eNoVA-Editor\caseworkers.xml</code> gespeichert
+            und steht sofort zur Verfügung. Das Feld zeigt den eigenen Kontakt
+            mit Vor- und Nachnamen an. Ein Löschen ist nicht vorgesehen.
+        </p>
+    </details>
+
+    <details>
+        <summary>
+            Warum ist die Auswahl leer und ich kann keine Antwort generieren?
+        </summary>
+        <p>
+            Es wurde weder im Installationsverzeichnis noch im
+            Benutzerverzeichnis eine gültige <code>caseworkers.xml</code>
+            gefunden. Neben dem Feld „Sachbearbeiter*in“ steht dann „Keine Kontaktdaten
+            vorhanden“. Legen Sie über die Schaltfläche „Kontaktdaten“ Ihren
+            Kontakt an. Danach kann die Antwort generiert werden.
+        </p>
+    </details>
+</main>
+
+</body>
+</html>
