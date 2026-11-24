@@ -50,8 +50,10 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 public class MainController {
 
@@ -85,6 +87,7 @@ public class MainController {
     private String senderName;
     private Map<String, List<String>> allowedDecisionsByRequestCode = Map.of();
     private Map<String, String> requestLabelsByCode = Map.of();
+    private List<CodelistEntry> requestEntries = List.of();
     @FXML
     private StackPane multipleDecisionBox;
 
@@ -585,6 +588,7 @@ public class MainController {
         }
 
         updateDecisionMissing();
+        updateAddRequestItems();
     }
 
     private ComboBox<CodelistEntry> createDecisionComboBox(List<CodelistEntry> allowedDecisionEntries) {
@@ -993,8 +997,20 @@ public class MainController {
         }
 
         requestLabelsByCode = Map.copyOf(labels);
-        addRequestComboBox.getItems().setAll(entries.stream()
+        requestEntries = entries.stream()
                 .filter(entry -> allowedDecisionsByRequestCode.containsKey(entry.code()))
+                .toList();
+        updateAddRequestItems();
+    }
+
+    // Fragen, die schon im Formular stehen, werden nicht noch einmal angeboten.
+    private void updateAddRequestItems() {
+        Set<String> codesInForm = decisionRows.stream()
+                .map(DecisionRow::requestCode)
+                .collect(Collectors.toSet());
+
+        addRequestComboBox.getItems().setAll(requestEntries.stream()
+                .filter(entry -> !codesInForm.contains(entry.code()))
                 .toList());
     }
 
@@ -1026,6 +1042,7 @@ public class MainController {
 
         decisionRows.clear();
         decisionMissing.set(true);
+        updateAddRequestItems();
     }
 
     private void setSplitControlsVisible(boolean visible) {
