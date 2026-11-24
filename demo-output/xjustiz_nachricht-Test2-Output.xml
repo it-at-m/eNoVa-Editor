@@ -16,7 +16,7 @@
                <tns:ref.rollennummer>
                   <tns:ref.rollennummer>5</tns:ref.rollennummer>
                </tns:ref.rollennummer>
-               <!--Verweis auf grunddaten.verfahrensdaten.beteiliung.beteiligter.beteiligtennummer, nicht auf rolle.rollennummer!-->
+               <!--Verweis auf grunddaten.verfahrensdaten.beteiligung.rolle.rollennummer, nicht auf beteiligter.beteiligtennummer!-->
             </tns:auswahl_verweisGrunddaten>
          </tns:informationen>
          <!--eNoVA: Aktenzeichen wurde durch den Wert aus dem Eingabefeld ersetzt-->
@@ -32,8 +32,10 @@
                <tns:sonstige>Notar Dr. Müller</tns:sonstige>
             </tns:auswahl_kommunikationspartner>
             <tns:auswahl_verweisGrunddaten><!--optional-->
-               <tns:ref.rollennummer>1</tns:ref.rollennummer>
-               <!--Verweis auf grunddaten.verfahrensdaten.beteiliung.beteiligter.beteiligtennummer, nicht auf rolle.rollennummer!-->
+               <tns:ref.rollennummer>
+                  <tns:ref.rollennummer>1</tns:ref.rollennummer>
+               </tns:ref.rollennummer>
+               <!--Verweis auf grunddaten.verfahrensdaten.beteiligung.rolle.rollennummer, nicht auf beteiligter.beteiligtennummer!-->
             </tns:auswahl_verweisGrunddaten>
          </tns:informationen>
          <!--TODO: Es ist zu klären, wie wir die eigene Nachrichten-ID bekommen. -->
@@ -277,7 +279,7 @@
          <tns:urkundsdatum>2026-08-13</tns:urkundsdatum>
          <tns:urkundsperson>
             <tns:ref.rollennummer>1</tns:ref.rollennummer>
-            <!--Verweis auf grunddaten.verfahrensdaten.beteiliung.beteiligter.beteiligtennummer, nicht auf rolle.rollennummer!-->
+            <!--Verweis auf grunddaten.verfahrensdaten.beteiligung.rolle.rollennummer, nicht auf beteiligter.beteiligtennummer!-->
          </tns:urkundsperson>
       </tns:datenDerUrkunde>
       <tns:datenDerUrkunde>
@@ -285,7 +287,7 @@
          <tns:urkundsdatum>2026-11-21</tns:urkundsdatum>
          <tns:urkundsperson>
             <tns:ref.rollennummer>1</tns:ref.rollennummer>
-            <!--Verweis auf grunddaten.verfahrensdaten.beteiliung.beteiligter.beteiligtennummer, nicht auf rolle.rollennummer!-->
+            <!--Verweis auf grunddaten.verfahrensdaten.beteiligung.rolle.rollennummer, nicht auf beteiligter.beteiligtennummer!-->
          </tns:urkundsperson>
       </tns:datenDerUrkunde>
       <tns:beschreibungDesBetroffenenRechts><!--Wenn mehrere Grundstücke in einer Urkunde übertragen werden, dann kommt dieses Element mehrmals vor. Es ist sogar zulässig, dass dieses Element 0 mal vorkommt. Der fachliche Hintergrund, eine Nachricht ohne Nennung eines Grundstücks zu verschicken, ist mir aber nicht ersichtlich. -->
