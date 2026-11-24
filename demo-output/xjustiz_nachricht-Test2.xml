@@ -10,7 +10,9 @@
 					<tns:sonstige>Notar Dr. Müller</tns:sonstige>
 				</tns:auswahl_kommunikationspartner>
 				<tns:auswahl_verweisGrunddaten><!--optional-->
-					<tns:ref.rollennummer>1</tns:ref.rollennummer><!--Verweis auf grunddaten.verfahrensdaten.beteiligung.rolle.rollennummer, nicht auf beteiligter.beteiligtennummer!-->
+					<tns:ref.rollennummer>
+						<tns:ref.rollennummer>1</tns:ref.rollennummer>
+					</tns:ref.rollennummer>
 				</tns:auswahl_verweisGrunddaten>
 			</tns:informationen>
 			<tns:aktenzeichen>UVZ-4697</tns:aktenzeichen>
@@ -290,6 +292,17 @@
 						<tns:herrschendeBuchungsstelle></tns:herrschendeBuchungsstelle>
 						<tns:dienendeBuchungsstelle></tns:dienendeBuchungsstelle>
 					</tns:miteigentumP3GBO>
+				</tns:auswahl_buchungsstelle>
+			</tns:buchungsstelle>
+			<tns:buchungsstelle>
+				<tns:lfdNummer>8</tns:lfdNummer>
+				<tns:auswahl_buchungsstelle>
+					<tns:wegEinheit>
+						<tns:sondereigentum>
+							<tns:bezeichnung>Wohnung 2</tns:bezeichnung>
+						</tns:sondereigentum>
+						<tns:stockwerkseigentum></tns:stockwerkseigentum>
+					</tns:wegEinheit>
 				</tns:auswahl_buchungsstelle>
 			</tns:buchungsstelle>
 				

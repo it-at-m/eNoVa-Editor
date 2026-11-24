@@ -16,7 +16,6 @@
                <tns:ref.rollennummer>
                   <tns:ref.rollennummer>5</tns:ref.rollennummer>
                </tns:ref.rollennummer>
-               <!--Verweis auf grunddaten.verfahrensdaten.beteiligung.rolle.rollennummer, nicht auf beteiligter.beteiligtennummer!-->
             </tns:auswahl_verweisGrunddaten>
          </tns:informationen>
          <!--eNoVA: Aktenzeichen wurde durch den Wert aus dem Eingabefeld ersetzt-->
@@ -35,7 +34,6 @@
                <tns:ref.rollennummer>
                   <tns:ref.rollennummer>1</tns:ref.rollennummer>
                </tns:ref.rollennummer>
-               <!--Verweis auf grunddaten.verfahrensdaten.beteiligung.rolle.rollennummer, nicht auf beteiligter.beteiligtennummer!-->
             </tns:auswahl_verweisGrunddaten>
          </tns:informationen>
          <!--TODO: Es ist zu klären, wie wir die eigene Nachrichten-ID bekommen. -->
@@ -198,6 +196,12 @@
                         <tns:vorname>Rupert</tns:vorname>
                         <tns:nachname>Späth</tns:nachname>
                      </tns:vollerName>
+                     <tns:anschrift>
+                        <tns:anschriftstyp listVersionID="3.0">
+                           <code>003</code>
+                        </tns:anschriftstyp>
+                        <tns:ort>München</tns:ort>
+                     </tns:anschrift>
                      <tns:telekommunikation>
                         <tns:telekommunikationsart listVersionID="2.3">
                            <code>001</code>
@@ -366,6 +370,17 @@
                   <tns:herrschendeBuchungsstelle/>
                   <tns:dienendeBuchungsstelle/>
                </tns:miteigentumP3GBO>
+            </tns:auswahl_buchungsstelle>
+         </tns:buchungsstelle>
+         <tns:buchungsstelle>
+            <tns:lfdNummer>8</tns:lfdNummer>
+            <tns:auswahl_buchungsstelle>
+               <tns:wegEinheit>
+                  <tns:sondereigentum>
+                     <tns:bezeichnung>Wohnung 2</tns:bezeichnung>
+                  </tns:sondereigentum>
+                  <tns:stockwerkseigentum/>
+               </tns:wegEinheit>
             </tns:auswahl_buchungsstelle>
          </tns:buchungsstelle>
          <tns:anschrift>
