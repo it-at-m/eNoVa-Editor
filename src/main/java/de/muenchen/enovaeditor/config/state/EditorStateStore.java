@@ -32,7 +32,7 @@ public class EditorStateStore {
                 properties.load(reader);
             }
 
-            String value = properties.getProperty(LAST_XML_DIRECTORY, "").strip();
+            String value = properties.getProperty(LAST_XML_DIRECTORY, "");
 
             return value.isEmpty() ? null : Path.of(value);
         } catch (Exception ignored) {
