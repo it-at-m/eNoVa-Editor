@@ -408,11 +408,7 @@
         1714
       </div>
 
-      <script>a=0;</script>
-
       
-	
-		
 		  <div class="flurstuecke">
 			
 
@@ -449,13 +445,11 @@
 			
 		</div>
 	
+
+
+        <span class="label">Sonderfall:</span>
+
 	
-	<script>
-		if(a===0){
-			document.write('<span id="sonderfall" style="display: none;" class="label">Sonderfall:</span>'); 
-			a=1;
-		}
-	</script>
 	
 	<div class="andere_buchungsstelle">	
 		
@@ -467,26 +461,9 @@
 		
 	</div>
   
-	
-		
-	
-	<script>
-		if(a===0){
-			document.write('<span id="sonderfall" style="display: none;" class="label">Sonderfall:</span>'); 
-			a=1;
-		}
-	</script>
-	
 	<div class="andere_buchungsstelle">	
 		
-			<div id="erbbaurecht" class="sonderfall-item">001</div>
-			<script> 
-				if(document.getElementById('erbbaurecht').textContent.trim() != '') 
-					{ 
-						document.getElementById('sonderfall').style.display = 'block';
-						document.getElementById('erbbaurecht').textContent = 'Erbbaurecht';
-					}; 
-			</script>
+			<div class="sonderfall-item">Erbbaurecht</div>
 		
 		
 		
@@ -496,28 +473,11 @@
 		
 	</div>
   
-	
-		
-	
-	<script>
-		if(a===0){
-			document.write('<span id="sonderfall" style="display: none;" class="label">Sonderfall:</span>'); 
-			a=1;
-		}
-	</script>
-	
 	<div class="andere_buchungsstelle">	
 		
 		
 		
-			<div id="nutzungsrecht" class="sonderfall-item">001</div>
-			<script> 
-				if(document.getElementById('nutzungsrecht').textContent.trim() != '') 
-					{ 
-						document.getElementById('sonderfall').style.display = 'block';
-						document.getElementById('nutzungsrecht').textContent = 'Nutzungsrecht';
-					}; 
-			</script>
+			<div class="sonderfall-item">Nutzungsrecht</div>
 		
 			
 		
@@ -525,47 +485,18 @@
 		
 	</div>
   
-	
-		
-	
-	<script>
-		if(a===0){
-			document.write('<span id="sonderfall" style="display: none;" class="label">Sonderfall:</span>'); 
-			a=1;
-		}
-	</script>
-	
 	<div class="andere_buchungsstelle">	
 		
 		
 		
 			
 		
-			<div id="wegeinheit" class="sonderfall-item">
-							Wohnung
-						</div>
-			<script> 
-				if(document.getElementById('wegeinheit').textContent.trim() != '') 
-					{ 
-						document.getElementById('sonderfall').style.display = 'block';
-						document.getElementById('wegeinheit').textContent = 'WEG-Einheit';
-					}; 
-			</script>
+			<div class="sonderfall-item">WEG-Einheit: Wohnung</div>
 		
 		
 		
 	</div>
   
-	
-		
-	
-	<script>
-		if(a===0){
-			document.write('<span id="sonderfall" style="display: none;" class="label">Sonderfall:</span>'); 
-			a=1;
-		}
-	</script>
-	
 	<div class="andere_buchungsstelle">	
 		
 		
@@ -574,18 +505,11 @@
 		
 		
 		
-			<div id="miteigentum" class="sonderfall-item">
+			<div class="sonderfall-item">Miteigentum:
 							
 								17 Quadratmeter
 							
 						</div>
-			<script> 
-				if(document.getElementById('miteigentum').textContent.trim() != '') 
-					{ 
-						document.getElementById('sonderfall').style.display = 'block';
-						document.getElementById('miteigentum').textContent = 'Miteigentum';
-					}; 
-			</script>
 		
 	</div>
   
@@ -633,11 +557,7 @@
         1715
       </div>
 
-      <script>a=0;</script>
-
       
-	
-		
 		  <div class="flurstuecke">
 			
 
@@ -698,13 +618,9 @@
 			
 		</div>
 	
+
+
 	
-	<script>
-		if(a===0){
-			document.write('<span id="sonderfall" style="display: none;" class="label">Sonderfall:</span>'); 
-			a=1;
-		}
-	</script>
 	
 	<div class="andere_buchungsstelle">	
 		
@@ -754,9 +670,9 @@
 		    <span>Teilungserklärung / Teilungsvertrag nach WEG</span>	
 	    </div>
      
-    <script> 
-	    if(document.getElementById('art').textContent.trim().toLowerCase() === 'freitext') 
-	    	{ document.getElementById('art').style.display = 'none';}; 
+    <script>
+      const art = document.getElementById('art');
+      if (art && art.textContent.trim().toLowerCase() === 'freitext') art.style.display = 'none';
     </script>
 
     <h3 id="eigentuemer" style="display: none;">
@@ -771,6 +687,7 @@
       Max
       Besitzer
 
+
       <br>
 
       Zenettistraße
@@ -781,10 +698,10 @@
       80337
       München
 
-      <br>
 
-      <span class="geburt">Geboren am
-      13.08.1965</span>
+        <br><span class="geburt">Geboren am 13.08.1965</span>
+
+
     </div>
 
     <script>
@@ -819,6 +736,7 @@
       Yvonne
       Vertreterin
 
+
       <br>
 
       Oberländerstraße
@@ -829,10 +747,10 @@
       1136
       Wien
 
-      <br>
 
-      <span class="geburt">Geboren am
-      28.09.1978</span>
+        <br><span class="geburt">Geboren am 28.09.1978</span>
+
+
     </div>
 
     <script>

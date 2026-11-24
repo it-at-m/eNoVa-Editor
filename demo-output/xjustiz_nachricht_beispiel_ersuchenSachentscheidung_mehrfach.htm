@@ -398,11 +398,7 @@
         1714
       </div>
 
-      <script>a=0;</script>
-
       
-	
-		
 		  <div class="flurstuecke">
 			
 
@@ -435,13 +431,9 @@
 			
 		</div>
 	
+
+
 	
-	<script>
-		if(a===0){
-			document.write('<span id="sonderfall" style="display: none;" class="label">Sonderfall:</span>'); 
-			a=1;
-		}
-	</script>
 	
 	<div class="andere_buchungsstelle">	
 		
@@ -497,11 +489,7 @@
         1715
       </div>
 
-      <script>a=0;</script>
-
       
-	
-		
 		  <div class="flurstuecke">
 			
 
@@ -562,13 +550,9 @@
 			
 		</div>
 	
+
+
 	
-	<script>
-		if(a===0){
-			document.write('<span id="sonderfall" style="display: none;" class="label">Sonderfall:</span>'); 
-			a=1;
-		}
-	</script>
 	
 	<div class="andere_buchungsstelle">	
 		
@@ -608,9 +592,9 @@
     
 
      
-    <script> 
-	    if(document.getElementById('art')?.textContent.trim().toLowerCase() === 'freitext')
-	    	{ document.getElementById('art').style.display = 'none';}; 
+    <script>
+      const art = document.getElementById('art');
+      if (art && art.textContent.trim().toLowerCase() === 'freitext') art.style.display = 'none';
     </script>
 
     <h3 id="eigentuemer" style="display: none;">
