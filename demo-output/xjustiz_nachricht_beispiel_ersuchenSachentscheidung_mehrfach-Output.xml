@@ -265,42 +265,54 @@
             <tns:sachentscheidung listVersionID="1.1">
                <code>019</code>
             </tns:sachentscheidung>
-            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GrdstVG (011)</tns:hinweise_sonstige>
             <!--eNoVA: Alle Käufer und Verkäufer wurden anhand ihrer Rollennummern als Adressaten der Sachentscheidung referenziert-->
             <tns:adressatDerSachentscheidung>
-               <tns:ref.rollennummer>3</tns:ref.rollennummer>
+               <tns:ref.rollennummer>
+                  <tns:ref.rollennummer>3</tns:ref.rollennummer>
+               </tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
             <tns:adressatDerSachentscheidung>
-               <tns:ref.rollennummer>4</tns:ref.rollennummer>
+               <tns:ref.rollennummer>
+                  <tns:ref.rollennummer>4</tns:ref.rollennummer>
+               </tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
+            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GrdstVG (011)</tns:hinweise_sonstige>
          </tns:sachentscheidung>
          <!--eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt-->
          <tns:sachentscheidung>
             <tns:sachentscheidung listVersionID="1.1">
                <code>021</code>
             </tns:sachentscheidung>
-            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GVO (012)</tns:hinweise_sonstige>
             <!--eNoVA: Alle Käufer und Verkäufer wurden anhand ihrer Rollennummern als Adressaten der Sachentscheidung referenziert-->
             <tns:adressatDerSachentscheidung>
-               <tns:ref.rollennummer>3</tns:ref.rollennummer>
+               <tns:ref.rollennummer>
+                  <tns:ref.rollennummer>3</tns:ref.rollennummer>
+               </tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
             <tns:adressatDerSachentscheidung>
-               <tns:ref.rollennummer>4</tns:ref.rollennummer>
+               <tns:ref.rollennummer>
+                  <tns:ref.rollennummer>4</tns:ref.rollennummer>
+               </tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
+            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GVO (012)</tns:hinweise_sonstige>
          </tns:sachentscheidung>
          <!--eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt-->
          <tns:sachentscheidung>
             <tns:sachentscheidung listVersionID="1.1">
                <code>023</code>
             </tns:sachentscheidung>
-            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte und hilfsweise um Erteilung eines Negativattests (013)</tns:hinweise_sonstige>
             <!--eNoVA: Alle Käufer und Verkäufer wurden anhand ihrer Rollennummern als Adressaten der Sachentscheidung referenziert-->
             <tns:adressatDerSachentscheidung>
-               <tns:ref.rollennummer>3</tns:ref.rollennummer>
+               <tns:ref.rollennummer>
+                  <tns:ref.rollennummer>3</tns:ref.rollennummer>
+               </tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
             <tns:adressatDerSachentscheidung>
-               <tns:ref.rollennummer>4</tns:ref.rollennummer>
+               <tns:ref.rollennummer>
+                  <tns:ref.rollennummer>4</tns:ref.rollennummer>
+               </tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
+            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte und hilfsweise um Erteilung eines Negativattests (013)</tns:hinweise_sonstige>
          </tns:sachentscheidung>
       </tns:auswahl_GegenstandDerNachricht>
       <tns:datenDerUrkunde>

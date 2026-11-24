@@ -1,0 +1,811 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>eNoVA - Output</title>
+    <style>
+      * {
+          box-sizing: border-box;
+      }
+
+      body {
+          margin: 0;
+          padding: 32px 16px;
+          background: #eef1f5;
+          color: #1f2933;
+          font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+          font-size: 15px;
+          line-height: 1.6;
+      }
+
+      .seite {
+          max-width: 780px;
+          margin: 0 auto;
+          padding: 48px 56px;
+          background: #ffffff;
+          border: 1px solid #d9e0e7;
+          border-radius: 6px;
+      }
+
+      p {
+          margin: 0 0 14px 0;
+      }
+
+      .hinweis {
+          margin: 0 0 32px 0;
+          padding: 8px 14px;
+          background: #fdf1f0;
+          border-left: 4px solid #c0392b;
+          border-radius: 3px;
+          color: #9b2c20;
+          font-size: 13px;
+          text-align: left;
+      }
+
+      .absender {
+          margin: 0 0 28px 0;
+          padding-bottom: 14px;
+          border-bottom: 1px solid #d9e0e7;
+          color: #5b6670;
+          font-size: 13px;
+          line-height: 1.5;
+      }
+
+      .kopf-zeile {
+          display: flex;
+          width: 100%;
+          margin-top: 24px;
+      }
+
+      .empfaenger {
+          flex: 1;
+          font-size: 16px;
+          line-height: 1.5;
+      }
+
+      .kontakt {
+          margin-left: auto;
+          padding: 12px 16px;
+          min-width: 230px;
+          background: #f3f6f9;
+          border-radius: 4px;
+          color: #5b6670;
+          font-size: 13px;
+          line-height: 1.7;
+      }
+
+      .datum-zeile {
+          text-align: right;
+          margin-top: 28px;
+          color: #5b6670;
+          font-size: 14px;
+      }
+
+      .betreff {
+          margin: 32px 0 20px 0;
+          font-size: 18px;
+          font-weight: 600;
+          line-height: 1.4;
+          color: #1f4e79;
+      }
+
+      h3 {
+          margin: 32px 0 12px 0;
+          padding-bottom: 6px;
+          border-bottom: 2px solid #1f4e79;
+          color: #1f4e79;
+          font-size: 16px;
+          font-weight: 600;
+          letter-spacing: 0.2px;
+      }
+
+      h3 .mehrere-personen {
+          display: block;
+          color: #5b6670;
+          font-size: 13px;
+          font-weight: 400;
+          letter-spacing: normal;
+      }
+
+      .person-block {
+          margin-bottom: 12px;
+          padding: 10px 16px;
+          background: #f3f6f9;
+          border-left: 3px solid #1f4e79;
+          border-radius: 0 4px 4px 0;
+          line-height: 1.55;
+      }
+
+      .geburt {
+          color: #5b6670;
+          font-size: 14px;
+      }
+
+      .urkunde {
+          line-height: 1.9;
+      }
+
+      .label {
+          display: inline-block;
+          min-width: 190px;
+          color: #5b6670;
+      }
+
+      .grundstueck-block {
+          margin-bottom: 20px;
+          padding: 14px 16px;
+          border: 1px solid #d9e0e7;
+          border-radius: 4px;
+          line-height: 1.8;
+      }
+
+      .flurstuecke {
+          margin-top: 10px;
+          padding-top: 10px;
+      }
+
+      .flurstueck-block {
+          margin-bottom: 6px;
+          padding: 6px 12px;
+          background: #f3f6f9;
+          border-radius: 3px;
+      }
+
+      .flurstueck-block .label {
+          min-width: 90px;
+      }
+
+	.wirtschaftsart-item:not(:last-child)::after {
+		content: ", ";
+	}
+	
+	.grundstueck-adresse {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed #d9e0e7;
+    }
+
+      .entscheidung {
+          margin: 24px 0 14px 0;
+          padding: 12px 16px;
+          background: #f3f6f9;
+          border-left: 4px solid #1f4e79;
+          border-radius: 0 4px 4px 0;
+      }
+
+      .entscheidung strong {
+          color: #1f4e79;
+      }
+
+      ol {
+          margin: 0 0 18px 0;
+          padding-left: 22px;
+      }
+
+      li {
+          margin-bottom: 4px;
+      }
+
+      .gruss {
+          margin-top: 28px;
+      }
+
+      .sachbearbeiter {
+          font-weight: 600;
+      }
+
+      .behoerde {
+          color: #5b6670;
+          font-size: 14px;
+      }
+
+      @media (max-width: 640px) {
+          body {
+              padding: 0;
+          }
+
+          .seite {
+              padding: 24px 18px;
+              border: 0;
+              border-radius: 0;
+          }
+
+          .kopf-zeile {
+              display: block;
+          }
+
+          .kontakt {
+              margin-top: 16px;
+          }
+
+          .label {
+              display: block;
+              min-width: 0;
+          }
+      }
+
+      @media print {
+          body {
+              padding: 0;
+              background: #ffffff;
+          }
+
+          .seite {
+              max-width: none;
+              padding: 0;
+              border: 0;
+              border-radius: 0;
+          }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="seite">
+    <div class="hinweis">Internes Ausgangsdokument generiert aus der XJustiz-Nachricht</div>
+
+    <!--
+        Absender suchen:
+        In der XML-Datei steht beim Absender eine Rollennummer.
+        Mit dieser Nummer suchen wir die passende Beteiligung.
+        Dort stehen die Rolle und die Person, die zu diesem Absender gehören.
+        Die gefundenen Daten können danach innerhalb dieses Bereichs verwendet werden.
+    -->
+    
+
+    <p class="absender">
+      <!--
+          Rollenbezeichnung ausgeben:
+          Der Name "rollenbezeichnung" gehört zur Konfiguration
+          in codelists.properties.
+          Der XPath liefert den Rollen-Code, zum Beispiel 208.
+          Über die Codelist wird daraus dann die Bezeichnung.
+      -->
+      Aussteller(in)
+
+      <!--
+          Informationen der Person/Absender aus der zuvor gefundenen Beteiligung ausgeben.
+      -->
+      
+      Rupert
+      Späth
+
+      <br>
+
+      
+      
+
+      <br>
+
+      
+      
+
+    </p>
+
+    <div class="kopf-zeile">
+
+
+      <div class="empfaenger">
+        <!-- Fall 1: Empfänger über ref.rollennummer -->
+        <div>
+          Dr.
+
+          Martin
+
+          Müller
+        </div>
+
+        <div>
+          Anton-Wilhelm-Amo-Straße
+
+          34
+        </div>
+
+        <div>
+          10117
+
+          Berlin
+        </div>
+
+        <!-- Fall 2: Keine ref.rollennummer -->
+        
+      </div>
+      <!-- Ende div Empfänge -->
+
+
+      <div class="kontakt">
+        
+
+          E-Mail:
+          enova-editor@muenchen.de
+
+          <br>
+        
+
+        <br>
+
+        Aktenzeichen:
+        asdf
+      </div>
+
+    </div>
+
+    <div class="datum-zeile">
+      <!-- Ort des aktuellen Beteiligten -->
+      ,
+
+      <!-- Erstellungsdatum der Nachricht im Format TT.MM.JJJJ -->
+      21.11.2026
+    </div>
+
+    
+
+    <!-- Betreff / Verfahrensgegenstand -->
+    <p class="betreff">
+      Ersuchen Genehmigung GrdstVG; 100000019136
+    </p>
+
+    <p>
+        Guten Tag,
+    </p>
+
+    <p>
+      Bezüglich Ihrer Anfrage teilen wir Ihnen mit:
+    </p>
+
+    <p class="entscheidung" style="margin-bottom: 0;"><strong>Frage – Antwort:</strong></p>
+
+    <ol style="margin-top: 0;">
+      
+
+      <li>
+        <div>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GrdstVG (011)</div>
+        <div>Unsere Entscheidung:
+        Erteilung der Genehmigung gemäß § 2 GrdstVG
+        (019)</div>
+      </li>
+
+      
+
+      <li>
+        <div>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GVO (012)</div>
+        <div>Unsere Entscheidung:
+        Erteilung der Genehmigung gemäß § 2 GVO
+        (021)</div>
+      </li>
+
+      
+
+      <li>
+        <div>Antwort auf die Frage: Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte und hilfsweise um Erteilung eines Negativattests (013)</div>
+        <div>Unsere Entscheidung:
+        Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte
+        (023)</div>
+      </li>
+
+      
+    </ol>
+
+    <h3>Urkundendaten:</h3>
+	
+		<p class="urkunde">
+		  <span class="label">Urkundenverzeichnisnummer (UVZ):</span>
+		  4697
+
+		  <br>
+
+		  <span class="label">Beurkundungsdatum:</span>
+		  13.08.2026
+		</p>
+	
+		<p class="urkunde">
+		  <span class="label">Urkundenverzeichnisnummer (UVZ):</span>
+		  4698
+
+		  <br>
+
+		  <span class="label">Beurkundungsdatum:</span>
+		  21.11.2026
+		</p>
+	
+
+    <h3>Grundstück(e):</h3>
+
+    
+
+    <div class="grundstueck-block">
+
+      <div>
+        <span class="label">Amtsgericht:</span>
+        München
+      </div>
+
+      <div>
+        <span class="label">Grundbuchbezirk:</span>
+        Obermenzing
+      </div>
+
+      <div>
+        <span class="label">Grundbuchblatt:</span>
+        1714
+      </div>
+
+      
+		  <div class="flurstuecke">
+			
+
+			<div class="flurstueck-block">
+			  <div>
+				<span class="label">Gemarkung:</span>
+				8694
+			  </div>
+
+			  <div>
+				<span class="label">Flurstück:</span>
+				306/46
+			  </div>
+
+
+			  <div>
+				<span class="label">Wirtschaftsart:</span>
+				<span>
+				  
+					<span class="wirtschaftsart-item">Erholungsfläche</span>
+				  
+					<span class="wirtschaftsart-item">Friedhof</span>
+				  
+					<span class="wirtschaftsart-item">Industrie- und Gewerbefläche</span>
+				  
+				</span>
+			  </div>
+			  
+			  <div>
+				<span class="label">Größe:</span>
+				357
+			  </div>
+			</div>
+			
+		</div>
+	
+
+
+        <span class="label">Sonderfall:</span>
+
+	
+	
+	<div class="andere_buchungsstelle">	
+		
+		
+		
+			
+		
+		
+		
+	</div>
+  
+	<div class="andere_buchungsstelle">	
+		
+			<div class="sonderfall-item">Erbbaurecht</div>
+		
+		
+		
+			
+		
+		
+		
+	</div>
+  
+	<div class="andere_buchungsstelle">	
+		
+		
+		
+			<div class="sonderfall-item">Nutzungsrecht</div>
+		
+			
+		
+		
+		
+	</div>
+  
+	<div class="andere_buchungsstelle">	
+		
+		
+		
+			
+		
+			<div class="sonderfall-item">WEG-Einheit: Wohnung</div>
+		
+		
+		
+	</div>
+  
+	<div class="andere_buchungsstelle">	
+		
+		
+		
+			
+		
+		
+		
+			<div class="sonderfall-item">Miteigentum:
+
+                        17 Quadratmeter
+
+                  </div>
+		
+	</div>
+  
+  
+  <div class="grundstueck-adresse">
+  
+    <div>
+		<span class="label">Straße/Hausnummer:</span>
+		Aberlestraße
+        34		
+	  </div>
+
+	  <div>
+		<span class="label">PLZ/Ort:</span>
+		81379
+        München	
+	  </div>  
+	  
+	  <div>
+		<span class="label">Grundstücksart:</span>
+		
+			Wohngebäude
+		 
+	  </div>  
+  </div>
+
+</div>
+
+    
+
+    <div class="grundstueck-block">
+
+      <div>
+        <span class="label">Amtsgericht:</span>
+        München
+      </div>
+
+      <div>
+        <span class="label">Grundbuchbezirk:</span>
+        Langwied
+      </div>
+
+      <div>
+        <span class="label">Grundbuchblatt:</span>
+        1715
+      </div>
+
+      
+		  <div class="flurstuecke">
+			
+
+			<div class="flurstueck-block">
+			  <div>
+				<span class="label">Gemarkung:</span>
+				8685
+			  </div>
+
+			  <div>
+				<span class="label">Flurstück:</span>
+				306/46
+			  </div>
+
+
+			  <div>
+				<span class="label">Wirtschaftsart:</span>
+				<span>
+				  
+					<span class="wirtschaftsart-item">Erholungsfläche</span>
+				  
+				</span>
+			  </div>
+			  
+			  <div>
+				<span class="label">Größe:</span>
+				359
+			  </div>
+			</div>
+			
+
+			<div class="flurstueck-block">
+			  <div>
+				<span class="label">Gemarkung:</span>
+				8685
+			  </div>
+
+			  <div>
+				<span class="label">Flurstück:</span>
+				307
+			  </div>
+
+
+			  <div>
+				<span class="label">Wirtschaftsart:</span>
+				<span>
+				  
+					<span class="wirtschaftsart-item">Mischnutzung</span>
+				  
+				</span>
+			  </div>
+			  
+			  <div>
+				<span class="label">Größe:</span>
+				776
+			  </div>
+			</div>
+			
+		</div>
+	
+
+
+	
+	
+	<div class="andere_buchungsstelle">	
+		
+		
+		
+			
+		
+		
+		
+	</div>
+  
+  
+  <div class="grundstueck-adresse">
+  
+    <div>
+		<span class="label">Straße/Hausnummer:</span>
+		Huberstraße
+        18		
+	  </div>
+
+	  <div>
+		<span class="label">PLZ/Ort:</span>
+		81377
+        München	
+	  </div>  
+	  
+	  <div>
+		<span class="label">Grundstücksart:</span>
+		
+			Bebaut
+		 
+	  </div>  
+  </div>
+
+</div>
+
+    
+
+    
+	    <h3>Art des Rechtsgeschäfts:</h3>
+	    <div>
+		   <span id="art">
+			    
+				    Freitext
+			    
+		   </span>
+		    <span>Teilungserklärung / Teilungsvertrag nach WEG</span>	
+	    </div>
+     
+    <script>
+      const art = document.getElementById('art');
+      if (art && art.textContent.trim().toLowerCase() === 'freitext') art.style.display = 'none';
+    </script>
+
+    <h3 id="eigentuemer" style="display: none;">
+      Eigentümer(in):
+      <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
+    </h3>
+
+    
+
+    <div class="person-block">
+      
+      Max
+      Besitzer
+
+
+      <br>
+
+      Zenettistraße
+      24
+
+      <br>
+
+      80337
+      München
+
+
+        <br><span class="geburt">Geboren am 13.08.1965</span>
+
+
+    </div>
+
+    <script>
+      document.getElementById('eigentuemer').style.display = 'block';
+    </script>
+
+    
+
+    <h3 id="veraeusserer" style="display: none;">
+      Veräußerer (Veräußerin):
+      <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
+    </h3>
+
+    
+
+    <h3 id="erwerber" style="display: none;">
+      Erwerber(in):
+      <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
+    </h3>
+
+    
+
+    <h3 id="vertreter" style="display: none;">
+      Gesetzliche(r) Vertreter(in):
+      <span class="mehrere-personen">(Dies können auch mehrere Personen sein.) </span>
+    </h3>
+
+    
+
+    <div class="person-block">
+      
+      Yvonne
+      Vertreterin
+
+
+      <br>
+
+      Oberländerstraße
+      36
+
+      <br>
+
+      1136
+      Wien
+
+
+        <br><span class="geburt">Geboren am 28.09.1978</span>
+
+
+    </div>
+
+    <script>
+      document.getElementById('vertreter').style.display = 'block';
+    </script>
+
+    
+
+    <p class="gruss">
+      Mit freundlichen Grüßen
+    </p>
+
+    <!--
+        Sachbearbeiter:
+        Fall 1: Absender verweist über ref.rollennummer auf eine Beteiligung.
+        Dann werden Vorname und Nachname dieser Person ausgegeben.
+
+        Fall 2: Keine ref.rollennummer vorhanden.
+        Dann wird auswahl_kommunikationspartner/sonstige verwendet.
+    -->
+    <div class="sachbearbeiter">
+      Rupert
+
+      Späth
+
+      
+    </div>
+
+    <!-- Instanzbehörde -->
+    <div class="behoerde">
+      LH München
+    </div>
+    </div>
+  </body>
+</html>

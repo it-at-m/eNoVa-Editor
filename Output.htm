@@ -143,7 +143,6 @@
       .flurstuecke {
           margin-top: 10px;
           padding-top: 10px;
-          border-top: 1px dashed #d9e0e7;
       }
 
       .flurstueck-block {
@@ -156,6 +155,16 @@
       .flurstueck-block .label {
           min-width: 90px;
       }
+
+	.wirtschaftsart-item:not(:last-child)::after {
+		content: ", ";
+	}
+	
+	.grundstueck-adresse {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed #d9e0e7;
+    }
 
       .entscheidung {
           margin: 24px 0 14px 0;
@@ -333,6 +342,7 @@
         not(tns:auswahl_verweisGrunddaten/tns:ref.rollennummer)
         ]/tns:auswahl_kommunikationspartner/tns:sonstige}}
       </div>
+      <!-- Ende div Empfänge -->
 
 
       <div class="kontakt">
@@ -396,19 +406,21 @@
     </ol>
 
     <h3>Urkundendaten:</h3>
-    <p class="urkunde">
-      <span class="label">Urkundenverzeichnisnummer (UVZ):</span>
-      {{xpath://tns:datenDerUrkunde/tns:urNr}}
+	{{#each xpath://tns:datenDerUrkunde}}
+		<p class="urkunde">
+		  <span class="label">Urkundenverzeichnisnummer (UVZ):</span>
+		  {{xpath:tns:urNr}}
 
-      <br>
+		  <br>
 
-      <span class="label">Beurkundungsdatum:</span>
-      {{xpath:concat(
-      substring(normalize-space(//tns:datenDerUrkunde/tns:urkundsdatum), 9, 2), '.',
-      substring(normalize-space(//tns:datenDerUrkunde/tns:urkundsdatum), 6, 2), '.',
-      substring(normalize-space(//tns:datenDerUrkunde/tns:urkundsdatum), 1, 4)
-      )}}
-    </p>
+		  <span class="label">Beurkundungsdatum:</span>
+		  {{xpath:concat(
+		  substring(normalize-space(tns:urkundsdatum), 9, 2), '.',
+		  substring(normalize-space(tns:urkundsdatum), 6, 2), '.',
+		  substring(normalize-space(tns:urkundsdatum), 1, 4)
+		  )}}
+		</p>
+	{{/each}}
 
     <h3>Grundstück(e):</h3>
 
@@ -431,35 +443,150 @@
         {{xpath:tns:bundeslandfremdesGrundbuchblatt/tns:grundbuchblatt}}
       </div>
 
-      <div class="flurstuecke">
+      {{#each xpath:tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:grundstueck}}
+		  <div class="flurstuecke">
+			{{#each xpath:tns:flurstuecke}}
 
-        {{#each xpath:tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:grundstueck/tns:flurstuecke}}
+			<div class="flurstueck-block">
+			  <div>
+				<span class="label">Gemarkung:</span>
+				{{xpath:tns:identifikationFlurstueck/tns:gemarkungsschluessel}}
+			  </div>
 
-        <div class="flurstueck-block">
-          <div>
-            <span class="label">Gemarkung:</span>
-            {{xpath:tns:identifikationFlurstueck/tns:gemarkungsschluessel}}
-          </div>
+			  <div>
+				<span class="label">Flurstück:</span>
+				{{xpath:concat(
+				tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:zaehler,
+				substring('/', 1, number(boolean(tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:nenner))),
+				tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:nenner
+				)}}
+			  </div>
 
-          <div>
-            <span class="label">Flurstück:</span>
-            {{xpath:concat(
-            tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:zaehler,
-            substring('/', 1, number(boolean(tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:nenner))),
-            tns:identifikationFlurstueck/tns:flurstuecksnummer/tns:nenner
-            )}}
-          </div>
-        </div>
 
-        {{/each}}
+			  <div>
+				<span class="label">Wirtschaftsart:</span>
+				<span>
+				  {{#each xpath:tns:wirtschaftsart}}
+					<span class="wirtschaftsart-item">{{codelist:wirtschaftsart xpath:code}}</span>
+				  {{/each}}
+				</span>
+			  </div>
+			  
+			  <div>
+				<span class="label">Größe:</span>
+				{{xpath:tns:groesse}}
+			  </div>
+			</div>
+			{{/each}}
+		</div>
+	{{/each}}
 
-      </div>
+      {{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle[tns:erbbaurecht or tns:nutzungsrecht or tns:wegEinheit or tns:miteigentumP3GBO])[1]}}
+        <span class="label">Sonderfall:</span>
+      {{/each}}
+	
+	{{#each xpath:tns:buchungsstelle/tns:auswahl_buchungsstelle}}
+	<div class="andere_buchungsstelle">	
+		{{#each xpath:tns:erbbaurecht}}
+			<div class="sonderfall-item">Erbbaurecht</div>
+		{{/each}}
+		
+		{{#each xpath:tns:nutzungsrecht}}
+			<div class="sonderfall-item">Nutzungsrecht</div>
+		{{/each}}
+			
+		{{#each xpath:tns:wegEinheit}}
+			<div class="sonderfall-item">WEG-Einheit: {{xpath:tns:sondereigentum/tns:bezeichnung}}</div>
+		{{/each}}
+		
+		{{#each xpath:tns:miteigentumP3GBO}}
+			<div class="sonderfall-item">Miteigentum: {{xpath:tns:anteil}}</div>
+		{{/each}}
+	</div>
+  {{/each}}
+  
+  <div class="grundstueck-adresse">
+  
+    <div>
+		<span class="label">Straße/Hausnummer:</span>
+		{{xpath:tns:anschrift/tns:strasse}}
+        {{xpath:tns:anschrift/tns:hausnummer}}		
+	  </div>
 
-    </div>
+	  <div>
+		<span class="label">PLZ/Ort:</span>
+		{{xpath:tns:anschrift/tns:postleitzahl}}
+        {{xpath:tns:anschrift/tns:ort}}	
+	  </div>  
+	  
+	  <div>
+		<span class="label">Grundstücksart:</span>
+		{{#each xpath:tns:weitereAngabenZumGrundstueck/tns:grundstuecksart}}
+			{{codelist:grundstuecksart xpath:code}}
+		{{/each}} 
+	  </div>  
+  </div>
+
+</div>
 
     {{/each}}
 
-    <h3>
+    {{#each xpath://tns:fachdaten/tns:artDesRechtsgeschaefts}}
+	    <h3>Art des Rechtsgeschäfts:</h3>
+	    <div>
+		   <span id="art">
+			    {{#each xpath:tns:art}}
+				    {{codelist:artdesrechtsgeschaefts xpath:code}}
+			    {{/each}}
+		   </span>
+		    <span>{{xpath:tns:freitext}}</span>	
+	    </div>
+    {{/each}} 
+    <script>
+      const art = document.getElementById('art');
+      if (art && art.textContent.trim().toLowerCase() === 'freitext') art.style.display = 'none';
+    </script>
+
+    <h3 id="eigentuemer" style="display: none;">
+      {{codelist:rollenbezeichnung xpath:'057'}}:
+      <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
+    </h3>
+
+    {{#each xpath://tns:beteiligung[
+    tns:rolle/tns:rollenbezeichnung/code='057'
+    ]}}
+
+    <div class="person-block">
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:titel}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:vorname}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:nachname}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:organisation/tns:bezeichnung/tns:bezeichnung.aktuell}}
+
+      <br>
+
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/*/tns:anschrift/tns:strasse}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/*/tns:anschrift/tns:hausnummer}}
+
+      <br>
+
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/*/tns:anschrift/tns:postleitzahl}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/*/tns:anschrift/tns:ort}}
+
+      {{#each xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:geburt/tns:geburtsdatum[string-length(normalize-space(.))=10]}}
+        <br><span class="geburt">Geboren am {{xpath:concat(substring(., 9, 2), '.', substring(., 6, 2), '.', substring(., 1, 4))}}</span>
+      {{/each}}
+      {{#each xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:geburt/tns:geburtsdatum[string-length(normalize-space(.))!=10]}}
+        <br><span class="geburt">Geboren am {{xpath:normalize-space(.)}}</span>
+      {{/each}}
+    </div>
+
+    <script>
+      document.getElementById('eigentuemer').style.display = 'block';
+    </script>
+
+    {{/each}}
+
+    <h3 id="veraeusserer" style="display: none;">
       {{codelist:rollenbezeichnung xpath:'168'}}:
       <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
     </h3>
@@ -496,9 +623,13 @@
       )}}</span>
     </div>
 
+    <script>
+      document.getElementById('veraeusserer').style.display = 'block';
+    </script>
+
     {{/each}}
 
-    <h3>
+    <h3 id="erwerber" style="display: none;">
       {{codelist:rollenbezeichnung xpath:'072'}}:
       <span class="mehrere-personen">(Dies können auch mehrere Personen sein.)</span>
     </h3>
@@ -534,6 +665,49 @@
       1, 4)
       )}}</span>
     </div>
+
+	<script>
+      document.getElementById('erwerber').style.display = 'block';
+    </script>
+
+    {{/each}}
+
+    <h3 id="vertreter" style="display: none;">
+      {{codelist:rollenbezeichnung xpath:'088'}}:
+      <span class="mehrere-personen">(Dies können auch mehrere Personen sein.) </span>
+    </h3>
+
+    {{#each xpath://tns:beteiligung[
+    tns:rolle/tns:rollenbezeichnung/code='088'
+    ]}}
+
+    <div class="person-block">
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:titel}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:vorname}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:vollerName/tns:nachname}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:organisation/tns:bezeichnung/tns:bezeichnung.aktuell}}
+
+      <br>
+
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/*/tns:anschrift/tns:strasse}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/*/tns:anschrift/tns:hausnummer}}
+
+      <br>
+
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/*/tns:anschrift/tns:postleitzahl}}
+      {{xpath:tns:beteiligter/tns:auswahl_beteiligter/*/tns:anschrift/tns:ort}}
+
+      {{#each xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:geburt/tns:geburtsdatum[string-length(normalize-space(.))=10]}}
+        <br><span class="geburt">Geboren am {{xpath:concat(substring(., 9, 2), '.', substring(., 6, 2), '.', substring(., 1, 4))}}</span>
+      {{/each}}
+      {{#each xpath:tns:beteiligter/tns:auswahl_beteiligter/tns:natuerlichePerson/tns:geburt/tns:geburtsdatum[string-length(normalize-space(.))!=10]}}
+        <br><span class="geburt">Geboren am {{xpath:normalize-space(.)}}</span>
+      {{/each}}
+    </div>
+
+    <script>
+      document.getElementById('vertreter').style.display = 'block';
+    </script>
 
     {{/each}}
 
