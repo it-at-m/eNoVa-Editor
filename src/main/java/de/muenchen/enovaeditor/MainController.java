@@ -13,6 +13,7 @@ import de.muenchen.enovaeditor.config.caseworker.CaseworkerEntry;
 import de.muenchen.enovaeditor.config.decision.DecisionConfigLoader;
 import de.muenchen.enovaeditor.config.manufacturer.ManufacturerInfo;
 import de.muenchen.enovaeditor.config.manufacturer.ManufacturerInfoLoader;
+import de.muenchen.enovaeditor.config.state.EditorStateStore;
 import de.muenchen.enovaeditor.error.AppException;
 import de.muenchen.enovaeditor.error.ErrorDetail;
 import de.muenchen.enovaeditor.error.ProblemDialog;
@@ -73,6 +74,7 @@ public class MainController {
     private final ErsuchenSachentscheidungReader ersuchenSachentscheidungReader = new ErsuchenSachentscheidungReader();
     private final DecisionConfigLoader decisionConfigLoader = new DecisionConfigLoader();
     private final FlurstueckSplitter flurstueckSplitter = new FlurstueckSplitter();
+    private final EditorStateStore editorStateStore = new EditorStateStore();
 
     private final ObjectProperty<Document> openedDocument = new SimpleObjectProperty<>(null);
 
@@ -80,6 +82,7 @@ public class MainController {
     private final List<DecisionRow> decisionRows = new ArrayList<>();
     private final List<CodelistEntry> decisionEntries = new ArrayList<>();
     private Path openedXmlPath;
+    private Path lastXmlDirectory;
     private Path caseworkersFile;
     private boolean caseworkersFromInstallationDirectory;
     private String senderName;
@@ -146,6 +149,7 @@ public class MainController {
         loadDecisionMappings();
         loadRequestLabels();
         HelpLink.configure(helpLink);
+        lastXmlDirectory = editorStateStore.loadLastXmlDirectory();
     }
 
     @FXML
@@ -170,6 +174,10 @@ public class MainController {
         }
 
         Path selectedXmlPath = selectedFile.toPath();
+
+        // Auch wenn die Datei danach abgelehnt wird, arbeitet die Sachbearbeitung weiter in diesem Ordner.
+        lastXmlDirectory = selectedXmlPath.getParent();
+        editorStateStore.saveLastXmlDirectory(lastXmlDirectory);
 
         setSplitControlsVisible(false);
 
@@ -486,6 +494,10 @@ public class MainController {
         fileChooser.setTitle("XML-Datei auswählen");
 
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML-Dateien", "*.xml"));
+
+        if (lastXmlDirectory != null && Files.isDirectory(lastXmlDirectory)) {
+            fileChooser.setInitialDirectory(lastXmlDirectory.toFile());
+        }
 
         return fileChooser.showOpenDialog(fileStatusLabel.getScene().getWindow());
     }
