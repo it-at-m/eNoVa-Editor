@@ -15,6 +15,9 @@ public class ErsuchenSachentscheidungChecker {
     private static final String EXPECTED_ROOT =
             "nachricht.enova.entscheidung.2900003";
 
+    private static final String SUPPORTED_XJUSTIZ_VERSION =
+            "3.6.2";
+
     public void check(Document document) throws AppException {
 
         Element root = document.getDocumentElement();
@@ -65,6 +68,29 @@ public class ErsuchenSachentscheidungChecker {
         if (ersuchen == null) {
             throw new AppException(
                     "Die ausgewählte Nachricht ist kein Ersuchen um Sachentscheidung.",
+                    List.of()
+            );
+        }
+
+        Element nachrichtenkopf =
+                getDirectChild(root, "nachrichtenkopf");
+
+        String xjustizVersion = nachrichtenkopf == null
+                ? ""
+                : nachrichtenkopf.getAttribute("xjustizVersion");
+
+        if (xjustizVersion.isBlank()) {
+            throw new AppException(
+                    "Die Nachricht enthält keine Angabe zur XJustiz-Version. Der eNoVA-Editor unterstützt derzeit nur Version %s."
+                            .formatted(SUPPORTED_XJUSTIZ_VERSION),
+                    List.of()
+            );
+        }
+
+        if (!SUPPORTED_XJUSTIZ_VERSION.equals(xjustizVersion)) {
+            throw new AppException(
+                    "Die Nachricht verwendet XJustiz-Version „%s“. Der eNoVA-Editor unterstützt derzeit nur Version %s."
+                            .formatted(xjustizVersion, SUPPORTED_XJUSTIZ_VERSION),
                     List.of()
             );
         }
