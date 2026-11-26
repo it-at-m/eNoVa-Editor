@@ -160,6 +160,10 @@
 		content: ", ";
 	}
 	
+	.sonderfall-sub-item:not(:last-child)::after {
+		content: ", ";
+	}
+	
 	.grundstueck-adresse {
         margin-top: 10px;
         padding-top: 10px;
@@ -446,73 +450,45 @@
 		</div>
 	
 
-
+    
         <span class="label">Sonderfall:</span>
-
+    
 	
-	
-	<div class="andere_buchungsstelle">	
-		
-		
-		
-			
-		
-		
-		
-	</div>
-  
 	<div class="andere_buchungsstelle">	
 		
 			<div class="sonderfall-item">Erbbaurecht</div>
 		
 		
 		
-			
-		
-		
-		
-	</div>
-  
-	<div class="andere_buchungsstelle">	
-		
-		
-		
 			<div class="sonderfall-item">Nutzungsrecht</div>
 		
-			
 		
 		
-		
-	</div>
-  
-	<div class="andere_buchungsstelle">	
+			<div class="sonderfall-item">WEG-Einheit(en):
 		
 		
+			<span class="sonderfall-sub-item">Wohnung</span>
 		
-			
-		
-			<div class="sonderfall-item">WEG-Einheit: Wohnung</div>
-		
+			<span class="sonderfall-sub-item">Wohnung 2</span>
 		
 		
-	</div>
-  
-	<div class="andere_buchungsstelle">	
-		
-		
-		
-			
+			</div>
 		
 		
 		
 			<div class="sonderfall-item">Miteigentum:
+		
+		
+			<span class="sonderfall-sub-item">
 							
 								17 Quadratmeter
 							
-						</div>
+						</span>
+		
+		
+			</div>
 		
 	</div>
-  
   
   <div class="grundstueck-adresse">
   
@@ -619,19 +595,21 @@
 		</div>
 	
 
-
-	
+    
 	
 	<div class="andere_buchungsstelle">	
 		
 		
 		
-			
+		
+		
+		
+		
+		
 		
 		
 		
 	</div>
-  
   
   <div class="grundstueck-adresse">
   
@@ -686,7 +664,7 @@
       
       Max
       Besitzer
-
+      
 
       <br>
 
@@ -698,10 +676,10 @@
       80337
       München
 
-
+      
         <br><span class="geburt">Geboren am 13.08.1965</span>
-
-
+      
+      
     </div>
 
     <script>
@@ -735,7 +713,7 @@
       
       Yvonne
       Vertreterin
-
+      
 
       <br>
 
@@ -747,10 +725,10 @@
       1136
       Wien
 
-
+      
         <br><span class="geburt">Geboren am 28.09.1978</span>
-
-
+      
+      
     </div>
 
     <script>

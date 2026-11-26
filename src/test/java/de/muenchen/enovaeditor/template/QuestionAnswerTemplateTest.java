@@ -195,8 +195,8 @@ class QuestionAnswerTemplateTest {
                 assertTrue(blocks[property].lastIndexOf("Größe:") < blocks[property].indexOf("Sonderfall:</span>"));
                 assertTrue(blocks[property].indexOf("Sonderfall:</span>") < blocks[property].indexOf(">Erbbaurecht</div>"));
             }
-            assertTrue(blocks[1].matches("(?s).*WEG-Einheit:\\s*Wohnung.*"));
-            assertTrue(blocks[1].matches("(?s).*Miteigentum:\\s*17 Quadratmeter.*"));
+            assertTrue(blocks[1].matches("(?s).*WEG-Einheit\\(en\\):.*Wohnung.*"));
+            assertTrue(blocks[1].matches("(?s).*Miteigentum:.*17 Quadratmeter.*"));
             assertFalse(html.contains("getElementById('sonderfall')"));
         }
     }

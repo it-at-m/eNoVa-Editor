@@ -160,6 +160,10 @@
 		content: ", ";
 	}
 	
+	.sonderfall-sub-item:not(:last-child)::after {
+		content: ", ";
+	}
+	
 	.grundstueck-adresse {
         margin-top: 10px;
         padding-top: 10px;
@@ -462,29 +466,39 @@
 		</div>
 	{{/each}}
 
-      {{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle[tns:erbbaurecht or tns:nutzungsrecht or tns:wegEinheit or tns:miteigentumP3GBO])[1]}}
+    {{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle[tns:erbbaurecht or tns:nutzungsrecht or tns:wegEinheit or tns:miteigentumP3GBO])[1]}}
         <span class="label">Sonderfall:</span>
-      {{/each}}
+    {{/each}}
 	
-	{{#each xpath:tns:buchungsstelle/tns:auswahl_buchungsstelle}}
 	<div class="andere_buchungsstelle">	
-		{{#each xpath:tns:erbbaurecht}}
+		{{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:erbbaurecht)[1]}}
 			<div class="sonderfall-item">Erbbaurecht</div>
 		{{/each}}
 		
-		{{#each xpath:tns:nutzungsrecht}}
+		{{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:nutzungsrecht)[1]}}
 			<div class="sonderfall-item">Nutzungsrecht</div>
 		{{/each}}
-			
-		{{#each xpath:tns:wegEinheit}}
-			<div class="sonderfall-item">WEG-Einheit: {{xpath:tns:sondereigentum/tns:bezeichnung}}</div>
+		
+		{{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:wegEinheit)[1]}}
+			<div class="sonderfall-item">WEG-Einheit(en):
+		{{/each}}
+		{{#each xpath:tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:wegEinheit}}
+			<span class="sonderfall-sub-item">{{xpath:tns:sondereigentum/tns:bezeichnung}}</span>
+		{{/each}}
+		{{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:wegEinheit)[1]}}
+			</div>
 		{{/each}}
 		
-		{{#each xpath:tns:miteigentumP3GBO}}
-			<div class="sonderfall-item">Miteigentum: {{xpath:tns:anteil}}</div>
+		{{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:miteigentumP3GBO)[1]}}
+			<div class="sonderfall-item">Miteigentum:
+		{{/each}}
+		{{#each xpath:tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:miteigentumP3GBO}}
+			<span class="sonderfall-sub-item">{{xpath:tns:anteil}}</span>
+		{{/each}}
+		{{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:miteigentumP3GBO)[1]}}
+			</div>
 		{{/each}}
 	</div>
-  {{/each}}
   
   <div class="grundstueck-adresse">
   
