@@ -248,6 +248,8 @@
 					</tns:grundstueck>
 				</tns:auswahl_buchungsstelle>
 			</tns:buchungsstelle>
+		</tns:beschreibungDesBetroffenenRechts>
+		<tns:beschreibungDesBetroffenenRechts>
 			<tns:buchungsstelle>
 				<tns:lfdNummer>4</tns:lfdNummer>
 				<tns:auswahl_buchungsstelle>
@@ -259,6 +261,8 @@
 					</tns:erbbaurecht>
 				</tns:auswahl_buchungsstelle>
 			</tns:buchungsstelle>
+		<tns:beschreibungDesBetroffenenRechts>
+		</tns:beschreibungDesBetroffenenRechts>
 			<tns:buchungsstelle>
 				<tns:lfdNummer>5</tns:lfdNummer>
 				<tns:auswahl_buchungsstelle>
@@ -269,6 +273,8 @@
 					</tns:nutzungsrecht>
 				</tns:auswahl_buchungsstelle>
 			</tns:buchungsstelle>
+		</tns:beschreibungDesBetroffenenRechts>
+		<tns:beschreibungDesBetroffenenRechts>
 			<tns:buchungsstelle>
 				<tns:lfdNummer>6</tns:lfdNummer>
 				<tns:auswahl_buchungsstelle>
@@ -280,6 +286,8 @@
 					</tns:wegEinheit>
 				</tns:auswahl_buchungsstelle>
 			</tns:buchungsstelle>
+		</tns:beschreibungDesBetroffenenRechts>
+		<tns:beschreibungDesBetroffenenRechts>
 			<tns:buchungsstelle>
 				<tns:lfdNummer>7</tns:lfdNummer>
 				<tns:auswahl_buchungsstelle>
@@ -294,6 +302,8 @@
 					</tns:miteigentumP3GBO>
 				</tns:auswahl_buchungsstelle>
 			</tns:buchungsstelle>
+		</tns:beschreibungDesBetroffenenRechts>
+		<tns:beschreibungDesBetroffenenRechts>
 			<tns:buchungsstelle>
 				<tns:lfdNummer>8</tns:lfdNummer>
 				<tns:auswahl_buchungsstelle>
