@@ -519,6 +519,9 @@ XJustiz response XML
         If there is no <code>caseworkers.xml</code> in the installation directory,
         the contact data requires write access to the user directory
         <code>%APPDATA%\eNoVA-Editor</code>.
+        The editor also stores the folder last used for “XML öffnen” there, in
+        <code>editor-state.properties</code>. Without write access, it remembers
+        the folder only until the editor is closed.
         When configuration files such as
         <code>sender-config.xml</code>,
         <code>caseworkers.xml</code>,
