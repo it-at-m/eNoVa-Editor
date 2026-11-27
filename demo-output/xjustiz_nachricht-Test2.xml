@@ -261,8 +261,8 @@
 					</tns:erbbaurecht>
 				</tns:auswahl_buchungsstelle>
 			</tns:buchungsstelle>
-		<tns:beschreibungDesBetroffenenRechts>
 		</tns:beschreibungDesBetroffenenRechts>
+		<tns:beschreibungDesBetroffenenRechts>
 			<tns:buchungsstelle>
 				<tns:lfdNummer>5</tns:lfdNummer>
 				<tns:auswahl_buchungsstelle>
