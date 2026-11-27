@@ -65,12 +65,12 @@ class QuestionAnswerTemplateTest {
     void keepsCaseworkerAndNotaryDetailsInOutgoingDocumentWithNestedReferences() throws Exception {
         String html = renderer.render(templateLoader.loadOutputTemplate(), new XmlLoader().load(OUTPUT));
 
-        assertTrue(html.contains("Antonia"));
-        assertTrue(html.contains("Allenthaler"));
-        assertTrue(html.contains("vorkaufsrecht@hinterhugeldapfing.de"));
-        assertTrue(html.contains("LH 2026-1234"));
-        assertTrue(html.contains("Hinterhugeldapfing,"));
-        assertTrue(html.contains("24.10.2026"));
+        assertTrue(html.contains("Rupert"));
+        assertTrue(html.contains("Späth"));
+        assertTrue(html.contains("enova-editor@muenchen.de"));
+        assertTrue(html.matches("(?s).*Aktenzeichen:\\s*asdf\\s*<.*"));
+        assertTrue(html.contains("München,"));
+        assertTrue(html.contains("26.11.2026"));
         assertTrue(html.contains("Dr."));
         assertTrue(html.contains("Martin"));
         assertTrue(html.contains("Müller"));
@@ -175,28 +175,24 @@ class QuestionAnswerTemplateTest {
     }
 
     @Test
-    void keepsSpecialRightsAndTheirHeadingsWithinEachProperty() throws Exception {
-        Document document = new XmlLoader().load(PROPERTY_OUTPUT);
-        List<Node> properties = new XPathReader().findNodes(document, "//tns:beschreibungDesBetroffenenRechts");
-        Node right = new XPathReader().findNodes(properties.get(0),
-                "tns:buchungsstelle[tns:auswahl_buchungsstelle/tns:erbbaurecht]").get(0);
-        properties.get(1).insertBefore(right.cloneNode(true),
-                new XPathReader().findNodes(properties.get(1), "tns:anschrift").get(0));
-
-        for (TemplateSource template : List.of(templateLoader.loadInputTemplate(), templateLoader.loadOutputTemplate())) {
+    void rendersSpecialRightsInSeparatePropertyBlocks() throws Exception {
+        for (boolean outgoing : List.of(false, true)) {
+            Document document = new XmlLoader().load(outgoing ? PROPERTY_OUTPUT : PROPERTY_INPUT);
+            TemplateSource template = outgoing ? templateLoader.loadOutputTemplate() : templateLoader.loadInputTemplate();
             String html = renderer.render(template, document);
             String[] blocks = html.split("<div class=\"grundstueck-block\">", -1);
-            assertEquals(3, blocks.length);
-            assertEquals(1, count(blocks[1], "Sonderfall:</span>"));
-            assertEquals(1, count(blocks[2], "Sonderfall:</span>"));
-            assertEquals(1, count(blocks[1], ">Erbbaurecht</div>"));
-            assertEquals(1, count(blocks[2], ">Erbbaurecht</div>"));
-            for (int property = 1; property <= 2; property++) {
-                assertTrue(blocks[property].lastIndexOf("Größe:") < blocks[property].indexOf("Sonderfall:</span>"));
-                assertTrue(blocks[property].indexOf("Sonderfall:</span>") < blocks[property].indexOf(">Erbbaurecht</div>"));
-            }
-            assertTrue(blocks[1].matches("(?s).*WEG-Einheit\\(en\\):.*Wohnung.*"));
-            assertTrue(blocks[1].matches("(?s).*Miteigentum:.*17 Quadratmeter.*"));
+            assertEquals(8, blocks.length, "One block per property plus the document header");
+
+            String specialBooking = "<div class=\"andere_buchungsstelle\">";
+            assertFalse(blocks[1].contains(specialBooking));
+            assertFalse(blocks[7].contains(specialBooking));
+            assertTrue(blocks[2].contains("Erbbaurecht</span>"));
+            assertTrue(blocks[3].contains("Nutzungsrecht</span>"));
+            assertTrue(blocks[4].matches("(?s).*WEG-Einheit:</span>\\s*Wohnung\\s*<.*"));
+            assertTrue(blocks[5].matches("(?s).*Miteigentum:</span>\\s*17 Quadratmeter\\s*<.*"));
+            assertTrue(blocks[6].matches("(?s).*WEG-Einheit:</span>\\s*Wohnung 2\\s*<.*"));
+            assertTrue(blocks[6].contains("Aberlestraße"));
+            assertFalse(blocks[2].contains("Straße/Hausnummer:"));
             assertFalse(html.contains("getElementById('sonderfall')"));
         }
     }

@@ -6,11 +6,11 @@
    <tns:nachrichtenkopf xjustizVersion="3.6.2"><!--In der Antwort muss der Nachrichtenkopf praktisch komplett neu geschrieben werden. 
 			Lediglich die Absenderdaten können für den Notar-Empfänger verwendet werden. 
 			Derzeit gehe ich davon aus, dass das Grundbuchamt eine eigene Nachricht bekommt, das bedeutet, dass dieses separat als Empfänger in einer eigenene XML-Datei zu benennen ist.--><!--eNoVA: Erstellungszeitpunkt wurde durch den aktuellen Systemzeitpunkt ersetzt-->
-      <tns:erstellungszeitpunkt>2026-10-24T10:49:51.3285491+02:00</tns:erstellungszeitpunkt>
+      <tns:erstellungszeitpunkt>2026-11-26T12:49:38.1341809+01:00</tns:erstellungszeitpunkt>
       <tns:absender>
          <tns:informationen><!--Type.GDS.Kommunikationspartner-->
             <tns:auswahl_kommunikationspartner><!--eNoVA: Kommunikationspartner wurde durch den Wert aus sender-config.xml ersetzt-->
-               <tns:sonstige>Behördenname in sender-config.xml eintragen</tns:sonstige>
+               <tns:sonstige>LH München</tns:sonstige>
             </tns:auswahl_kommunikationspartner>
             <tns:auswahl_verweisGrunddaten><!--optional--><!--eNoVA: Rollennummer wurde durch die nächste freie Rollennummer aus den vorhandenen Verfahrensdaten ersetzt-->
                <tns:ref.rollennummer>
@@ -20,9 +20,9 @@
             </tns:auswahl_verweisGrunddaten>
          </tns:informationen>
          <!--eNoVA: Aktenzeichen wurde durch den Wert aus dem Eingabefeld ersetzt-->
-         <tns:aktenzeichen>LH 2026-1234</tns:aktenzeichen>
+         <tns:aktenzeichen>asdf</tns:aktenzeichen>
          <!--eNoVA: Nachrichten-ID wurde durch eine von der Anwendung neu erzeugte eindeutige Nachrichten-ID ersetzt-->
-         <tns:eigeneNachrichtenID>b6bd0fbd-2ee4-426e-9ebf-26f0a718dd98</tns:eigeneNachrichtenID>
+         <tns:eigeneNachrichtenID>53ff9f59-88c8-465e-8d7e-cd4e2cb7fc1c</tns:eigeneNachrichtenID>
       </tns:absender>
       <!--eNoVA: Empfängerdaten wurden aus den Daten des ursprünglichen Absenders übernommen-->
       <tns:empfaenger>
@@ -59,7 +59,7 @@
          <!--alphanumerisch-->
          <tns:instanzdaten>
             <tns:auswahl_instanzbehoerde><!--Im Regelfall sollte dies identisch mit nachrichtenkopf.empfaenger sein --><!--eNoVA: Instanzbehörde wurde durch den Wert aus sender-config.xml ersetzt-->
-               <tns:sonstige>Behördenname in sender-config.xml eintragen</tns:sonstige>
+               <tns:sonstige>LH München</tns:sonstige>
             </tns:auswahl_instanzbehoerde>
             <tns:verfahrensgegenstand>
                <tns:gegenstand>Ersuchen Genehmigung GrdstVG; 100000019136</tns:gegenstand>
@@ -192,25 +192,21 @@
                <tns:beteiligtennummer>4</tns:beteiligtennummer>
                <tns:auswahl_beteiligter>
                   <tns:natuerlichePerson>
-                     <tns:vollerName><!-- Type.GDS.NameNatuerlichePerson -->
-                        <tns:vorname>Antonia</tns:vorname>
-                        <tns:nachname>Allenthaler</tns:nachname>
+                     <tns:vollerName>
+                        <tns:vorname>Rupert</tns:vorname>
+                        <tns:nachname>Späth</tns:nachname>
                      </tns:vollerName>
-                     <tns:anschrift><!-- 003='Dienst-/Geschäftsadresse' -->
-                        <tns:anschriftstyp listVersionID="3.0"><!--https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.anschriftstyp -->
+                     <tns:anschrift>
+                        <tns:anschriftstyp listVersionID="3.0">
                            <code>003</code>
                         </tns:anschriftstyp>
-                        <tns:anschriftenzusatz>Gemeinde Hinterhugeldapfing, Abteilung 3</tns:anschriftenzusatz>
-                        <tns:strasse>Hauptstrasse</tns:strasse>
-                        <tns:hausnummer>2</tns:hausnummer>
-                        <tns:postleitzahl>98776</tns:postleitzahl>
-                        <tns:ort>Hinterhugeldapfing</tns:ort>
+                        <tns:ort>München</tns:ort>
                      </tns:anschrift>
-                     <tns:telekommunikation><!-- 001='E-Mail' -->
-                        <tns:telekommunikationsart listVersionID="2.3"><!--https://www.xrepository.de/details/urn:xoev-de:xjustiz:codeliste:gds.telekommunikationsart -->
+                     <tns:telekommunikation>
+                        <tns:telekommunikationsart listVersionID="2.3">
                            <code>001</code>
                         </tns:telekommunikationsart>
-                        <tns:verbindung>vorkaufsrecht@hinterhugeldapfing.de</tns:verbindung>
+                        <tns:verbindung>enova-editor@muenchen.de</tns:verbindung>
                      </tns:telekommunikation>
                   </tns:natuerlichePerson>
                </tns:auswahl_beteiligter>
@@ -265,54 +261,42 @@
             <tns:sachentscheidung listVersionID="1.1">
                <code>019</code>
             </tns:sachentscheidung>
+            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GrdstVG (011)</tns:hinweise_sonstige>
             <!--eNoVA: Alle Käufer und Verkäufer wurden anhand ihrer Rollennummern als Adressaten der Sachentscheidung referenziert-->
             <tns:adressatDerSachentscheidung>
-               <tns:ref.rollennummer>
-                  <tns:ref.rollennummer>3</tns:ref.rollennummer>
-               </tns:ref.rollennummer>
+               <tns:ref.rollennummer>3</tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
             <tns:adressatDerSachentscheidung>
-               <tns:ref.rollennummer>
-                  <tns:ref.rollennummer>4</tns:ref.rollennummer>
-               </tns:ref.rollennummer>
+               <tns:ref.rollennummer>4</tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
-            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GrdstVG (011)</tns:hinweise_sonstige>
          </tns:sachentscheidung>
          <!--eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt-->
          <tns:sachentscheidung>
             <tns:sachentscheidung listVersionID="1.1">
                <code>021</code>
             </tns:sachentscheidung>
+            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GVO (012)</tns:hinweise_sonstige>
             <!--eNoVA: Alle Käufer und Verkäufer wurden anhand ihrer Rollennummern als Adressaten der Sachentscheidung referenziert-->
             <tns:adressatDerSachentscheidung>
-               <tns:ref.rollennummer>
-                  <tns:ref.rollennummer>3</tns:ref.rollennummer>
-               </tns:ref.rollennummer>
+               <tns:ref.rollennummer>3</tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
             <tns:adressatDerSachentscheidung>
-               <tns:ref.rollennummer>
-                  <tns:ref.rollennummer>4</tns:ref.rollennummer>
-               </tns:ref.rollennummer>
+               <tns:ref.rollennummer>4</tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
-            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GVO (012)</tns:hinweise_sonstige>
          </tns:sachentscheidung>
          <!--eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt-->
          <tns:sachentscheidung>
             <tns:sachentscheidung listVersionID="1.1">
                <code>023</code>
             </tns:sachentscheidung>
+            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte und hilfsweise um Erteilung eines Negativattests (013)</tns:hinweise_sonstige>
             <!--eNoVA: Alle Käufer und Verkäufer wurden anhand ihrer Rollennummern als Adressaten der Sachentscheidung referenziert-->
             <tns:adressatDerSachentscheidung>
-               <tns:ref.rollennummer>
-                  <tns:ref.rollennummer>3</tns:ref.rollennummer>
-               </tns:ref.rollennummer>
+               <tns:ref.rollennummer>3</tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
             <tns:adressatDerSachentscheidung>
-               <tns:ref.rollennummer>
-                  <tns:ref.rollennummer>4</tns:ref.rollennummer>
-               </tns:ref.rollennummer>
+               <tns:ref.rollennummer>4</tns:ref.rollennummer>
             </tns:adressatDerSachentscheidung>
-            <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte und hilfsweise um Erteilung eines Negativattests (013)</tns:hinweise_sonstige>
          </tns:sachentscheidung>
       </tns:auswahl_GegenstandDerNachricht>
       <tns:datenDerUrkunde>

@@ -6,7 +6,7 @@
    <tns:nachrichtenkopf xjustizVersion="3.6.2"><!--In der Antwort muss der Nachrichtenkopf praktisch komplett neu geschrieben werden. 
 			Lediglich die Absenderdaten können für den Notar-Empfänger verwendet werden. 
 			Derzeit gehe ich davon aus, dass das Grundbuchamt eine eigene Nachricht bekommt, das bedeutet, dass dieses separat als Empfänger in einer eigenene XML-Datei zu benennen ist.--><!--eNoVA: Erstellungszeitpunkt wurde durch den aktuellen Systemzeitpunkt ersetzt-->
-      <tns:erstellungszeitpunkt>2026-11-21T17:05:17.1951567+01:00</tns:erstellungszeitpunkt>
+      <tns:erstellungszeitpunkt>2026-11-27T08:19:25.6640883+01:00</tns:erstellungszeitpunkt>
       <tns:absender>
          <tns:informationen><!--Type.GDS.Kommunikationspartner-->
             <tns:auswahl_kommunikationspartner><!--eNoVA: Kommunikationspartner wurde durch den Wert aus sender-config.xml ersetzt-->
@@ -21,7 +21,7 @@
          <!--eNoVA: Aktenzeichen wurde durch den Wert aus dem Eingabefeld ersetzt-->
          <tns:aktenzeichen>asdf</tns:aktenzeichen>
          <!--eNoVA: Nachrichten-ID wurde durch eine von der Anwendung neu erzeugte eindeutige Nachrichten-ID ersetzt-->
-         <tns:eigeneNachrichtenID>6e6e9eaf-2506-4e81-9b3c-1cc873cd2116</tns:eigeneNachrichtenID>
+         <tns:eigeneNachrichtenID>ec928b3c-4425-4c9f-b73c-ef8948efa4c8</tns:eigeneNachrichtenID>
          <!--TODO: Es ist zu klären, wie wir die eigene Nachrichten-ID bekommen. -->
       </tns:absender>
       <!--eNoVA: Empfängerdaten wurden aus den Daten des ursprünglichen Absenders übernommen-->
@@ -262,6 +262,13 @@
                <code>019</code>
             </tns:sachentscheidung>
             <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GrdstVG (011)</tns:hinweise_sonstige>
+            <!--eNoVA: Alle Käufer und Verkäufer wurden anhand ihrer Rollennummern als Adressaten der Sachentscheidung referenziert-->
+            <tns:adressatDerSachentscheidung>
+               <tns:ref.rollennummer>3</tns:ref.rollennummer>
+            </tns:adressatDerSachentscheidung>
+            <tns:adressatDerSachentscheidung>
+               <tns:ref.rollennummer>4</tns:ref.rollennummer>
+            </tns:adressatDerSachentscheidung>
          </tns:sachentscheidung>
          <!--eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt-->
          <tns:sachentscheidung>
@@ -269,6 +276,13 @@
                <code>021</code>
             </tns:sachentscheidung>
             <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der Genehmigung nach § 2 GVO (012)</tns:hinweise_sonstige>
+            <!--eNoVA: Alle Käufer und Verkäufer wurden anhand ihrer Rollennummern als Adressaten der Sachentscheidung referenziert-->
+            <tns:adressatDerSachentscheidung>
+               <tns:ref.rollennummer>3</tns:ref.rollennummer>
+            </tns:adressatDerSachentscheidung>
+            <tns:adressatDerSachentscheidung>
+               <tns:ref.rollennummer>4</tns:ref.rollennummer>
+            </tns:adressatDerSachentscheidung>
          </tns:sachentscheidung>
          <!--eNoVA: Ersuchen um Sachentscheidung wurde durch die zugehörige ausgewählte Sachentscheidung ersetzt-->
          <tns:sachentscheidung>
@@ -276,6 +290,13 @@
                <code>023</code>
             </tns:sachentscheidung>
             <tns:hinweise_sonstige>Antwort auf die Frage: Erteilung der familiengerichtlichen Genehmigung für sämtliche in der Urkunde enthaltenen genehmigungsbedürftigen Rechtsgeschäfte und hilfsweise um Erteilung eines Negativattests (013)</tns:hinweise_sonstige>
+            <!--eNoVA: Alle Käufer und Verkäufer wurden anhand ihrer Rollennummern als Adressaten der Sachentscheidung referenziert-->
+            <tns:adressatDerSachentscheidung>
+               <tns:ref.rollennummer>3</tns:ref.rollennummer>
+            </tns:adressatDerSachentscheidung>
+            <tns:adressatDerSachentscheidung>
+               <tns:ref.rollennummer>4</tns:ref.rollennummer>
+            </tns:adressatDerSachentscheidung>
          </tns:sachentscheidung>
       </tns:auswahl_GegenstandDerNachricht>
       <tns:datenDerUrkunde>
@@ -326,6 +347,8 @@
                </tns:grundstueck>
             </tns:auswahl_buchungsstelle>
          </tns:buchungsstelle>
+      </tns:beschreibungDesBetroffenenRechts>
+      <tns:beschreibungDesBetroffenenRechts>
          <tns:buchungsstelle>
             <tns:lfdNummer>4</tns:lfdNummer>
             <tns:auswahl_buchungsstelle>
@@ -337,6 +360,8 @@
                </tns:erbbaurecht>
             </tns:auswahl_buchungsstelle>
          </tns:buchungsstelle>
+      </tns:beschreibungDesBetroffenenRechts>
+      <tns:beschreibungDesBetroffenenRechts>
          <tns:buchungsstelle>
             <tns:lfdNummer>5</tns:lfdNummer>
             <tns:auswahl_buchungsstelle>
@@ -347,6 +372,8 @@
                </tns:nutzungsrecht>
             </tns:auswahl_buchungsstelle>
          </tns:buchungsstelle>
+      </tns:beschreibungDesBetroffenenRechts>
+      <tns:beschreibungDesBetroffenenRechts>
          <tns:buchungsstelle>
             <tns:lfdNummer>6</tns:lfdNummer>
             <tns:auswahl_buchungsstelle>
@@ -358,6 +385,8 @@
                </tns:wegEinheit>
             </tns:auswahl_buchungsstelle>
          </tns:buchungsstelle>
+      </tns:beschreibungDesBetroffenenRechts>
+      <tns:beschreibungDesBetroffenenRechts>
          <tns:buchungsstelle>
             <tns:lfdNummer>7</tns:lfdNummer>
             <tns:auswahl_buchungsstelle>
@@ -372,6 +401,8 @@
                </tns:miteigentumP3GBO>
             </tns:auswahl_buchungsstelle>
          </tns:buchungsstelle>
+      </tns:beschreibungDesBetroffenenRechts>
+      <tns:beschreibungDesBetroffenenRechts>
          <tns:buchungsstelle>
             <tns:lfdNummer>8</tns:lfdNummer>
             <tns:auswahl_buchungsstelle>

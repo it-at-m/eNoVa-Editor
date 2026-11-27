@@ -160,8 +160,10 @@
 		content: ", ";
 	}
 	
-	.sonderfall-sub-item:not(:last-child)::after {
-		content: ", ";
+	.andere_buchungsstelle {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed #d9e0e7;
 	}
 	
 	.grundstueck-adresse {
@@ -169,7 +171,6 @@
         padding-top: 10px;
         border-top: 1px dashed #d9e0e7;
     }
-
 
 
       ol {
@@ -414,17 +415,23 @@
     <div class="grundstueck-block">
 
       <div>
-        <span class="label">Amtsgericht:</span>
+		{{#each xpath:tns:bundeslandfremdesGrundbuchblatt/tns:amtsgericht}}
+			<span class="label">Amtsgericht:</span>
+		{{/each}}
         {{xpath:tns:bundeslandfremdesGrundbuchblatt/tns:amtsgericht}}
       </div>
 
       <div>
-        <span class="label">Grundbuchbezirk:</span>
+		{{#each xpath:tns:bundeslandfremdesGrundbuchblatt/tns:grundbuchbezirk}}
+			<span class="label">Grundbuchbezirk:</span>
+		{{/each}}
         {{xpath:tns:bundeslandfremdesGrundbuchblatt/tns:grundbuchbezirk}}
       </div>
 
       <div>
-        <span class="label">Grundbuchblatt:</span>
+		{{#each xpath:tns:bundeslandfremdesGrundbuchblatt/tns:grundbuchblatt}}
+			<span class="label">Grundbuchblatt:</span>
+		{{/each}}
         {{xpath:tns:bundeslandfremdesGrundbuchblatt/tns:grundbuchblatt}}
       </div>
 
@@ -464,65 +471,67 @@
 			</div>
 			{{/each}}
 		</div>
-	{{/each}}
+	  {{/each}}
 
-    {{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle[tns:erbbaurecht or tns:nutzungsrecht or tns:wegEinheit or tns:miteigentumP3GBO])[1]}}
-        <span class="label">Sonderfall:</span>
-    {{/each}}
-	
-	<div class="andere_buchungsstelle">	
-		{{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:erbbaurecht)[1]}}
-			<div class="sonderfall-item">Erbbaurecht</div>
-		{{/each}}
+	  {{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle[tns:erbbaurecht or tns:nutzungsrecht or tns:wegEinheit or tns:miteigentumP3GBO])[1]}}
+		<div class="andere_buchungsstelle">	
+	  {{/each}}
+		<div>
+			{{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:erbbaurecht)}}
+				<span class="label">Erbbaurecht</span>
+			{{/each}}
+		</div>
 		
-		{{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:nutzungsrecht)[1]}}
-			<div class="sonderfall-item">Nutzungsrecht</div>
-		{{/each}}
+		<div>
+			{{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:nutzungsrecht)}}
+				<span class="label">Nutzungsrecht</span>
+			{{/each}}
+		</div>
 		
-		{{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:wegEinheit)[1]}}
-			<div class="sonderfall-item">WEG-Einheit(en):
-		{{/each}}
-		{{#each xpath:tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:wegEinheit}}
-			<span class="sonderfall-sub-item">{{xpath:tns:sondereigentum/tns:bezeichnung}}</span>
-		{{/each}}
-		{{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:wegEinheit)[1]}}
-			</div>
-		{{/each}}
+		<div>
+			{{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:wegEinheit)}}
+				<span class="label">WEG-Einheit:</span>{{xpath:tns:sondereigentum/tns:bezeichnung}}
+			{{/each}}
+		</div>
 		
-		{{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:miteigentumP3GBO)[1]}}
-			<div class="sonderfall-item">Miteigentum:
-		{{/each}}
-		{{#each xpath:tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:miteigentumP3GBO}}
-			<span class="sonderfall-sub-item">{{xpath:tns:anteil}}</span>
-		{{/each}}
-		{{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:miteigentumP3GBO)[1]}}
-			</div>
-		{{/each}}
-	</div>
+		<div>
+			{{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle/tns:miteigentumP3GBO)}}
+				<span class="label">Miteigentum:</span>{{xpath:tns:anteil}}
+			{{/each}}
+		</div>
+	  {{#each xpath:(tns:buchungsstelle/tns:auswahl_buchungsstelle[tns:erbbaurecht or tns:nutzungsrecht or tns:wegEinheit or tns:miteigentumP3GBO])[1]}}
+		</div>
+	  {{/each}}
   
-  <div class="grundstueck-adresse">
-  
-    <div>
-		<span class="label">Straße/Hausnummer:</span>
-		{{xpath:tns:anschrift/tns:strasse}}
-        {{xpath:tns:anschrift/tns:hausnummer}}		
-	  </div>
-
-	  <div>
-		<span class="label">PLZ/Ort:</span>
-		{{xpath:tns:anschrift/tns:postleitzahl}}
-        {{xpath:tns:anschrift/tns:ort}}	
-	  </div>  
+		<div class="grundstueck-adresse">
 	  
-	  <div>
-		<span class="label">Grundstücksart:</span>
-		{{#each xpath:tns:weitereAngabenZumGrundstueck/tns:grundstuecksart}}
-			{{codelist:grundstuecksart xpath:code}}
-		{{/each}} 
-	  </div>  
-  </div>
+		  <div>	  
+			{{#each xpath:tns:anschrift/tns:strasse}}
+				<span class="label">Straße/Hausnummer:</span>
+			{{/each}}
+			{{xpath:tns:anschrift/tns:strasse}}
+			{{xpath:tns:anschrift/tns:hausnummer}}		
+		  </div>
 
-</div>
+		  <div>
+			{{#each xpath:tns:anschrift/tns:ort}}
+				<span class="label">PLZ/Ort:</span>
+			{{/each}}
+			{{xpath:tns:anschrift/tns:postleitzahl}}
+			{{xpath:tns:anschrift/tns:ort}}	
+		  </div>  
+		  
+		  <div>
+			{{#each xpath:tns:weitereAngabenZumGrundstueck/tns:grundstuecksart}}
+				<span class="label">Grundstücksart:</span>
+			{{/each}}
+			{{#each xpath:tns:weitereAngabenZumGrundstueck/tns:grundstuecksart}}
+				{{codelist:grundstuecksart xpath:code}}
+			{{/each}} 
+		  </div>  
+		</div>
+
+	</div>
 
     {{/each}}
 

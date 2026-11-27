@@ -15,6 +15,7 @@ class AnswerTransformerTest {
     private static final File INPUT = new File(
             "demo-output/xjustiz_nachricht_beispiel_ersuchenSachentscheidung_mehrfach.xml"
     );
+    private static final File PROPERTY_INPUT = new File("demo-output/xjustiz_nachricht-Test2.xml");
 
     private final XmlLoader xmlLoader = new XmlLoader();
     private final XPathReader xpathReader = new XPathReader();
@@ -47,6 +48,22 @@ class AnswerTransformerTest {
                 "Antwort auf die Frage: Zweite Frage (012)"
         ), requestHints(output));
         assertEquals(0, new ErsuchenSachentscheidungReader().read(output).size());
+    }
+
+    @Test
+    void includesOwnerAndLegalRepresentativeAsAddresseesForEachDecision() throws Exception {
+        Document output = transform(xmlLoader.load(PROPERTY_INPUT), List.of(
+                new DecisionAnswer("011", "Erste Frage", "019"),
+                new DecisionAnswer("012", "Zweite Frage", "021")));
+
+        List<Node> decisions = xpathReader.findNodes(output, "//tns:auswahl_GegenstandDerNachricht/tns:sachentscheidung");
+        assertEquals(2, decisions.size());
+        for (Node decision : decisions) {
+            List<String> addressees = xpathReader.findNodes(decision,
+                            "tns:adressatDerSachentscheidung/tns:ref.rollennummer")
+                    .stream().map(Node::getTextContent).toList();
+            assertEquals(List.of("3", "4"), addressees);
+        }
     }
 
     private Document transform(Document input, List<DecisionAnswer> decisions) throws Exception {
