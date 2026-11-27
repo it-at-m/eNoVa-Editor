@@ -61,12 +61,12 @@
     <xsl:variable name="nextParticipantNumber" select="max((//tns:verfahrensdaten/tns:beteiligung/tns:beteiligter/tns:beteiligtennummer, 0)) + 1"/>
 
 
-    <!-- Ermittelt alle Rollennummern der Käufer (072) und Verkäufer (168) aus den Grunddaten -->
+    <!-- Ermittelt alle Rollennummern der Eigentümer (057), Käufer (072), Gesetzlicher Vertreter (088) und Verkäufer (168) aus den Grunddaten -->
     <xsl:variable name="addresseeRoleNumbers"
                   select="/tns:nachricht.enova.entscheidung.2900003
                       /tns:grunddaten/tns:verfahrensdaten
                       /tns:beteiligung/tns:rolle
-                      [tns:rollenbezeichnung/code = ('072', '168')]
+                      [tns:rollenbezeichnung/code = ('057', '072', '088', '168')]
                       /tns:rollennummer"/>
 
 
