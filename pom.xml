@@ -195,7 +195,14 @@
                                             <fileset dir="${project.basedir}/codelists"/>
                                         </copy>
                                         <copy
+                                                todir="${project.build.directory}/distribution/eNoVA-editor/xsd">
+                                            <fileset dir="${project.basedir}/xsd"/>
+                                        </copy>
+                                        <copy
                                                 file="${project.basedir}/src/main/dist/eNoVA-editor.cmd"
+                                                todir="${project.build.directory}/distribution/eNoVA-editor"/>
+                                        <copy
+                                                file="${project.basedir}/src/main/dist/eNoVA-schema-validation.cmd"
                                                 todir="${project.build.directory}/distribution/eNoVA-editor"/>
                                         <zip
                                                 destfile="${project.build.directory}/${project.artifactId}-${project.version}.zip"
