@@ -1,0 +1,17 @@
+name: trivy
+
+on:
+  pull_request:
+  schedule:
+    - cron: '0 3 * * *' # Daily at 03:00 UTC
+
+jobs:
+  trivy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write # Upload SARIF results to the GitHub Security tab
+    steps:
+      - uses: it-at-m/lhm_actions/action-templates/actions/action-trivy@9bde6576151908ace5f517ca623fea3b98600cb7 # v1.6.5
+        with:
+          path: . # Single Maven project at the repository root

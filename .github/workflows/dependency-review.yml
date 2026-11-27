@@ -1,0 +1,13 @@
+name: dependency-review
+
+on:
+  pull_request:
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: it-at-m/lhm_actions/action-templates/actions/action-dependency-review@9bde6576151908ace5f517ca623fea3b98600cb7 # v1.6.5

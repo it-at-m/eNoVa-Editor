@@ -1,0 +1,42 @@
+name: Build
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Read Java version
+        id: java-version
+        shell: pwsh
+        run: |
+          [xml]$pom = Get-Content -Raw pom.xml
+          $javaVersion = $pom.project.properties.'java.version'
+
+          if ([string]::IsNullOrWhiteSpace($javaVersion)) {
+            throw "Could not determine Java version from pom.xml."
+          }
+
+          "version=$javaVersion" >> $env:GITHUB_OUTPUT
+          Write-Host "Java version: $javaVersion"
+
+      - name: Set up Java
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: ${{ steps.java-version.outputs.version }}
+          cache: maven
+
+      - name: Build and test
+        shell: pwsh
+        run: .\mvnw.cmd clean package

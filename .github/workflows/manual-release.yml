@@ -1,26 +1,44 @@
 name: Create Release
 
 on:
-  pull_request:
-    branches:
-      - main
-
   workflow_dispatch:
+    inputs:
+      releaseVersion:
+        description: 'Version to release (e.g. 1.2.0)'
+        type: string
+        required: true
+      developmentVersion:
+        description: 'Next development version (e.g. 1.2.1-SNAPSHOT)'
+        type: string
+        required: true
 
-permissions:
-  contents: write
+concurrency:
+  group: manual-release
 
 jobs:
   release:
     runs-on: windows-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      RELEASE_VERSION: ${{ inputs.releaseVersion }}
+      DEVELOPMENT_VERSION: ${{ inputs.developmentVersion }}
 
     steps:
-      - name: Ensure main branch
-        if: github.event_name == 'workflow_dispatch'
+      - name: Validate release inputs
         shell: pwsh
         run: |
-          if ("${{ github.ref }}" -ne "refs/heads/main") {
+          if ($env:GITHUB_REF -ne "refs/heads/main") {
             throw "Releases must be created from the main branch."
+          }
+
+          if ($env:RELEASE_VERSION -notmatch '\A[0-9]+\.[0-9]+\.[0-9]+\z') {
+            throw "releaseVersion must use the format X.Y.Z."
+          }
+
+          if ($env:DEVELOPMENT_VERSION -cnotmatch '\A[0-9]+\.[0-9]+\.[0-9]+-SNAPSHOT\z') {
+            throw "developmentVersion must use the format X.Y.Z-SNAPSHOT."
           }
 
       - name: Checkout repository
@@ -47,35 +65,25 @@ jobs:
           java-version: ${{ steps.java-version.outputs.version }}
           cache: maven
 
-      - name: Read project version
-        id: version
+      - name: Check release tag and development version
         shell: pwsh
         run: |
-          $version = (& .\mvnw.cmd help:evaluate "-Dexpression=project.version" -q "-DforceStdout").Trim()
-
-          if ([string]::IsNullOrWhiteSpace($version)) {
-            throw "Could not determine project version."
-          }
-
-          if ("${{ github.event_name }}" -eq "workflow_dispatch" -and $version -match "-SNAPSHOT$") {
-            throw "Snapshot versions cannot be released: $version"
-          }
-
-          "version=$version" >> $env:GITHUB_OUTPUT
-          Write-Host "Project version: $version"
-
-      - name: Check release tag
-        if: github.event_name == 'workflow_dispatch'
-        shell: pwsh
-        run: |
-          $version = "${{ steps.version.outputs.version }}"
-          $tag = "v$version"
-
+          $PSNativeCommandUseErrorActionPreference = $true
+          $tag = "v$env:RELEASE_VERSION"
           $existingTag = git ls-remote --tags origin "refs/tags/$tag"
-
           if ($existingTag) {
             throw "Tag $tag already exists."
           }
+
+          [xml]$pom = Get-Content -Raw pom.xml
+          if ($pom.project.version -eq $env:DEVELOPMENT_VERSION) {
+            throw "developmentVersion already matches pom.xml; there would be no version change to propose."
+          }
+
+      - name: Set release version
+        shell: pwsh
+        run: |
+          .\mvnw.cmd -B org.codehaus.mojo:versions-maven-plugin:2.19.1:set "-DnewVersion=$env:RELEASE_VERSION" "-DgenerateBackupPoms=false"
 
       - name: Build distribution
         shell: pwsh
@@ -84,24 +92,49 @@ jobs:
       - name: Verify distribution
         shell: pwsh
         run: |
-          $version = "${{ steps.version.outputs.version }}"
-          $file = "target/eNoVA-editor-$version.zip"
+          $file = "target/eNoVA-editor-$env:RELEASE_VERSION.zip"
 
-          if (-not (Test-Path $file)) {
+          if (-not (Test-Path -LiteralPath $file -PathType Leaf)) {
             throw "Distribution ZIP not found: $file"
           }
 
+      - name: Commit and tag release version locally
+        shell: pwsh
+        run: |
+          $PSNativeCommandUseErrorActionPreference = $true
+          if (git status --porcelain -- pom.xml) {
+            git -c "user.name=github-actions[bot]" -c "user.email=41898282+github-actions[bot]@users.noreply.github.com" `
+              commit -m "chore: release $env:RELEASE_VERSION" -- pom.xml
+          }
+          git tag "v$env:RELEASE_VERSION"
+
+      - name: Set next development version
+        shell: pwsh
+        run: |
+          .\mvnw.cmd -B org.codehaus.mojo:versions-maven-plugin:2.19.1:set "-DnewVersion=$env:DEVELOPMENT_VERSION" "-DgenerateBackupPoms=false"
+
+      - name: Create development version pull request
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          base: main
+          branch: release/bump-${{ inputs.developmentVersion }}
+          add-paths: pom.xml
+          commit-message: 'chore: bump version to ${{ inputs.developmentVersion }}'
+          title: 'chore: bump version to ${{ inputs.developmentVersion }}'
+          body: 'Set the next Maven development version after release `${{ inputs.releaseVersion }}`.'
+
       - name: Create GitHub release
-        if: github.event_name == 'workflow_dispatch'
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $version = "${{ steps.version.outputs.version }}"
-          $file = "target/eNoVA-editor-$version.zip"
+          $PSNativeCommandUseErrorActionPreference = $true
+          $tag = "v$env:RELEASE_VERSION"
+          $file = "target/eNoVA-editor-$env:RELEASE_VERSION.zip"
 
-          gh release create "v$version" `
+          git push origin "refs/tags/$tag"
+          gh release create "$tag" `
             "$file" `
-            --title "eNoVA Editor $version" `
-            --target "${{ github.sha }}" `
+            --title "eNoVA Editor $env:RELEASE_VERSION" `
+            --verify-tag `
             --generate-notes
