@@ -1,0 +1,4 @@
+XJustiz 3.6.2 XSD für eNoVA: nur xjustiz_2900_dabag_3_3.xsd und die 13 Dateien, die es über xs:import einbindet
+(Grunddatensatz, Codelisten, DIN 91379, XÖV-Code). Andere XJustiz-Fachmodule sind für den eNoVA-Editor ohne Bedeutung.
+Entpackt aus https://xjustiz.justiz.de/system/zip/XJustiz_3_6_2_Nachlieferung_ZVSTR_08_2026_XSD.zip (heruntergeladen 2026-11-13).
+Gültig bis 29.04.2027, danach XJustiz 4.0.0.

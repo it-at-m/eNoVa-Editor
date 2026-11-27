@@ -142,6 +142,7 @@
 eNoVA-editor/
 ├── app/
 ├── codelists/
+├── xsd/
 ├── Input.htm
 ├── Output.htm
 ├── sender-config.xml
@@ -152,7 +153,8 @@ eNoVA-editor/
 ├── help-config.properties
 ├── answer-transform.xsl
 ├── schriftgutobjekte.xml
-└── eNoVA-editor.cmd
+├── eNoVA-editor.cmd
+└── eNoVA-schema-validation.cmd
     </pre>
 
     <p>
@@ -533,6 +535,63 @@ XJustiz-Antwort-XML
 
     <p class="notice">
         Die Datei sollte normalerweise nicht verändert werden. Eine Ausnahme stellt <a href="https://github.com/it-at-m/eNoVa-Editor/issues/124">Issue #124</a> dar. 
+    </p>
+
+
+    <h3><code>eNoVA-schema-validation.cmd</code> und <code>xsd/</code></h3>
+
+    <p>
+        Prüft eNoVA-Nachrichten des Typs <code>nachricht.enova.entscheidung.2900003</code>
+        gegen das konfigurierte XJustiz-Schema. Unterstützt werden sowohl Ersuchen
+        als auch Antworten. Der eNoVA-Editor selbst prüft beim Öffnen nicht gegen
+        das Schema.
+    </p>
+
+    <p>
+        Aufruf in einer Eingabeaufforderung mit einer oder mehreren Dateien oder
+        Ordnern (alle <code>*.xml</code> direkt im Ordner):
+    </p>
+
+    <pre>
+eNoVA-schema-validation.cmd C:\Eingang\nachricht.xml
+eNoVA-schema-validation.cmd C:\Eingang
+    </pre>
+
+    <p>
+        Die Ausgabe erscheint in der Konsole, je Fehler eine Zeile mit Datei,
+        Zeile, Spalte, Elementpfad und Meldung, am Ende eine Zusammenfassung.
+        Es werden keine Dateien geschrieben. Exit-Code: 0 = alle Dateien gültig,
+        1 = Schemafehler, 2 = mindestens eine Datei nicht prüfbar (z.&nbsp;B. keine
+        eNoVA-Nachricht, ungültiges XML, nicht konfigurierte XJustiz-Version) oder
+        keine XML-Datei gefunden.
+    </p>
+
+    <pre>
+C:\Eingang\Test2.xml:249:24: /nachricht.enova.entscheidung.2900003/fachdaten/beschreibungDesBetroffenenRechts/buchungsstelle[2]: Ungültiger Content wurde beginnend mit Element 'buchungsstelle' gefunden. '{anschrift, weitereAngabenZumGrundstueck, grundbuchart, bundeslandfremdesGrundbuchblatt}' wird erwartet. (cvc-complex-type.2.4.a)
+C:\Eingang\Test2.xml: Ersuchen, 1 Fehler (XJustiz 3.6.2)
+C:\Eingang\Antwort.xml: Antwort, gültig (XJustiz 3.6.2)
+2 XML-Dateien gefunden: 1 gültig, 1 mit Fehlern, 0 nicht prüfbar
+    </pre>
+
+    <p>
+        Je Datei steht dabei, ob es sich um ein Ersuchen oder eine Antwort handelt.
+        Fehler in einem Ersuchen sind an die absendende Stelle (Notariat) zu melden,
+        Fehler in einer vom eNoVA-Editor erzeugten Antwort als Fehler des
+        eNoVA-Editors (<a href="https://github.com/it-at-m/eNoVa-Editor/issues">GitHub-Issue</a>).
+    </p>
+
+    <p>
+        Die XSD-Dateien liegen in <code>xsd/</code>, je XJustiz-Version in einem
+        eigenen Ordner. <code>xsd/schemas.properties</code> ordnet jeder Version
+        (<code>nachrichtenkopf/@xjustizVersion</code>) ihre Haupt-XSD zu.
+        Für eine neue Version werden die XSD-Dateien in einen neuen Ordner gelegt
+        und eine Zeile ergänzt.
+    </p>
+
+    <p class="notice">
+        Eine zusätzliche XJustiz-Version in <code>xsd/</code> erweitert nur die
+        Schemaprüfung. Der eNoVA-Editor unterstützt weiterhin nur Nachrichten der
+        Version 3.6.2.
     </p>
 
 
